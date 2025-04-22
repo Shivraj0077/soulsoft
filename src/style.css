@@ -25,6 +25,7 @@
 html, body {
     height: 100%;
     width: 100%;
+    cursor: none;
 }
 
 #main {
@@ -36,7 +37,7 @@ html, body {
 #page1 {
     min-height: 100vh;
     width: 100%;
-    background-color: #EFEAE3;
+    background-color: black;
     position: relative;
     padding: 0 2vw;
 }
@@ -59,11 +60,11 @@ nav {
 }
 
 #nav-part2 h4 {
-    padding: 10px 20px;
-    border: 1px solid #0000003c;
+    padding: 10px 25px;
+    border: 1px solid white;
     border-radius: 50px;
     font-weight: 500;
-    color: #000000bb;
+    color: white;
     transition: all ease 0.4s;
     position: relative;
     font-size: 18px;
@@ -75,7 +76,7 @@ nav {
     position: absolute;
     height: 100%;
     width: 100%;
-    background-color: black;
+    background-color: white;
     left: 0;
     bottom: -100%;
     border-radius: 50%;
@@ -88,14 +89,14 @@ nav {
 }
 
 #nav-part2 h4 a {
-    color: #000000bb;
+    color: white;
     text-decoration: none;
     position: relative;
     z-index: 9;
 }
 
 #nav-part2 h4:hover a {
-    color: #fff;
+    color:black;
 }
 
 nav h3 {
@@ -115,7 +116,7 @@ nav h3 {
 
 #left h3 {
     width: 25vw;
-    font-size: 1.8vw;
+    font-size: 2vw;
     line-height: 2vw;
 }
 
@@ -134,14 +135,14 @@ nav h3 {
 
 #hero-shape {
     position: absolute;
-    width: 46vw;
-    height: 36vw;
+    width: 55vw;
+    height: 50vw;
     right: 0;
-    top: 65vh;
+    top: 64vh;
 }
 
 #hero-1 {
-    background-color:#e71717;
+    background-color:#FE320A;
     height: 100%;
     width: 100%;
     border-top-left-radius: 50%;
@@ -151,14 +152,14 @@ nav h3 {
 }
 
 #hero-2 {
-    background: linear-gradient(#f10707,#ef2d2d);
+    background: linear-gradient(#FE320A,#FE320A);
 
     height: 50vw;
     width: 30vw;
     border-radius: 50%;
     position: absolute;
     animation-name: anime2;
-    animation-duration: 5s;
+    animation-duration: 1s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: alternate;
@@ -166,14 +167,14 @@ nav h3 {
 }
 
 #hero-3 {
-    background: linear-gradient(#cd1515, #c71111);
+    background: linear-gradient(#FE320A, #FE320A);
     height: 30vw;
     position: absolute;
     width: 30vw;
     border-radius: 50%;
     filter: blur(40px);
     animation-name: anime1;
-    animation-duration: 5s;
+    animation-duration: 1s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: alternate;
@@ -181,7 +182,7 @@ nav h3 {
 
 @keyframes anime1 {
     from {
-        transform: translate(55%, -3%);
+        transform: translate(55%, -8%);
     }
 
     to {
@@ -202,7 +203,7 @@ nav h3 {
 #page2 {
     min-height: 100vh;
     width: 100%;
-    background-color: #EFEAE3;
+    background-color: black;
     padding: 8vw 0;
     position: relative;
 }
@@ -220,9 +221,13 @@ nav h3 {
     white-space: nowrap;
     display: inline-block;
     animation-name: move;
-    animation-duration: 10s;
+    animation-duration: 15s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+    
+}
+.con h1{
+    color: white;
 }
 
 #moving-text h1 {
@@ -266,6 +271,7 @@ nav h3 {
     font-size: 4vw;
     width: 60%;
     line-height: 4vw;
+    color: white;
 }
 
 #bottom-part2 {
@@ -279,9 +285,10 @@ nav h3 {
 }
 
 #bottom-part2 p {
-    font-weight: 200;
+    font-weight: 300;
     margin-top: 2vw;
-    font-size: 1vw;
+    font-size: medium;
+    color:white
 }
 
 #page2 #gooey {
@@ -297,7 +304,7 @@ nav h3 {
     left: 25%;
     filter: blur(20px);
     animation-name: gooey;
-    animation-duration: 6s;
+    animation-duration: 3s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
     animation-timing-function: ease-in-out;
@@ -306,12 +313,12 @@ nav h3 {
 
 @keyframes gooey {
     from {
-        filter: blur(20px);
+        filter: blur(30px);
         transform: translate(10%, -10%) skew(0);
     }
 
     to {
-        filter: blur(30px);
+        filter: blur(40px);
         transform: translate(-10%, 10%) skew(-12deg);
     }
 }
@@ -322,12 +329,16 @@ nav h3 {
 #page3 {
     min-height: 100vh;
     width: 100%;
-    background-color: #EFEAE3;
+    background-color: black;
     padding: 4vw 0;
 }
 
+.elem h2:last-child {
+    margin-right: 0;
+}
+
 .elem {
-    height: 150px;
+    height: 130px;
     width: 100%;
     position: relative;
 
@@ -336,18 +347,22 @@ nav h3 {
     display: flex;
     align-items: center;
     padding: 0 2vw;
+    justify-content: space-between
 }
 
 .elem h2 {
     font-size: 3vw;
     position: relative;
     z-index: 9;
+    margin-right: 2vw;
+    color: white;
+    
 }
 
 .elem .overlay {
     height: 100%;
     width: 100%;
-    background-color: black;
+    background-color: #ff2d03;
     position: absolute;
     left: 0;
     top: -100%;
@@ -356,6 +371,7 @@ nav h3 {
 
 .elem:hover .overlay {
     top: 0;
+    
 }
 
 
@@ -412,6 +428,45 @@ nav h3 {
     flex-direction: column;
     padding: 1vw 3vw;
 }
+#page5 {
+    height: 100vh;
+    width: 100%;
+    background-color: #EFEAE3;
+    position: relative;
+}
+
+#page5 .slides-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+#page5 .slide {
+    flex: 1;
+    padding: 2rem;
+    position: relative;
+}
+
+#page5 .slide:not(:last-child) {
+    border-right: 1px solid #ddd;
+}
+
+#page5 .slide h3 {
+    font-weight: 500;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#page5 .slide-content {
+    margin-top: 2rem;
+}
+
+#page5 .slide-content p {
+    font-weight: 100;
+    line-height: 1.6;
+}
 
 #footer h1 {
     font-size: 23vw;
@@ -420,7 +475,7 @@ nav h3 {
 #footer-div {
     height: 20vh;
     width: 100%;
-    background-color: red;
+    background-color: transparent;
 }
 
 #footer-bottom {
@@ -522,7 +577,7 @@ nav h3 {
     #page2 {
         min-height: 100vh;
         width: 100%;
-        background-color: #EFEAE3;
+        background-color: black;
         padding: 8vw 0;
         position: relative;
     }
@@ -631,6 +686,7 @@ nav h3 {
     justify-content: center;
 }
 
+
 #loader h1{
     font-size: 4vw;
     color: transparent;
@@ -673,8 +729,13 @@ nav h3 {
 }
 #right {
   position: relative;
-  top: -2cm; /* moves it up by approx 2cm */
-  color: #000;
+  top: -3cm; /* moves it up by approx 2cm */
+  color: white;
+  
+}
+#right h1{
+    
+  
 }
 .subtitle {
     font-size: 1.5rem;
@@ -684,9 +745,9 @@ nav h3 {
     ; /* move only this line upward */
     right: 0;
     margin-right: 10px; /* optional spacing from right edge */
-    color:black;
+    color:white;
   }
 #left{
-    color: #000;
+    color: white;
 }
   

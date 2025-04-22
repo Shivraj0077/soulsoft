@@ -30,6 +30,11 @@ function swiperAnimation() {
         spaceBetween: 100,
     });
 }
+var swiper = new swiper(".mySwiper", {
+    slidesPerView: "auto",
+    centeredSlides: true,
+    spaceBetween: 100,
+});
 function menuAnimation() {
 
     var menu = document.querySelector("nav h3")
