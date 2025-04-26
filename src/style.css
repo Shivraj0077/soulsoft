@@ -142,7 +142,7 @@ nav h3 {
 }
 
 #hero-1 {
-    background-color:#FE320A;
+    background-color:#1665f8;
     height: 100%;
     width: 100%;
     border-top-left-radius: 50%;
@@ -152,7 +152,7 @@ nav h3 {
 }
 
 #hero-2 {
-    background: linear-gradient(#FE320A,#FE320A);
+    background: linear-gradient(#1665f8,#1665f8);
 
     height: 50vw;
     width: 30vw;
@@ -167,7 +167,7 @@ nav h3 {
 }
 
 #hero-3 {
-    background: linear-gradient(#FE320A, #FE320A);
+    background: linear-gradient(#1665f8, #1665f8);
     height: 30vw;
     position: absolute;
     width: 30vw;
