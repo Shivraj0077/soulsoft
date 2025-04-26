@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Check } from 'lucide-react';
-import { useInView } from '../hooks/useInView';
+import { useInView } from '../src/hooks/useInView';
 
 const CTASection = () => {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
