@@ -47,11 +47,30 @@ export default function Home() {
           <div
             className="cover-v1 jarallax"
             style={{
-              backgroundImage: "url('./images/blacky.jpg')",
+              position: 'relative',
               marginTop: '-2cm',
+              overflow: 'hidden',
             }}
             id="home-section"
           >
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                zIndex: -1,
+              }}
+            >
+              <source src="/circle.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
             <div className="container">
               <div className="row align-items-center">
                 <div className="col-md-9 mx-auto text-center">

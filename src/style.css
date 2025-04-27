@@ -241,7 +241,7 @@ nav h3 {
     width: 70px;
     border-radius: 50%;
     display: inline-block;
-    background-color: #FE320A;
+    background-color:#1665f8;
     margin: 1vw 2vw;
 }
 
@@ -296,7 +296,7 @@ nav h3 {
     width: 32vw;
     position: absolute;
     border-radius: 50%;
-    background: linear-gradient(to top right, #ff2d03, #ff5c0b);
+    background: linear-gradient(to top right, #1665f8, #0444bb);
     /* background: linear-gradient(to top right,red,blue); */
 
 
@@ -362,7 +362,7 @@ nav h3 {
 .elem .overlay {
     height: 100%;
     width: 100%;
-    background-color: #ff2d03;
+    background-color: #1665f8;
     position: absolute;
     left: 0;
     top: -100%;
@@ -611,7 +611,7 @@ nav h3 {
         width: 25px;
         border-radius: 50%;
         display: inline-block;
-        background-color: #FE320A;
+        background-color: #1665f8;
         margin: 2vw 2vw;
     }
 
@@ -655,7 +655,7 @@ nav h3 {
         width: 62vw;
         position: absolute;
         border-radius: 50%;
-        background: linear-gradient(to top right, #ff2d03, #ff5c0b);
+        background: linear-gradient(to top right, #1665f8, #054fd7);
         /* background: linear-gradient(to top right,red,blue); */
 
 

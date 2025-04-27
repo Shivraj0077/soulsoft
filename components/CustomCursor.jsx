@@ -49,7 +49,7 @@ const CustomCursor = () => {
   left: 0;
   width: 100px;
   height: 100px;
-  background-color: rgba(240, 63, 63, 0.9); /* Semi-transparent background */
+  background-color: white; /* Semi-transparent background */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); /* Shadow for depth */
   border-radius: 50%; /* Perfect circle */
   transform: translate(-50%, -50%); /* Only centering, no rotation */
@@ -60,7 +60,7 @@ const CustomCursor = () => {
   justify-content: center;
   font-family: sans-serif;
   font-size: 13px;
-  color: white;
+  color: black;
     text-align: center;
   font-weight: bold;
 }
