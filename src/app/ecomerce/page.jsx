@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Code, ShoppingCart, Search, Smartphone, Check, ChevronDown, ChevronUp, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, CheckCircle, HeartHandshake, Layers } from 'lucide-react';
 import Footer from '../../../components/Footer';
 import './style.css'
-import PricingSection from '../../../components/PricingSection';
 
 function Web() {
   const [isVisible, setIsVisible] = useState(false);
@@ -161,57 +160,51 @@ function Web() {
   const services = [
     {
       icon: <Code className="icon icon-blue" />,
-      title: "Search Engine Optimization (SEO)",
-      description: "Boost your website’s rankings and drive organic traffic with our expert SEO strategies"
+      title: "Stunning & Responsive Designs",
+      description: "Mobile-friendly & visually appealing layouts"
     },
     {
       icon: <ShoppingCart className="icon icon-blue" />,
-      title: "Social Media Marketing (SMM)",
-      description: "Engage, attract, and convert followers with strategic social media marketing."
+      title: "Fast & Secure Online Stores",
+      description: "Optimized for speed, performance & security"
     },
     {
       icon: <Search className="icon icon-blue" />,
-      title: "Pay-Per-Click (PPC) Advertising",
-      description: "Maximize your ROI with targeted PPC advertising campaigns."
+      title: "SEO-Friendly Development",
+      description: "Higher search rankings for better visibility"
     },
     {
       icon: <Smartphone className="icon icon-blue" />,
-      title: "Content Marketing & Branding",
-      description: "Strengthen your brand with compelling content marketing strategies."
+      title: "Multi-Payment & Shipping Integration",
+      description: "Offer a seamless checkout experience"
     }
   ];
 
   const features = [
     {
-      title: "Tailored campaigns to match your business goals.",
-      description: "10+ years of expertise."
+      title: "Custom eCommerce Development",
+      description: "Designed to boost sales & engagement"
     },
     {
-      title: "Customized Strategies",
-      description: "Tailored campaigns to match your business goals."
+      title: "Conversion-Optimized Storefronts",
+      description: "Tailored features to match your unique business needs and help you stand out from competitors."
     },
     {
-      title: "Data-Driven Approach",
-      description: "Focused on ROI & measurable success."
+      title: "Fast Loading Speed",
+      description: "Optimized performance for better customer retention and improved search engine rankings."
     },
     {
-      title: "Multi-Channel Marketing",
-      description: "SEO, PPC, social media & more."
-
-
+      title: "24/7 Support & Maintenance",
+      description: "Ensuring smooth operations for your business with dedicated technical assistance whenever you need it."
     }
   ];
 
   const tabContents = [
     {
-      title: "Custom Website Development",
+      title: "Custom eCommerce Website Design",
       description: "We build custom websites that are tailored specifically to your business objectives and brand identity, ensuring a unique online presence that stands out from the competition.",
       features: [
-        "Custom UI/UX design based on your brand guidelines",
-        "Front-end development with modern frameworks (React, Vue.js)",
-        "Back-end development for complex functionality",
-        "Database integration and API development",
-        "Performance optimization for speed and efficiency"
+        "Beautiful, modern, and responsive designs tailored to your brand User-friendly UI/UX for a better customer experience & higher conversions"
       ]
     },
     {
@@ -226,19 +219,15 @@ function Web() {
       ]
     },
     {
-      title: "Responsive Website Design",
-      description: "Ensure your website looks and functions perfectly on all devices with our responsive design approach that adapts seamlessly to different screen sizes.",
+      title: "Multi-Payment & Shipping Integration",
+      description: "Offer your customers a variety of payment options and shipping methods to enhance their shopping experience and increase conversion rates.",
       features: [
-        "Mobile-first design approach",
-        "Cross-browser compatibility testing",
-        "Adaptive layouts for all screen sizes",
-        "Touch-friendly navigation and elements",
-        "Optimized media loading for mobile devices"
+        "Support for UPI, PayPal, Stripe, Razorpay, & other payment gateways Automated shipping & tracking systems for hassle-free deliveries"
       ]
     },
     {
-      title: "CMS Development",
-      description: "Take control of your website content with our custom content management system solutions that make updating your website simple and efficient.",
+      title: "SEO & Digital Marketing for eCommerce",
+      description: "On-page & off-page SEO optimization for better Google rankings PPC, social media & email marketing strategies to drive traffic & sales",
       features: [
         "WordPress, Shopify, Magento implementations",
         "Custom CMS development",
@@ -248,14 +237,10 @@ function Web() {
       ]
     },
     {
-      title: "SEO & Digital Marketing Integration",
+      title: "eCommerce Website Maintenance & Support",
       description: "Build a foundation for online success with websites that are optimized for search engines and integrate seamlessly with your digital marketing efforts.",
       features: [
-        "SEO-optimized code and structure",
-        "Schema markup implementation",
-        "Analytics integration (Google Analytics, etc.)",
-        "Social media integration",
-        "Conversion tracking and optimization"
+        "Regular updates, bug fixes & security enhancements 24/7 technical support to keep your store running smoothly"
       ]
     },
     {
@@ -273,21 +258,25 @@ function Web() {
 
   const faqs = [
     {
-      question: "What are digital marketing services?",
-      answer: "Digital marketing includes SEO, PPC, social media, and content marketing to help businesses grow online."
+      question: "Which eCommerce platforms do you work with?",
+      answer: " We build online stores using Shopify, WooCommerce, Magento, PrestaShop, & custom platforms."
     },
     {
-      question: "Why is digital marketing important for businesses?",
-      answer: "Digital marketing increases brand visibility, lead generation, and sales through targeted strategies."
+      question: "Do you offer SEO-friendly web design?",
+      answer: "Yes! We follow SEO best practices to ensure higher search rankings & organic traffic growth."
     },
     {
-      question: "How long does it take to see results from SEO?",
-      answer:"SEO typically takes 3-6 months for noticeable improvements, depending on competition and strategy."
+      question: "How long does it take to develop an eCommerce website?",
+      answer: "Absolutely! We specialize in developing custom e-commerce websites that are tailored to your business needs. Our e-commerce solutions include secure payment processing, inventory management, user-friendly product catalogs, and seamless checkout experiences. We work with platforms like WooCommerce, Shopify, and Magento, or can build custom solutions."
     },
     {
-      question: "Can Soulsoft Infotech manage my business’s social media?",
-      answer:"Yes! We offer comprehensive social media management to increase engagement and brand awareness."
-    }
+      question: "How long does it take to build a website?",
+      answer: " Depending on your requirements, it takes 2-6 weeks to build a fully functional eCommerce site. "
+    },
+    {
+        question: "Can I accept international payments on my store?",
+        answer: "  Yes! We integrate multi-currency & international payment gateways for global reach."
+      }
   ];
 
   return (
@@ -309,12 +298,12 @@ function Web() {
           <div className="glowing-circle"></div>
           <p className="subheading animate-text char-effect">SOULSOFT INFOTECH</p>
           <h1 className="main-heading">
-            <span className="animate-text word-effect delay-1">Digital{""}</span>
-            <span className="highlight animate-text word-effect delay-2">marketing</span>
+            <span className="animate-text word-effect delay-1">Ecomerce {""}</span>
+            <span className="highlight animate-text word-effect delay-2"> </span>
           </h1>
         
           <h2 className="sub-heading animate-text fade-up delay-3">
-          Grow Your Business with Soulsoft Infotech
+          Build, Scale & Grow Your Online Store with a Stunning eCommerce Website
           </h2>
           <div className="button-group">
             <button className="primary-button hover-effect">
@@ -371,12 +360,10 @@ function Web() {
       <section className="intro-section">
         <div className="content-container">
           <h2 className="section-heading animate-text word-effect">
-          Grow Your Business with Soulsoft Infotech
+          Sell Online with a High-Performance eCommerce Website
           </h2>
           <p className="section-text animate-text fade-up delay-1">
-          Looking for the best digital marketing services to boost your online presence? At Soulsoft Infotech, we specialize in SEO, social media marketing, PPC, content marketing, and branding to drive traffic, generate leads, and maximize business growth.
-
-With a data-driven approach and customized strategies, we ensure your brand stands out in the competitive digital space. Whether you’re a startup or an established business, our expert marketing solutions deliver measurable results.
+          In today’s digital world, having a professional, user-friendly, and scalable eCommerce website is essential for success. At Soulsoft Infotech, we specialize in custom eCommerce development to help businesses of all sizes launch, grow, and succeed online.
           </p>
           <div className="divider animate-width"></div>
         </div>
@@ -388,7 +375,7 @@ With a data-driven approach and customized strategies, we ensure your brand stan
           <div className="section-header">
             <h2 className="section-heading animate-text word-effect">Key Services</h2>
             <p className="section-subtext animate-text fade-up delay-1">
-              Our comprehensive Digital Marketing services are designed to transform your online presence
+              Our comprehensive web development services are designed to transform your online presence
             </p>
           </div>
           
@@ -425,11 +412,12 @@ With a data-driven approach and customized strategies, we ensure your brand stan
                 Why Choose <span className="highlight">Soulsoft</span>
               </h2>
               <p className="section-text animate-text fade-up delay-1">
-              Experienced Digital Marketing Team
+                We're committed to delivering exceptional web solutions that help your business thrive online.
+                Our expertise, combined with our client-centered approach, ensures results that exceed expectations.
               </p>
               <div className="cta-link">
                 <a href="#" className="primary-button animate-text hover-effect">
-                10+ years of expertise.
+                  Learn more about our approach
                 </a>
               </div>
             </div>
@@ -461,35 +449,84 @@ With a data-driven approach and customized strategies, we ensure your brand stan
       {/* Service Details Section */}
       <section className="service-details-section">
         <div className="content-container-wide">
-      
+          <div className="section-header">
+            <h2 className="section-heading animate-text word-effect">Detailed Service Highlights</h2>
+            <p className="section-subtext animate-text fade-up delay-1">
+              Explore our comprehensive web development services designed to meet all your digital needs
+            </p>
+          </div>
           
-        
-          <PricingSection/>
+          <div className="tabs animate-fade-in">
+            {tabContents.map((content, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveTab(index)}
+                className={`tab-button ${activeTab === index ? 'tab-active' : ''}`}
+              >
+                {index === 0 && <Code className="tab-icon" />}
+                {index === 1 && <ShoppingCart className="tab-icon" />}
+                {index === 2 && <Smartphone className="tab-icon" />}
+                {index === 3 && <Layers className="tab-icon" />}
+                {index === 4 && <Search className="tab-icon" />}
+                {index === 5 && <HeartHandshake className="tab-icon" />}
+                <span className="tab-text">{content.title.split(' ')[0]}</span>
+              </button>
+            ))}
+          </div>
           
-     
+          <div className="tab-content">
+            {tabContents.map((content, index) => {
+              const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+              return (
+                <div 
+                  key={index}
+                  ref={ref}
+                  className={`tab-panel ${activeTab === index ? 'tab-visible' : 'tab-hidden'}`}
+                >
+                  <div className={`tab-card ${inView && activeTab === index ? 'slide-in' : 'slide-out'}`}>
+                    <h3 className="tab-title animate-text word-effect">{content.title}</h3>
+                    <p className="tab-description">{content.description}</p>
+                    
+                    <ul className="tab-features">
+                      {content.features.map((feature, featureIndex) => (
+                        <li key={featureIndex} className="tab-feature-item stagger-fade-in" style={{ animationDelay: `${featureIndex * 100}ms` }}>
+                          <div className="tab-feature-icon">
+                            <div className="tab-feature-dot"></div>
+                          </div>
+                          <p className="tab-feature-text">{feature}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
-   
+
       {/* CTA Section */}
       <section className="cta-section">
         <div className="cta-overlay animated-gradient"></div>
         <div className="content-container">
           <h2 className="cta-heading animate-text word-effect">
-          Our Digital Marketing Services
+            Elevate Your Business with a High-Performing Website!
           </h2>
           
           <div className="cta-features">
             <div className="cta-feature stagger-fade-in">
               <Check className="icon icon-blue" />
-              <span>SEO & PPC experts for better search rankings & increased traffic.</span>
+              <span>
+              Top-rated eCommerce website design services for online businesses</span>
             </div>
             <div className="cta-feature stagger-fade-in" style={{ animationDelay: '200ms' }}>
               <Check className="icon icon-blue" />
-              <span>Social media & branding specialists for business growth.</span>
+              <span></span>
+              SEO-friendly online store development for maximum visibility
             </div>
             <div className="cta-feature stagger-fade-in" style={{ animationDelay: '400ms' }}>
               <Check className="icon icon-blue" />
-              <span>Top digital marketing agency delivering ROI-driven strategies.</span>
+              <span>Secure, scalable & fast eCommerce solutions to boost sales</span>
             </div>
           </div>
           
