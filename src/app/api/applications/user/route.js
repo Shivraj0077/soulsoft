@@ -1,48 +1,76 @@
-import { pool } from '@/lib/db';
-import { getServerSession } from 'next-auth/next';
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
-export async function GET(request) {
+const s3Client = new S3Client({
+  region: 'auto',
+  endpoint: process.env.CLOUDFLARE_ENDPOINT,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY,
+    secretAccessKey: process.env.CLOUDFLARE_SECRET_KEY,
+  },
+});
+
+export async function POST(request) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session) {
-      console.error('GET /api/applications/user: Unauthorized access attempt');
+      console.error('POST /api/upload: Unauthorized access attempt');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Verify the user is an applicant
-    const userResult = await pool.query(
-      'SELECT a.applicant_id FROM users u JOIN applicants a ON u.user_id = a.user_id WHERE u.email = $1',
-      [session.user.email]
-    );
+    const formData = await request.formData();
+    const file = formData.get('file');
 
-    if (userResult.rows.length === 0) {
-      console.error(`GET /api/applications/user: Applicant not found for email ${session.user.email}`);
-      return NextResponse.json({ error: 'Applicant not found' }, { status: 404 });
+    if (!file) {
+      console.error('POST /api/upload: No file provided');
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const applicantId = userResult.rows[0].applicant_id;
-    console.log(`GET /api/applications/user: Fetching applications for applicant_id = ${applicantId}`);
+    const fileType = file.type;
+    const validTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
 
-    // Fetch applications for the applicant
-    const result = await pool.query(
-      `SELECT a.application_id, a.job_id, a.resume_url, a.cover_letter, a.applied_date, a.application_status
-       FROM applications a
-       WHERE a.applicant_id = $1
-       ORDER BY a.applied_date DESC`,
-      [applicantId]
-    );
+    if (!validTypes.includes(fileType)) {
+      console.error(`POST /api/upload: Invalid file type '${fileType}'`);
+      return NextResponse.json({ error: 'Invalid file type. Please upload PDF or Word document.' }, { status: 400 });
+    }
 
-    const applications = result.rows.map(app => ({
-      ...app,
-      job_id: parseInt(app.job_id, 10), // Ensure job_id is an integer
-      application_id: parseInt(app.application_id, 10), // Ensure application_id is an integer
-    }));
+    const metadata = formData.get('metadata') ? JSON.parse(formData.get('metadata')) : {};
 
-    console.log(`GET /api/applications/user: Fetched ${applications.length} applications for ${session.user.email}`);
-    return NextResponse.json({ applications });
+    const timestamp = Date.now();
+    const userId = session.user.email.split('@')[0]; // Simplified for unique naming
+    const uniqueFileName = `${userId}_${timestamp}_${file.name}`;
+
+    console.log(`POST /api/upload: Uploading file '${uniqueFileName}' to Cloudflare R2`);
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    const command = new PutObjectCommand({
+      Bucket: process.env.CLOUDFLARE_BUCKET,
+      Key: uniqueFileName,
+      Body: buffer,
+      ContentType: file.type,
+      Metadata: metadata,
+    });
+
+    await s3Client.send(command);
+
+    if (!process.env.CLOUDFLARE_PUBLIC_URL) {
+      console.error('POST /api/upload: CLOUDFLARE_PUBLIC_URL is not set');
+      return NextResponse.json({ error: 'Storage configuration error' }, { status: 500 });
+    }
+
+    const fileUrl = `${process.env.CLOUDFLARE_PUBLIC_URL}/${uniqueFileName}`;
+    console.log(`POST /api/upload: File uploaded successfully, URL: ${fileUrl}`);
+
+    return NextResponse.json({ success: true, url: fileUrl });
   } catch (error) {
-    console.error('GET /api/applications/user: Error fetching applications', {
+    console.error('POST /api/upload: Upload error', {
       message: error.message,
       stack: error.stack,
       email: session?.user?.email || 'unknown',

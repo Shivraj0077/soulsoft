@@ -11,39 +11,39 @@ export default function ApplicationDetails() {
   const router = useRouter();
   const [applicationId, setApplicationId] = useState(null);
   const [application, setApplication] = useState(null);
-  const [job, setJob] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [resumeError, setResumeError] = useState(null);
 
   useEffect(() => {
-    async function fetchParamsAndApplication() {
+    async function fetchData() {
       try {
-        const params = await paramsPromise; // Await params to resolve Promise
-        const appId = params.applicationId;
-        console.log(`Fetching application for applicationId: ${appId}`);
-        setApplicationId(appId);
+        const params = await paramsPromise;
+        const id = params.applicationId;
+        console.log(`Fetching application for applicationId: ${id}`);
+        setApplicationId(id);
 
-        if (!appId || isNaN(parseInt(appId, 10))) {
+        if (!id || isNaN(parseInt(id, 10)) || parseInt(id, 10) <= 0) {
           throw new Error('Invalid application ID');
         }
 
-        const response = await fetch(`/api/applications/${appId}`);
+        const response = await fetch(`/api/applications/${id}`);
         if (!response.ok) {
           console.error(`Failed to fetch application: ${response.status}`);
           throw new Error(`Application not found (Status: ${response.status})`);
         }
         const data = await response.json();
-        if (!data.application || !data.job) {
-          throw new Error('Invalid application or job data');
+        console.log('Fetched application:', data);
+
+        if (!data.application) {
+          throw new Error('Application data not found in response');
         }
-        console.log('Fetched application:', {
-          application_id: data.application.application_id,
-          job_id: data.application.job_id,
-          status: data.application.application_status,
-          job_title: data.job.title,
+
+        setApplication({
+          ...data.application,
+          application_id: parseInt(data.application.application_id, 10),
+          job_id: parseInt(data.application.job_id, 10),
         });
-        setApplication(data.application);
-        setJob(data.job);
       } catch (err) {
         console.error('Error fetching application:', err);
         setError(err.message || 'Failed to load application details');
@@ -53,31 +53,35 @@ export default function ApplicationDetails() {
     }
 
     if (status === 'authenticated') {
-      fetchParamsAndApplication();
+      fetchData();
+      // Poll for status updates every 10 seconds
+      const interval = setInterval(fetchData, 10000);
+      return () => clearInterval(interval);
     } else if (status === 'unauthenticated') {
       router.push(`/auth/signin?callbackUrl=${encodeURIComponent(`/applicant/applications/${applicationId || ''}`)}`);
     }
   }, [status, paramsPromise, router, applicationId]);
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Accepted':
-        return 'bg-green-100 text-green-800';
-      case 'Rejected':
-        return 'bg-red-100 text-red-800';
-      case 'In Review':
-        return 'bg-blue-100 text-blue-800';
-      default:
-        return 'bg-yellow-100 text-yellow-800';
-    }
-  };
-
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return dateString ? new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
-    });
+    }) : 'Unknown';
+  };
+
+  const testResumeUrl = async (url) => {
+    try {
+      const res = await fetch(url, { method: 'HEAD' });
+      if (!res.ok) {
+        throw new Error(`Resume inaccessible (Status: ${res.status})`);
+      }
+      return true;
+    } catch (err) {
+      console.error(`Error accessing resume: ${url}`, err);
+      setResumeError(`Unable to access resume. Please check Cloudflare R2 permissions or contact support.`);
+      return false;
+    }
   };
 
   if (status === 'loading' || isLoading) {
@@ -88,10 +92,10 @@ export default function ApplicationDetails() {
     );
   }
 
-  if (error) {
+  if (error || !application) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-600">{error}</div>
+        <div className="text-red-600">{error || 'Application details not available'}</div>
       </div>
     );
   }
@@ -99,7 +103,6 @@ export default function ApplicationDetails() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Go back button */}
         <div className="px-4 sm:px-0 mb-4">
           <Link
             href="/applicant/dashboard"
@@ -122,120 +125,83 @@ export default function ApplicationDetails() {
         </div>
 
         <div className="px-4 py-6 sm:px-0">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Application for {job?.title || 'Job'}
-          </h2>
-
-          {/* Status Card */}
+          {resumeError && (
+            <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+              {resumeError}
+            </div>
+          )}
           <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
             <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Application Status
-              </h3>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Application for: {application.job.title}
+              </h2>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                Applied on {formatDate(application.applied_date)}
+                Status: {application.application_status}
               </p>
-            </div>
-            <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
-              <div className="flex items-center">
-                <span
-                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                    application.application_status
-                  )}`}
-                >
-                  {application.application_status || 'Pending'}
-                </span>
-                {application.application_status === 'Pending' && (
-                  <span className="ml-2 text-sm text-gray-500">
-                    Your application is pending review
-                  </span>
-                )}
-                {application.application_status === 'In Review' && (
-                  <span className="ml-2 text-sm text-gray-500">
-                    Your application is currently being reviewed
-                  </span>
-                )}
-                {application.application_status === 'Accepted' && (
-                  <span className="ml-2 text-sm text-gray-500">
-                    Congratulations! Your application has been accepted
-                  </span>
-                )}
-                {application.application_status === 'Rejected' && (
-                  <span className="ml-2 text-sm text-gray-500">
-                    We're sorry, your application was not selected at this time
-                  </span>
-                )}
-              </div>
             </div>
           </div>
 
-          {/* Application Details */}
           <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Application Details
-              </h3>
-            </div>
             <div className="border-t border-gray-200">
               <dl>
-                {/* Resume */}
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Job Title</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.job.title}
+                  </dd>
+                </div>
                 <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Location</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.job.location || 'Remote'}
+                  </dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Salary Range</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.job.salary_range || 'Competitive'}
+                  </dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Employment Type</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.job.employment_type || 'Not specified'}
+                  </dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Applied Date</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {formatDate(application.applied_date)}
+                  </dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Application Status</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.application_status}
+                  </dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Resume</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                     {application.resume_url ? (
                       <a
                         href={application.resume_url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => testResumeUrl(application.resume_url)}
                         className="text-indigo-600 hover:text-indigo-500"
                       >
                         View Resume
                       </a>
                     ) : (
-                      'No resume uploaded'
+                      'Not provided'
                     )}
                   </dd>
                 </div>
-                {/* Cover Letter */}
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Cover Letter</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {application.cover_letter || 'No cover letter provided'}
-                  </dd>
-                </div>
-                {/* Job Title */}
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Job Title</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {job?.title || 'Unknown'}
-                  </dd>
-                </div>
-                {/* Job Location */}
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Location</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {job?.location || 'Remote'}
-                  </dd>
-                </div>
-                {/* Salary Range */}
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Salary Range</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {job?.salary_range || 'Competitive'}
-                  </dd>
-                </div>
-                {/* Posted Date */}
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Posted Date</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {job?.posted_date ? formatDate(job.posted_date) : 'Unknown'}
-                  </dd>
-                </div>
-                {/* Deadline Date */}
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Application Deadline</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {job?.deadline_date ? formatDate(job.deadline_date) : 'None'}
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.cover_letter || 'Not provided'}
                   </dd>
                 </div>
               </dl>

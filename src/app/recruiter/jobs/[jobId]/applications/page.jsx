@@ -2,39 +2,96 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function JobApplications({ params }) {
+export default function JobApplications() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [resumeError, setResumeError] = useState(null);
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { jobId } = params;
+  const params = useParams();
+  const jobId = params.jobId;
 
   // Fetch applications for the job
   useEffect(() => {
     async function fetchApplications() {
       try {
+        if (!jobId || isNaN(parseInt(jobId, 10))) {
+          throw new Error('Invalid job ID');
+        }
+        console.log(`Fetching applications for jobId: ${jobId}`);
         const res = await fetch(`/api/jobs/${jobId}/applications`);
         if (res.ok) {
           const data = await res.json();
+          console.log('Fetched applications:', data);
           setApplications(data.applications || []);
         } else {
+          console.error(`Failed to fetch applications: ${res.status}`);
           setError('Failed to load applications');
         }
       } catch (err) {
+        console.error('Error fetching applications:', err);
         setError('Error loading applications');
       } finally {
         setLoading(false);
       }
     }
 
-    if (status === 'authenticated') {
+    if (status === 'authenticated' && session?.user?.role === 'recruiter') {
       fetchApplications();
+    } else if (status === 'authenticated' && session?.user?.role !== 'recruiter') {
+      setError('Unauthorized access');
+      setLoading(false);
     }
-  }, [status, jobId]);
+  }, [status, jobId, session]);
+
+  // Update application status
+  const updateStatus = async (applicationId, newStatus) => {
+    try {
+      console.log(`Updating status for application ${applicationId} to ${newStatus}`);
+      const res = await fetch(`/api/applications/${applicationId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setApplications((prev) =>
+          prev.map((app) =>
+            app.application_id === applicationId
+              ? { ...app, application_status: newStatus }
+              : app
+          )
+        );
+        console.log(`Status updated for application ${applicationId}`);
+      } else {
+        const errorData = await res.json();
+        console.error(`Failed to update status: ${res.status}`, errorData);
+        setError(`Failed to update application status: ${errorData.error || 'Unknown error'}`);
+      }
+    } catch (err) {
+      console.error('Error updating status:', err);
+      setError('Error updating application status');
+    }
+  };
+
+  // Test resume URL accessibility
+  const testResumeUrl = async (url) => {
+    try {
+      const res = await fetch(url, { method: 'HEAD', mode: 'cors' });
+      if (!res.ok) {
+        throw new Error(`Resume inaccessible (Status: ${res.status})`);
+      }
+      setResumeError(null);
+      return true;
+    } catch (err) {
+      console.error(`Error accessing resume: ${url}`, err);
+      setResumeError(`Unable to access resume. Ensure the file is publicly accessible in Cloudflare R2 or contact support.`);
+      return false;
+    }
+  };
 
   if (status === 'loading' || loading) {
     return (
@@ -47,7 +104,7 @@ export default function JobApplications({ params }) {
     );
   }
 
-  if (!session || status !== 'authenticated') {
+  if (!session || status !== 'authenticated' || session.user.role !== 'recruiter') {
     router.push('/auth/signin');
     return null;
   }
@@ -80,35 +137,62 @@ export default function JobApplications({ params }) {
             Back to Dashboard
           </Link>
         </div>
+        {resumeError && (
+          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+            {resumeError}
+          </div>
+        )}
         <div className="bg-white shadow overflow-hidden sm:rounded-md">
           {applications.length > 0 ? (
             <ul className="divide-y divide-gray-200">
               {applications.map((app) => (
                 <li key={app.application_id}>
                   <div className="px-4 py-4 sm:px-6">
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-start">
                       <div>
                         <h3 className="text-lg font-medium text-black">{app.applicant_name}</h3>
                         <p className="mt-1 text-sm text-black">Email: {app.applicant_email}</p>
-                        <p className="mt-1 text-sm text-black">Status: {app.application_status}</p>
-                        <p className="mt-1 text-sm text-black">
-                          Applied: {new Date(app.applied_date).toLocaleDateString()}
-                        </p>
+                        <p className="mt-1 text-sm text-black">Applied: {new Date(app.applied_date).toLocaleDateString()}</p>
                         {app.cover_letter && (
                           <p className="mt-1 text-sm text-black">
                             Cover Letter: {app.cover_letter.substring(0, 100)}...
                           </p>
                         )}
                       </div>
-                      <div>
-                        <a
-                          href={app.resume_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                        >
-                          View Resume
-                        </a>
+                      <div className="flex items-center space-x-4">
+                        <div>
+                          <label htmlFor={`status-${app.application_id}`} className="sr-only">
+                            Application Status
+                          </label>
+                          <select
+                            id={`status-${app.application_id}`}
+                            value={app.application_status}
+                            onChange={(e) => updateStatus(app.application_id, e.target.value)}
+                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                          >
+                            <option value="Pending">Pending</option>
+                            <option value="Reviewed">Reviewed</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Rejected">Rejected</option>
+                          </select>
+                        </div>
+                        <div>
+                          {app.resume_url ? (
+                            <a
+                              href={app.resume_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => testResumeUrl(app.resume_url)}
+                              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                            >
+                              View Resume
+                            </a>
+                          ) : (
+                            <span className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 bg-gray-200">
+                              No Resume
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
