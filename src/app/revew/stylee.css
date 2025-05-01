@@ -2066,6 +2066,16 @@ span.error {
   -ms-transform: translateX(-100%);
   transform: translateX(-100%);
 }
+/* Mobile-specific styles for .reveal-content */
+@media (max-width: 768px) {
+  .reveal-content {
+    font-size: 25px; /* Adjust font size for smaller screens */
+    line-height:3; /* Adjust line height for readability */
+    padding: 10px; /* Add padding for better spacing */
+    text-align: center; /* Center-align text for better presentation */
+    /* Ensure long words break properly */
+  }
+}
 
 .gsap-reveal-img {
   line-height: 0;

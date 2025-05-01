@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Code, ShoppingCart, Search, Smartphone, Check, ChevronDown, ChevronUp, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, CheckCircle, HeartHandshake, Layers } from 'lucide-react';
 import Footer from '../../../components/Footer';
-import './style.css'
+import './style.css';
 
 function Web() {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,6 +11,12 @@ function Web() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
+  const [isClient, setIsClient] = useState(false); // Track client-side rendering
+
+  // Mark as client-side after mounting
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Track scroll position for parallax effects
   useEffect(() => {
@@ -204,7 +210,8 @@ function Web() {
       title: "Custom eCommerce Website Design",
       description: "We build custom websites that are tailored specifically to your business objectives and brand identity, ensuring a unique online presence that stands out from the competition.",
       features: [
-        "Beautiful, modern, and responsive designs tailored to your brand User-friendly UI/UX for a better customer experience & higher conversions"
+        "Beautiful, modern, and responsive designs tailored to your brand",
+        "User-friendly UI/UX for a better customer experience & higher conversions"
       ]
     },
     {
@@ -222,25 +229,27 @@ function Web() {
       title: "Multi-Payment & Shipping Integration",
       description: "Offer your customers a variety of payment options and shipping methods to enhance their shopping experience and increase conversion rates.",
       features: [
-        "Support for UPI, PayPal, Stripe, Razorpay, & other payment gateways Automated shipping & tracking systems for hassle-free deliveries"
+        "Support for UPI, PayPal, Stripe, Razorpay, & other payment gateways",
+        "Automated shipping & tracking systems for hassle-free deliveries"
       ]
     },
     {
       title: "SEO & Digital Marketing for eCommerce",
       description: "On-page & off-page SEO optimization for better Google rankings PPC, social media & email marketing strategies to drive traffic & sales",
       features: [
-        "WordPress, Shopify, Magento implementations",
-        "Custom CMS development",
-        "User-friendly admin interfaces",
-        "Content workflow and publishing controls",
-        "Multi-user access levels and permissions"
+        "SEO-optimized code and structure",
+        "Schema markup implementation",
+        "Analytics integration (Google Analytics, etc.)",
+        "Social media integration",
+        "Conversion tracking and optimization"
       ]
     },
     {
       title: "eCommerce Website Maintenance & Support",
-      description: "Build a foundation for online success with websites that are optimized for search engines and integrate seamlessly with your digital marketing efforts.",
+      description: "Keep your eCommerce store running smoothly with our comprehensive maintenance and support services, ensuring security and performance.",
       features: [
-        "Regular updates, bug fixes & security enhancements 24/7 technical support to keep your store running smoothly"
+        "Regular updates, bug fixes & security enhancements",
+        "24/7 technical support to keep your store running smoothly"
       ]
     },
     {
@@ -259,21 +268,20 @@ function Web() {
   const faqs = [
     {
       question: "Which eCommerce platforms do you work with?",
-      answer: " We build online stores using Shopify, WooCommerce, Magento, PrestaShop, & custom platforms."
+      answer: "We build online stores using Shopify, WooCommerce, Magento, PrestaShop, & custom platforms."
     },
     {
       question: "Do you offer SEO-friendly web design?",
       answer: "Yes! We follow SEO best practices to ensure higher search rankings & organic traffic growth."
     },
-
     {
       question: "How long does it take to build a website?",
-      answer: " Depending on your requirements, it takes 2-6 weeks to build a fully functional eCommerce site. "
+      answer: "Depending on your requirements, it takes 2-6 weeks to build a fully functional eCommerce site."
     },
     {
-        question: "Can I accept international payments on my store?",
-        answer: "  Yes! We integrate multi-currency & international payment gateways for global reach."
-      }
+      question: "Can I accept international payments on my store?",
+      answer: "Yes! We integrate multi-currency & international payment gateways for global reach."
+    }
   ];
 
   return (
@@ -295,12 +303,12 @@ function Web() {
           <div className="glowing-circle"></div>
           <p className="subheading animate-text char-effect">SOULSOFT INFOTECH</p>
           <h1 className="main-heading">
-            <span className="animate-text word-effect delay-1">Ecomerce {""}</span>
-            <span className="highlight animate-text word-effect delay-2"> </span>
+            <span className="animate-text word-effect delay-1">eCommerce</span>
+            <span className="highlight animate-text word-effect delay-2"></span>
           </h1>
         
           <h2 className="sub-heading animate-text fade-up delay-3">
-          Build, Scale & Grow Your Online Store with a Stunning eCommerce Website
+            Build, Scale & Grow Your Online Store with a Stunning eCommerce Website
           </h2>
           <div className="button-group">
             <button className="primary-button hover-effect">
@@ -313,12 +321,9 @@ function Web() {
             <div
               className="float-element code-element"
               style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * 0.02
-                      }px)`
-                    : 'none',
+                transform: isClient
+                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${(mousePosition.y - window.innerHeight / 2) * 0.02}px)`
+                  : 'none'
               }}
             >
               <Code />
@@ -326,12 +331,9 @@ function Web() {
             <div
               className="float-element shop-element"
               style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * -0.01}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * -0.01
-                      }px)`
-                    : 'none',
+                transform: isClient
+                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * -0.01}px, ${(mousePosition.y - window.innerHeight / 2) * -0.01}px)`
+                  : 'none'
               }}
             >
               <ShoppingCart />
@@ -339,12 +341,9 @@ function Web() {
             <div
               className="float-element search-element"
               style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * 0.03
-                      }px)`
-                    : 'none',
+                transform: isClient
+                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${(mousePosition.y - window.innerHeight / 2) * 0.03}px)`
+                  : 'none'
               }}
             >
               <Search />
@@ -357,10 +356,10 @@ function Web() {
       <section className="intro-section">
         <div className="content-container">
           <h2 className="section-heading animate-text word-effect">
-          Sell Online with a High-Performance eCommerce Website
+            Sell Online with a High-Performance eCommerce Website
           </h2>
           <p className="section-text animate-text fade-up delay-1">
-          In today’s digital world, having a professional, user-friendly, and scalable eCommerce website is essential for success. At Soulsoft Infotech, we specialize in custom eCommerce development to help businesses of all sizes launch, grow, and succeed online.
+            In today’s digital world, having a professional, user-friendly, and scalable eCommerce website is essential for success. At Soulsoft Infotech, we specialize in custom eCommerce development to help businesses of all sizes launch, grow, and succeed online.
           </p>
           <div className="divider animate-width"></div>
         </div>
@@ -513,13 +512,11 @@ function Web() {
           <div className="cta-features">
             <div className="cta-feature stagger-fade-in">
               <Check className="icon icon-blue" />
-              <span>
-              Top-rated eCommerce website design services for online businesses</span>
+              <span>Top-rated eCommerce website design services for online businesses</span>
             </div>
             <div className="cta-feature stagger-fade-in" style={{ animationDelay: '200ms' }}>
               <Check className="icon icon-blue" />
-              <span></span>
-              SEO-friendly online store development for maximum visibility
+              <span>SEO-friendly online store development for maximum visibility</span>
             </div>
             <div className="cta-feature stagger-fade-in" style={{ animationDelay: '400ms' }}>
               <Check className="icon icon-blue" />

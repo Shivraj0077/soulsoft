@@ -1,4 +1,6 @@
+"use client";
 import { MacbookScroll } from "@/components/ui/macbook-scroll";
+
 import HeroSectionOne from "@/components/hero-section-demo-1";
 import { Timeline } from "@/components/ui/timeline";
 import Footer from "../../../components/Footer";
@@ -221,10 +223,10 @@ export default function Home() {
           <MacbookScroll
             title={
               <div className="text-center">
-  <span className="text-4xl font-semibold font-sans">
+  <span className="text-7xl font-semibold font-sans">
     <span className="text-blue-500">Simplify</span> the complex.
   </span>
-  <p className="text-sm text-gray-500 mt-2">
+  <p className="text-2xl text-gray-500 mt-2">
     Easy to integrate, easy to use, and easy to scale. <br /> <br />{" "}
   </p>
 </div>

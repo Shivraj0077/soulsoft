@@ -2,29 +2,46 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <div style={styles.footer}>
-      <style>
-        {`
-          @media (max-width: 768px) {
-            .footer-container {
-              flex-direction: column;
-              align-items: flex-start;
-              gap: 30px;
-            }
+    <div style={styles.footer} className="footer-wrapper">
+      {/* Responsive Styles */}
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .footer-container {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
           }
-        `}
-      </style>
+          .footer-container > div {
+            width: 100%;
+            min-width: auto;
+          }
+          .footer-logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 150px !important;
+          }
+          .footer-section h2 {
+            font-size: 1.2rem;
+          }
+          .footer-section p {
+            font-size: 1rem;
+          }
+          .footer-bottom {
+            font-size: 0.9rem;
+            margin-top: 20px;
+          }
+        }
+      `}</style>
 
       <div style={styles.container} className="footer-container">
 
         {/* Logo and About */}
-        <div style={styles.section}>
-          <img src="so.png" style={styles.logo} />
-          
+        <div style={styles.section} className="footer-section">
+          <img src="so.png" style={styles.logo} className="footer-logo" alt="Soulsoft Logo" />
         </div>
 
         {/* Get in Touch */}
-        <div style={styles.section}>
+        <div style={styles.section} className="footer-section">
           <h2 style={styles.heading}>Get In Touch</h2>
           <p style={styles.text}>
             <strong>Office Location</strong><br />
@@ -42,20 +59,15 @@ const Footer = () => {
         </div>
 
         {/* Company */}
-        <div style={styles.section}>
+        <div style={styles.section} className="footer-section">
           <h2 style={styles.heading}>Company</h2>
-          <p style={styles.text}>Home</p>
-          <p style={styles.text}>About Us</p>
-          <p style={styles.text}>POS Products</p>
-          <p style={styles.text}>Services</p>
-          <p style={styles.text}>Download</p>
-          <p style={styles.text}>Contact</p>
-          <p style={styles.text}>Privacy Policy</p>
-          <p style={styles.text}>Terms & Conditions</p>
+          {['Home','About Us','POS Products','Services','Download','Contact','Privacy Policy','Terms & Conditions'].map((item,idx)=>(
+            <p style={styles.text} key={idx}>{item}</p>
+          ))}
         </div>
 
         {/* Business Hours */}
-        <div style={styles.section}>
+        <div style={styles.section} className="footer-section">
           <h2 style={styles.heading}>Business Hours</h2>
           <p style={styles.text}>
             <strong>Opening Days</strong><br />
@@ -68,7 +80,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div style={styles.bottom}>
+      <div style={styles.bottom} className="footer-bottom">
         ©2025 Soulsoft Infotech Pvt. Ltd. All Rights Reserved.
       </div>
     </div>

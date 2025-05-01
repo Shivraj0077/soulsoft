@@ -569,6 +569,7 @@ body {
 .feature-icon {
   color: var(--primary-blue);
   transition: transform 0.3s ease;
+  margin-top:2rem;
 }
 
 .grow-effect:hover {
@@ -582,7 +583,7 @@ body {
 .feature-title {
   font-size: 1.2rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
 }
 
 .feature-description {
@@ -707,7 +708,7 @@ body {
 .tab-title {
   font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
   color: var(--primary-blue);
 }
 
@@ -1194,7 +1195,7 @@ footer {
 
   .tab-title {
       font-size: var(--font-size-md);
-      margin-bottom: 0.8rem;
+      margin-bottom: 2rem;
   }
 
   .tab-description {
@@ -1215,7 +1216,7 @@ footer {
 
   .cta-heading {
       font-size: var(--font-size-lg);
-      margin-bottom: 2rem;
+      margin-bottom: 6rem;
   }
 
   .cta-features {
@@ -1314,6 +1315,9 @@ footer {
 
   .section-heading {
       font-size: var(--font-size-md);
+      margin-top: -20px
+  
+  ;
   }
 
   .service-card {

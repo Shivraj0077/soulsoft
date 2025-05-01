@@ -1,0 +1,161 @@
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  @media (min-width: 1024px) {
+    .container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .wobbleCard {
+    position: relative;
+    overflow: hidden;
+    min-height: 300px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 8px;
+    animation: wobble 8s ease-in-out infinite;
+  }
+  
+  @keyframes wobble {
+    0%,
+    100% {
+      transform: rotate(0deg) translate(0, 0);
+    }
+    25% {
+      transform: rotate(1deg) translate(2px, -2px);
+    }
+    50% {
+      transform: rotate(-1deg) translate(-2px, 2px);
+    }
+    75% {
+      transform: rotate(0.5deg) translate(2px, -2px);
+    }
+  }
+  
+  .wobbleCard:hover {
+    transform: scale(1.02);
+  }
+  
+  .card1 {
+    background-color: #be185d;
+    min-height: 500px;
+  }
+  
+  @media (min-width: 1024px) {
+    .card1 {
+      grid-column: span 2;
+      min-height: 300px;
+    }
+  }
+  
+  .card2 {
+    background-color: #000;
+    min-height: 300px;
+  }
+  
+  .card3 {
+    background-color: #1e3a8a;
+    min-height: 500px;
+  }
+  
+  @media (min-width: 1024px) {
+    .card3 {
+      grid-column: span 3;
+      min-height: 600px;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .card3 {
+      min-height: 300px;
+    }
+  }
+  
+  .content {
+    max-width: 320px;
+  }
+  
+  .card3 .content {
+    max-width: 384px;
+  }
+  
+  @media (min-width: 768px) {
+    .card3 .content {
+      max-width: 512px;
+    }
+  }
+  
+  .content h2 {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: #fff;
+    margin: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .content h2 {
+      font-size: 20px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .content h2 {
+      font-size: 30px;
+    }
+  }
+  
+  .content p {
+    margin-top: 16px;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #e5e7eb;
+    max-width: 416px;
+  }
+  
+  .card1Image,
+  .card3Image {
+    position: absolute;
+    bottom: -40px;
+    object-fit: contain;
+    border-radius: 16px;
+    width: 500px;
+    height: 500px;
+  }
+  
+  .card1Image {
+    right: -16px;
+    filter: grayscale(100%);
+  }
+  
+  @media (min-width: 1024px) {
+    .card1Image {
+      right: -40%;
+    }
+  }
+  
+  .card3Image {
+    right: -40px;
+  }
+  
+  @media (min-width: 768px) {
+    .card3Image {
+      right: -40%;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .card3Image {
+      right: -20%;
+    }
+  }

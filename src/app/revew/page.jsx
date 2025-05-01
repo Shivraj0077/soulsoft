@@ -10,6 +10,7 @@ import './owl.carousel.min.css';
 import './jquery.fancybox.min.css';
 import './bootstrap.min.css';
 import './aos.css';
+import Footer from '../../../components/Footer';
 
 export default function Home() {
   useEffect(() => {
@@ -703,6 +704,7 @@ export default function Home() {
         </div>
       </div>
       {/* Loader */}
+      <Footer/>
 
       {/* Scripts */}
       <Script src="js/scripts-dist.js" strategy="beforeInteractive" />

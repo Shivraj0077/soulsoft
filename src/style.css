@@ -26,10 +26,10 @@ html, body {
     height: 100%;
     width: 100%;
     cursor: none;
+    overflow-x: hidden;
 }
 
 #main {
-    /* background-color: #000; */
     position: relative;
     z-index: 10;
 }
@@ -45,7 +45,6 @@ html, body {
 nav {
     padding: 2vw 0vw;
     width: 100%;
-    /* background-color: red; */
     display: flex;
     align-items: center;
     position: relative;
@@ -94,9 +93,22 @@ nav {
     position: relative;
     z-index: 9;
 }
+@media (max-width: 768px) {
+    .responsive-text {
+      color: white !important;
+
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .responsive-text {
+      color: black !important;
+    }
+  }
+  
 
 #nav-part2 h4:hover a {
-    color:black;
+    color: black;
 }
 
 nav h3 {
@@ -106,7 +118,6 @@ nav h3 {
 #center {
     height: 65vh;
     width: 100%;
-    /* background-color: orange; */
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -138,11 +149,11 @@ nav h3 {
     width: 55vw;
     height: 50vw;
     right: 0;
-    top: 64vh;
+    top: 50vh;
 }
 
 #hero-1 {
-    background-color:#1665f8;
+    background-color: #1665f8;
     height: 100%;
     width: 100%;
     border-top-left-radius: 50%;
@@ -152,8 +163,7 @@ nav h3 {
 }
 
 #hero-2 {
-    background: linear-gradient(#1665f8,#1665f8);
-
+    background: linear-gradient(#1665f8, #1665f8);
     height: 50vw;
     width: 30vw;
     border-radius: 50%;
@@ -184,7 +194,6 @@ nav h3 {
     from {
         transform: translate(55%, -8%);
     }
-
     to {
         transform: translate(0%, 10%);
     }
@@ -194,7 +203,6 @@ nav h3 {
     from {
         transform: translate(5%, -5%);
     }
-
     to {
         transform: translate(-20%, 30%);
     }
@@ -224,15 +232,14 @@ nav h3 {
     animation-duration: 15s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    
 }
-.con h1{
+
+.con h1 {
     color: white;
 }
 
 #moving-text h1 {
     font-size: 9vw;
-    /* background-color: #ffdbac; */
     display: inline-block;
 }
 
@@ -241,7 +248,7 @@ nav h3 {
     width: 70px;
     border-radius: 50%;
     display: inline-block;
-    background-color:#1665f8;
+    background-color: #1665f8;
     margin: 1vw 2vw;
 }
 
@@ -249,7 +256,6 @@ nav h3 {
     from {
         transform: translateX(0);
     }
-
     to {
         transform: translateX(-100%);
     }
@@ -258,7 +264,6 @@ nav h3 {
 #page2-bottom {
     height: 80vh;
     width: 100%;
-    /* background-color: aliceblue; */
     padding: 4.5vw;
     display: flex;
     align-items: center;
@@ -276,7 +281,6 @@ nav h3 {
 
 #bottom-part2 {
     width: 20%;
-    /* background-color: aqua; */
 }
 
 #bottom-part2 img {
@@ -288,7 +292,7 @@ nav h3 {
     font-weight: 300;
     margin-top: 2vw;
     font-size: medium;
-    color:white
+    color: white;
 }
 
 #page2 #gooey {
@@ -297,9 +301,6 @@ nav h3 {
     position: absolute;
     border-radius: 50%;
     background: linear-gradient(to top right, #1665f8, #0444bb);
-    /* background: linear-gradient(to top right,red,blue); */
-
-
     top: 58%;
     left: 25%;
     filter: blur(20px);
@@ -308,23 +309,24 @@ nav h3 {
     animation-iteration-count: infinite;
     animation-direction: alternate;
     animation-timing-function: ease-in-out;
-
 }
 
+@media (max-width: 768px) {
+    #page2 #gooey {
+      transform: translateY(-30vh) !important;
+
+    }
+  }
 @keyframes gooey {
     from {
         filter: blur(30px);
         transform: translate(10%, -10%) skew(0);
     }
-
     to {
         filter: blur(40px);
         transform: translate(-10%, 10%) skew(-12deg);
     }
 }
-
-
-
 
 #page3 {
     min-height: 100vh;
@@ -341,14 +343,27 @@ nav h3 {
     height: 130px;
     width: 100%;
     position: relative;
-
     border-bottom: 1px solid #38383864;
     overflow: hidden;
     display: flex;
     align-items: center;
     padding: 0 2vw;
-    justify-content: space-between
+    justify-content: space-between;
 }
+@media (max-width: 768px) {
+    #bottom-part2 {
+      width: 100% !important;
+      max-width: none;
+      margin: 0;          /* remove auto‐margins */
+      padding: 0 1rem; 
+      margin-top: 4cm;   /* optional side padding */
+    }
+    /* if you want the Next.js <Image> to also fill */
+    #bottom-part2 img {
+      width: 100% !important;
+      height: 10cm !important;
+    }
+  }
 
 .elem h2 {
     font-size: 3vw;
@@ -356,7 +371,6 @@ nav h3 {
     z-index: 9;
     margin-right: 2vw;
     color: white;
-    
 }
 
 .elem .overlay {
@@ -371,15 +385,11 @@ nav h3 {
 
 .elem:hover .overlay {
     top: 0;
-    
 }
-
-
 
 #fixed-image {
     height: 30vw;
     width: 24vw;
-    /* background-color: red; */
     border-radius: 15px;
     position: fixed;
     z-index: 99;
@@ -411,7 +421,6 @@ nav h3 {
 #page5 {
     height: 100vh;
     width: 100%;
-    /* background-color: #EFEAE3; */
 }
 
 #footer {
@@ -423,11 +432,11 @@ nav h3 {
     z-index: 9;
     bottom: 0;
     display: flex;
-    /* align-items: flex-end; */
     justify-content: flex-end;
     flex-direction: column;
     padding: 1vw 3vw;
 }
+
 #page5 {
     height: 100vh;
     width: 100%;
@@ -500,21 +509,87 @@ nav h3 {
     background-color: #EFEAE3;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-
 }
 
-@media (max-width:600px) {
+#loader {
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    transition: all ease 0.7s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+#loader h1 {
+    font-size: 4vw;
+    color: transparent;
+    background: linear-gradient(to right, orange, orangered);
+    -webkit-background-clip: text;
+    position: absolute;
+    opacity: 0;
+    animation-name: load;
+    animation-duration: 1s;
+    animation-delay: 1s;
+    animation-timing-function: linear;
+}
+
+#loader h1:nth-child(2) {
+    animation-delay: 2s;
+}
+
+#loader h1:nth-child(3) {
+    animation-delay: 3s;
+}
+
+@keyframes load {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+#right {
+    position: relative;
+    top: -3cm;
+    color: white;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    font-weight: lighter;
+    text-align: right;
+    position: relative;
+    right: 0;
+    margin-right: 10px;
+    color: white;
+}
+
+#left {
+    color: white;
+}
+
+@media (max-width: 700px) {
     #page1 {
         min-height: 100vh;
-        width: 100vw;
-        padding: 0 0vw;
+        width: 100%;
+        padding: 0;
     }
 
     nav {
         padding: 8vw 5vw;
         background-color: #EFEAE3;
-        /* padding: 0 5vw; */
     }
 
     nav img {
@@ -539,7 +614,6 @@ nav h3 {
     #center {
         height: 62vh;
         width: 100%;
-        /* background-color: orange; */
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
@@ -555,12 +629,23 @@ nav h3 {
         width: 80%;
         font-size: 5.5vw;
         line-height: 6vw;
+        margin-bottom:1rem;
+    }
+
+    #right {
+        top: 0;
     }
 
     #center h1 {
         font-size: 17vw;
         text-align: right;
         line-height: 15vw;
+    }
+
+    .subtitle {
+        font-size: 4vw;
+        margin-right: 0;
+        text-align: right;
     }
 
     #page1 video {
@@ -572,6 +657,18 @@ nav h3 {
         object-position: center;
         width: 92%;
         margin-left: 4%;
+    }
+
+    #hero-shape {
+        width: 80vw;
+        height: 80vw;
+        margin-top: -20vw;
+        right: 0;
+    }
+
+    #hero-1, #hero-2, #hero-3 {
+        width: 100%;
+        height: 100%;
     }
 
     #page2 {
@@ -602,7 +699,6 @@ nav h3 {
 
     #moving-text h1 {
         font-size: 15vw;
-        /* background-color: #ffdbac; */
         display: inline-block;
     }
 
@@ -618,7 +714,6 @@ nav h3 {
     #page2-bottom {
         height: 90vh;
         width: 100%;
-        /* background-color: aliceblue; */
         padding: 10vw 4vw;
         display: flex;
         align-items: flex-start;
@@ -636,18 +731,22 @@ nav h3 {
 
     #bottom-part2 {
         width: 70%;
-        /* background-color: aqua; */
     }
 
     #bottom-part2 img {
         width: 100%;
         border-radius: 10px;
     }
+    .services {
+        /* move it down by 3cm only on phones */
+        margin-bottom:-4cm !important;
+        margin-top: 7cm;
+      }
 
     #bottom-part2 p {
-        font-weight: 200;
+        font-weight: 300;
         margin-top: 2vw;
-        font-size: 3vw;
+        font-size: 4vw;
     }
 
     #page2 #gooey {
@@ -656,98 +755,87 @@ nav h3 {
         position: absolute;
         border-radius: 50%;
         background: linear-gradient(to top right, #1665f8, #054fd7);
-        /* background: linear-gradient(to top right,red,blue); */
-
-
         top: 58%;
         left: 25%;
         filter: blur(20px);
         animation-name: gooey;
-        animation-duration: 6s;
+        animation-duration: 3s;
         animation-iteration-count: infinite;
         animation-direction: alternate;
         animation-timing-function: ease-in-out;
-
     }
 
-
-}
-
-#loader{
-    height: 100%;
-    width: 100%;
-    background-color: #000;
-    position: fixed;
-    z-index: 999;
-    top: 0;
-    transition: all ease 0.7s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-#loader h1{
-    font-size: 4vw;
-    color: transparent;
-    background: linear-gradient(to right,orange,orangered);
-    -webkit-background-clip: text;
-    position: absolute;
-    opacity: 0;
-    animation-name: load;
-    animation-duration: 1s;
-    animation-delay: 1s;
-    animation-timing-function: linear;
-}
-#loader h1:nth-child(2){
-    animation-delay: 2s;
-}
-#loader h1:nth-child(3){
-    animation-delay: 3s;
-}
-
-@keyframes load {
-    0%{
-        opacity: 0;
+    #page3 {
+        min-height: 100vh;
+        width: 100%;
+        padding: 8vw 4vw;
     }
-    10%{
-        opacity: 1;
+    #elem-container {
+        margin-top: -1cm !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        flex-direction: column;
+        margin-left: -0.8cm !important;
+        gap: 15px !important;
     }
-    90%{
-        opacity: 1;
-    }
-    100%{
-        opacity: 0;
-    }
-}
-
-@media (max-width:600px) {
-    #loader h1{
-        font-size: 9vw;
-      
-    }
-}
-#right {
-  position: relative;
-  top: -3cm; /* moves it up by approx 2cm */
-  color: white;
-  
-}
-#right h1{
     
-  
+   
+      /* Make each button full width with only 2px margin on sides */
+      #elem-container .group {
+        flex: none !important;
+        width: 100% !important;
+        font-size: 1.4rem !important;
+        padding: 15px !important;
+        box-sizing:content-box;
+      }
+    #elem-container a.group .arrow {
+        font-size: 4vw;
+    }
+
+    #page3 > div > div > div > div:first-child {
+        margin-bottom: 50px;
+        margin-top: -50px;
+    }
+
+    #page3 > div > div > div > div:first-child h2 {
+        font-size: 8vw;
+    }
+
+    #page3 > div > div > div > div:last-child {
+        padding-left: 0.5cm;
+        padding-right: 0.5cm;
+        margin-top: 30px;
+    }
+
+    #page3 > div > div > div > div:last-child video {
+        border-radius: 10px;
+    }
+    .video-container {
+        margin-top: 50px;
+        width: calc(100vw - 2px); /* Full viewport width minus 2px */
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      
+      
+      /* force the video to be exactly 10cm wide */
+      .mobile-video {
+        width: 30cm !important;
+        height: auto !important;
+        margin: 0 auto; /* center it horizontally */
+        display: block;
+      }
+    #loader h1 {
+        font-size: 9vw;
+    }
+
+    #arrow-container {
+        margin-top: 10px;
+    }
+
+    #arrow-container span {
+        font-size: 18px;
+    }
 }
-.subtitle {
-    font-size: 1.5rem;
-    font-weight:lighter;
-    text-align: right;
-    position: relative;
-    ; /* move only this line upward */
-    right: 0;
-    margin-right: 10px; /* optional spacing from right edge */
-    color:white;
-  }
-#left{
-    color: white;
-}
-  

@@ -271,20 +271,20 @@ function Web() {
 
   const faqs = [
     {
-      question: "How much does it cost to develop a website?",
-      answer: "Website development costs vary based on complexity, features, and design requirements. Basic websites typically range from $3,000-$10,000, while complex e-commerce or custom web applications can range from $10,000-$50,000+. We provide detailed quotes after understanding your specific requirements."
+      question: "How much does It depends on features, complexity & platform. Contact us for a free quote. mobile app development cost?",
+      answer: ""
     },
     {
-      question: "Do you offer SEO-friendly web design?",
-      answer: "Yes, all our websites are built with SEO best practices in mind. This includes clean code, fast loading speeds, mobile responsiveness, proper heading structure, schema markup, and optimized images. We also offer additional SEO services to help improve your search engine rankings."
+      question: "Do you develop both Android & iOS apps?",
+      answer: "Yes! We offer Android, iOS & cross-platform app development using the latest technologies."
     },
     {
-      question: "Can you develop an e-commerce website?",
-      answer: "Absolutely! We specialize in developing custom e-commerce websites that are tailored to your business needs. Our e-commerce solutions include secure payment processing, inventory management, user-friendly product catalogs, and seamless checkout experiences. We work with platforms like WooCommerce, Shopify, and Magento, or can build custom solutions."
+      question: "How long does it take to build a mobile app?",
+      answer: "Typically, 2-6 months, depending on the project scope."
     },
     {
-      question: "How long does it take to build a website?",
-      answer: "Typically, websites take 2–6 weeks depending on requirements. Simple websites can be completed in 2-3 weeks, while more complex sites may take 8-12 weeks or more. We ensure timely delivery without compromising quality and provide clear timelines during the project scoping phase."
+      question: "Will you help with App Store submission?",
+      answer: "Yes! We handle the Google Play Store & App Store submission process for you."
     }
   ];
 

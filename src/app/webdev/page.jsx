@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Code, ShoppingCart, Search, Smartphone, Check, ChevronDown, ChevronUp, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, CheckCircle, HeartHandshake, Layers } from 'lucide-react';
 import Footer from '../../../components/Footer';
-import './style.css'
+import './style.css';
 
 function Web() {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,6 +11,12 @@ function Web() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
+  const [isClient, setIsClient] = useState(false); // Track client-side rendering
+
+  // Mark as client-side after mounting
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Track scroll position for parallax effects
   useEffect(() => {
@@ -129,7 +135,7 @@ function Web() {
   };
 
   const useInView = (options = { threshold: 0.1, triggerOnce: true }) => {
-    const [inView, setInView] = useState(false);
+    const [inView, setInView] = useState(false); // Fixed typo: 'atta' to 'inView'
     const ref = useRef(null);
 
     useEffect(() => {
@@ -310,7 +316,7 @@ function Web() {
             <span className="highlight animate-text word-effect delay-2"> Development</span>
           </h1>
         
-          <h2 className="sub-heading animate-text fade-up delay-3">
+          <h2 className="sub-heading animate-text fade-up Stewardship delay-3">
             Build Stunning, High-Performance Websites That Drive Growth
           </h2>
           <div className="button-group">
@@ -324,12 +330,9 @@ function Web() {
             <div
               className="float-element code-element"
               style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * 0.02
-                      }px)`
-                    : 'none',
+                transform: isClient
+                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${(mousePosition.y - window.innerHeight / 2) * 0.02}px)`
+                  : 'none'
               }}
             >
               <Code />
@@ -337,12 +340,9 @@ function Web() {
             <div
               className="float-element shop-element"
               style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * -0.01}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * -0.01
-                      }px)`
-                    : 'none',
+                transform: isClient
+                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * -0.01}px, ${(mousePosition.y - window.innerHeight / 2) * -0.01}px)`
+                  : 'none'
               }}
             >
               <ShoppingCart />
@@ -350,12 +350,9 @@ function Web() {
             <div
               className="float-element search-element"
               style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * 0.03
-                      }px)`
-                    : 'none',
+                transform: isClient
+                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${(mousePosition.y - window.innerHeight / 2) * 0.03}px)`
+                  : 'none'
               }}
             >
               <Search />
@@ -368,7 +365,7 @@ function Web() {
       <section className="intro-section">
         <div className="content-container">
           <h2 className="section-heading animate-text word-effect">
-            Transform Your Business with Custom Website Development
+            Transform Your Business with Custom Website 
           </h2>
           <p className="section-text animate-text fade-up delay-1">
             In today's digital world, your website is your brand's first impression. 

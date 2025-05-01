@@ -6,6 +6,7 @@ import Script from "next/script";
 import { register } from "swiper/element/bundle";
 import dynamic from "next/dynamic";
 import { HeroScrollDemo } from "./globe/page";
+import ScrollToHash from "./ScrollToHash";
 import "../style.css";
 // Import swiper styles
 import "swiper/css";
@@ -17,6 +18,8 @@ import Footer from "../../components/Footer";
 import WorldMap from "@/components/ui/world-map";
 
 import { BentoGridDemo } from "../../components/globe";
+import { CompareDemo } from "../../components/Before";
+import { WobbleCardDemo } from "../../components/card";
 // Import locomotive scroll dynamically with no SSR
 const LocomotiveScrollProvider = dynamic(
   () => import("../../components/LocomotiveScrollProvider"),
@@ -128,9 +131,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/icon.png" />
       </Head>
-      <div className="custom-cursor">
-        <span>Soulsoft</span>
-      </div>
+     
       <CustomCursor />
 
       {isLoading && (
@@ -148,28 +149,7 @@ export default function Home() {
 
       <div id="main">
         <div id="page1">
-          <nav>
-            <Image src="/so.png" alt="soulsoft Logo" width={200} height={60} />
-            <div id="nav-part2">
-              <h4>
-                <a href="#">product</a>
-              </h4>
-              <h4>
-                <a href="#">about</a>
-              </h4>
-              <h4>
-                <a href="#">Contact</a>
-              </h4>
-              <h4>
-                <a href="#">review</a>
-              </h4>
-              <h4>
-                <a href="#">jobs</a>
-              </h4>
-            </div>
-            <h3>Menu</h3>
-          </nav>
-
+         
           <div id="center">
             <div id="left">
               <h3>
@@ -194,13 +174,14 @@ export default function Home() {
           </div>
 
           <video
+           
             autoPlay
             loop
+            muted
+        
             src="/solo.mp4"
-            controls
-            onLoadedMetadata={(e) => {
-              e.target.volume = 1.0; // Set volume to 100%
-            }}
+            
+            
           ></video>
 
           <div
@@ -255,14 +236,14 @@ export default function Home() {
           </div>
         </div>
         
-       
+        <ScrollToHash />
           
         <div id="page3">
         <div id="page3">
         <div id="page3">
         <div id="page3">
         <div style={{ textAlign: "center", marginBottom: "150px", marginTop: "-150px" }}>
-  <h2 style={{ 
+  <h2  className="services"style={{ 
     fontSize: "3rem", 
     fontWeight: "600", 
     color: "white"
@@ -270,7 +251,7 @@ export default function Home() {
     Our Services
   </h2>
 </div>
-        
+  <section id="services">   
 <div
   id="elem-container"
   ref={elemContainerRef}
@@ -335,32 +316,14 @@ export default function Home() {
         →
       </span>
     </a>
+
   ))}
-</div>
 
-
-
-<div style={{
-  paddingLeft: "1cm",
-  paddingRight: "1cm",
-  marginTop: "50px",
-}}>
- <video
-  autoPlay
-  muted
-  loop
-  src="/fotter.mp4"
-  style={{
-    display: "block",
-    width: "100%",
-    height: "auto",
-    borderRadius: "20px",
-  }}
-></video>
+ <CompareDemo/>
+ 
 
 </div>
-
-</div>
+</section>
 
 
 </div>
@@ -370,6 +333,51 @@ export default function Home() {
 </div>
 
 
+
+<div className="w-full overflow-hidden">
+      <style>
+        {`
+          .full-width-video-container {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            overflow: hidden;
+            border-radius: 50px;
+            padding: 0 20px;
+          }
+          
+          .full-width-video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+             border-radius: 30px;
+          }
+        `}
+      </style>
+      
+      <div className="full-width-video-container">
+        <video 
+          autoPlay
+          muted
+          loop
+          src="/fotter.mp4"
+        ></video>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+</div>
       </div>
       {/* Replace your current page5 div with this */}
     
@@ -389,7 +397,7 @@ export default function Home() {
           <Footer />
        
   
-      
+ 
      
 
       {/* Load locomotive-scroll from CDN (necessary for client-side) */}
@@ -397,8 +405,6 @@ export default function Home() {
         src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js"
         strategy="lazyOnload"
       />
-
-
 
     </>
   );
