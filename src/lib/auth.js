@@ -2,13 +2,19 @@ import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { pool } from '@/lib/db';
 
-// Hardcoded recruiter emails
+// Hardcoded admin emails for ticket system
+const ADMIN_EMAILS = [
+  'admin1@example.com',
+  'admin2@example.com',
+  'shivrajpawar0077@gmail.com', // Add your admin email
+];
+
+// Hardcoded recruiter emails for job system
 const RECRUITER_EMAILS = [
   'recruiter1@example.com',
   'recruiter2@example.com',
   'recruiter3@example.com',
   'shivrajpawar7700@gmail.com',
-  // Add more recruiter emails as needed
 ];
 
 export const authOptions = {
@@ -16,6 +22,13 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "select_account",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
   ],
   callbacks: {
@@ -23,9 +36,14 @@ export const authOptions = {
       if (account.provider === 'google') {
         try {
           // Determine role based on email
-          const role = RECRUITER_EMAILS.includes(user.email)
-            ? 'recruiter'
-            : 'applicant';
+          let role;
+          if (ADMIN_EMAILS.includes(user.email)) {
+            role = 'admin';
+          } else if (RECRUITER_EMAILS.includes(user.email)) {
+            role = 'recruiter';
+          } else {
+            role = 'user'; // Default role for ticket system users
+          }
 
           // Check if user exists
           const userResult = await pool.query(
@@ -39,19 +57,17 @@ export const authOptions = {
             // Create new user
             const newUserResult = await pool.query(
               'INSERT INTO users (email, name, provider_id, provider_name, role, google_sub) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
-              [
-                user.email,
-                user.name,
-                account.providerAccountId,
-                'google',
-                role,
-                user.id,
-              ]
+              [user.email, user.name, account.providerAccountId, 'google', role, user.id]
             );
             userId = newUserResult.rows[0].user_id;
 
             // Create role-specific record
-            if (role === 'recruiter') {
+            if (role === 'admin') {
+              await pool.query(
+                'INSERT INTO admins (user_id, name, email, phone_number) VALUES ($1, $2, $3, $4)',
+                [userId, user.name, user.email, null] // Phone number set via admin configuration
+              );
+            } else if (role === 'recruiter') {
               await pool.query(
                 'INSERT INTO recruiters (user_id) VALUES ($1)',
                 [userId]
@@ -71,23 +87,34 @@ export const authOptions = {
             );
 
             // Ensure role-specific record exists
-            if (role === 'recruiter') {
-              const recruiterCheck = await pool.query(
-                'SELECT * FROM recruiters WHERE user_id = $1',
+            if (role === 'admin') {
+              const adminResult = await pool.query(
+                'SELECT admin_id FROM admins WHERE user_id = $1',
                 [userId]
               );
-              if (recruiterCheck.rows.length === 0) {
+              if (adminResult.rows.length === 0) {
+                await pool.query(
+                  'INSERT INTO admins (user_id, name, email, phone_number) VALUES ($1, $2, $3, $4)',
+                  [userId, user.name, user.email, null]
+                );
+              }
+            } else if (role === 'recruiter') {
+              const recruiterResult = await pool.query(
+                'SELECT recruiter_id FROM recruiters WHERE user_id = $1',
+                [userId]
+              );
+              if (recruiterResult.rows.length === 0) {
                 await pool.query(
                   'INSERT INTO recruiters (user_id) VALUES ($1)',
                   [userId]
                 );
               }
             } else {
-              const applicantCheck = await pool.query(
-                'SELECT * FROM applicants WHERE user_id = $1',
+              const applicantResult = await pool.query(
+                'SELECT applicant_id FROM applicants WHERE user_id = $1',
                 [userId]
               );
-              if (applicantCheck.rows.length === 0) {
+              if (applicantResult.rows.length === 0) {
                 await pool.query(
                   'INSERT INTO applicants (user_id) VALUES ($1)',
                   [userId]
@@ -106,24 +133,37 @@ export const authOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.email = user.email;
-        token.role = RECRUITER_EMAILS.includes(user.email)
+        token.role = ADMIN_EMAILS.includes(user.email)
+          ? 'admin'
+          : RECRUITER_EMAILS.includes(user.email)
           ? 'recruiter'
-          : 'applicant';
+          : 'user';
+        token.id = user.id; // Store Google sub for database queries
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.email = token.email;
-        session.user.role = token.role;
+      if (session?.user) {
+        session.user.role = ADMIN_EMAILS.includes(session.user.email)
+          ? 'admin'
+          : RECRUITER_EMAILS.includes(session.user.email)
+          ? 'recruiter'
+          : 'user';
+        session.user.id = token.id; // Add user ID to session
       }
       return session;
     },
   },
   pages: {
     signIn: '/auth/signin',
+    signOut: '/auth/signin',
     error: '/auth/error',
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 24 hours
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
+
+export default NextAuth(authOptions);
