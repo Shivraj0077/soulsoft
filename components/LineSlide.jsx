@@ -1,7 +1,6 @@
 import React from "react";
 
 const LineSlides = () => {
-  console.log("✅ LineSlides component rendered");
 
   const containerStyle = {
     display: "flex",
