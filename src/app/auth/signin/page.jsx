@@ -6,13 +6,23 @@ import { useState } from 'react';
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
-  const error = searchParams.get('error');
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
-    await signIn('google', { callbackUrl });
+    setError(null);
+    try {
+      await signIn('google', {
+        callbackUrl,
+        prompt: 'select_account' // Force account selection
+      });
+    } catch (error) {
+      console.error('Sign-in error:', error);
+      setError('Failed to sign in with Google. Please try again.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -30,6 +40,7 @@ export default function SignIn() {
             {error === 'OAuthSignin' && 'Error starting the sign in process. Please try again.'}
             {error === 'OAuthCallback' && 'Error during the sign in process. Please try again.'}
             {error === 'Default' && 'An error occurred. Please try again.'}
+            {error}
           </div>
         )}
 

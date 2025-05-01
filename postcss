@@ -1,0 +1,31 @@
+/app   
+  /admin
+    /dashboard/page.js   +
+    /tickets/[id]/page.js   +
+  /user
+    /dashboard/page.js   +
+    /tickets/new/page.js  +(updated grok)
+    /tickets/[id]/page.js  +
+  /api
+    /tickets
+      /route.js   +
+      /[id]/route.js  +
+      /upload/route.js   +
+    /notifications
+      /email/route.js   +
+      /whatsapp/route.js  +
+/components
+  /admin
+    TicketList.jsx   +
+    StatusUpdater.jsx   +
+  /user
+    TicketForm.jsx   +
+    TicketList.jsx   +
+  /shared
+    ImageUploader.jsx   +
+/lib
+  /auth.js (modified)   +
+  /db.js
+  /cloudflare.js   +
+  /notifications.js   +
+/middleware.js (modified)   +

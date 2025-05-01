@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { getFileProxyUrl, getFileKeyFromUrl } from '@/lib/cloudflare';
 
 export default function JobApplications() {
   const [applications, setApplications] = useState([]);
@@ -77,18 +78,40 @@ export default function JobApplications() {
     }
   };
 
-  // Test resume URL accessibility
+  const ResumeLink = ({ resumeUrl }) => {
+    const fileKey = getFileKeyFromUrl(resumeUrl);
+    const proxyUrl = getFileProxyUrl(fileKey);
+
+    return (
+      <a
+        href={proxyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+        onClick={async (e) => {
+          e.preventDefault();
+          const isAccessible = await testResumeUrl(proxyUrl);
+          if (isAccessible) {
+            window.open(proxyUrl, '_blank');
+          }
+        }}
+      >
+        View Resume
+      </a>
+    );
+  };
+
   const testResumeUrl = async (url) => {
     try {
-      const res = await fetch(url, { method: 'HEAD', mode: 'cors' });
-      if (!res.ok) {
-        throw new Error(`Resume inaccessible (Status: ${res.status})`);
+      const response = await fetch(url, { method: 'HEAD' });
+      if (!response.ok) {
+        throw new Error(`Resume inaccessible (Status: ${response.status})`);
       }
       setResumeError(null);
       return true;
     } catch (err) {
-      console.error(`Error accessing resume: ${url}`, err);
-      setResumeError(`Unable to access resume. Ensure the file is publicly accessible in Cloudflare R2 or contact support.`);
+      console.error('Error accessing resume:', err);
+      setResumeError('Unable to access resume file. Please try again later.');
       return false;
     }
   };
@@ -171,22 +194,13 @@ export default function JobApplications() {
                             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                           >
                             <option value="Pending">Pending</option>
-                            <option value="Reviewed">Reviewed</option>
                             <option value="Accepted">Accepted</option>
                             <option value="Rejected">Rejected</option>
                           </select>
                         </div>
                         <div>
                           {app.resume_url ? (
-                            <a
-                              href={app.resume_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() => testResumeUrl(app.resume_url)}
-                              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                            >
-                              View Resume
-                            </a>
+                            <ResumeLink resumeUrl={app.resume_url} />
                           ) : (
                             <span className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 bg-gray-200">
                               No Resume

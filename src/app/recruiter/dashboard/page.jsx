@@ -52,10 +52,14 @@ export default function RecruiterDashboard() {
   };
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      fetchJobs();
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin');
+    } else if (status === 'authenticated' && session?.user?.role !== 'recruiter') {
+      router.push('/applicant/dashboard');
+    } else if (status === 'authenticated') {
+      fetchJobs(); // Your existing fetchJobs function
     }
-  }, [status]);
+  }, [status, session, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -160,10 +164,19 @@ export default function RecruiterDashboard() {
 
   const handleLogout = async () => {
     try {
-      await signOut({ redirect: false });
-      router.push('/jobs');
+      // Clear any local storage or state
+      localStorage.removeItem('recruiterSession');
+      sessionStorage.clear();
+      
+      // Sign out and force a clean redirect
+      await signOut({ 
+        callbackUrl: '/auth/signin',
+        redirect: true
+      });
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Error during logout:', error);
+      // Fallback redirect
+      router.push('/auth/signin');
     }
   };
 
