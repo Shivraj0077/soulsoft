@@ -265,10 +265,7 @@ function Web() {
       question: "Do you offer SEO-friendly web design?",
       answer: "Yes! We follow SEO best practices to ensure higher search rankings & organic traffic growth."
     },
-    {
-      question: "How long does it take to develop an eCommerce website?",
-      answer: "Absolutely! We specialize in developing custom e-commerce websites that are tailored to your business needs. Our e-commerce solutions include secure payment processing, inventory management, user-friendly product catalogs, and seamless checkout experiences. We work with platforms like WooCommerce, Shopify, and Magento, or can build custom solutions."
-    },
+
     {
       question: "How long does it take to build a website?",
       answer: " Depending on your requirements, it takes 2-6 weeks to build a fully functional eCommerce site. "
