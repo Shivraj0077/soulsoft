@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Send, ChevronUp, ChevronDown, X } from 'lucide-react';
 
+// Language options
 const languages = [
   { code: 'en', name: 'English' },
   { code: 'hi', name: 'हिन्दी' },
@@ -33,10 +34,12 @@ const translations = {
     appointmentConfirm: 'Your appointment has been scheduled. You will receive an email confirmation shortly.',
     typeNumber: 'Type a number to select an option',
     errorMessage: 'Sorry, there was an error processing your request.',
-    purchaseRedirect: 'this is your purchase link',
+    purchaseRedirect: 'This is your purchase link',
     demoLink: 'Here is the demo link for the selected product.',
     phoneNumber: 'Contact us at: +91-123-456-7890',
-    emailContact: 'Email us at: support@example.com',
+    emailContact: 'Email us at: [support@example.com](mailto:support@example.com)',
+    chooseLanguage: 'Please select a language:',
+    talkToMe: 'Talk to me',
   },
   hi: {
     placeholder: 'अपना संदेश लिखें...',
@@ -63,7 +66,9 @@ const translations = {
     purchaseRedirect: 'खरीद पृष्ठ पर पुनर्निर्देशित हो रहा है...',
     demoLink: 'चयनित उत्पाद के लिए डेमो लिंक यहाँ है।',
     phoneNumber: 'हमसे संपर्क करें: +91-123-456-7890',
-    emailContact: 'हमें ईमेल करें: support@example.com',
+    emailContact: 'हमें ईमेल करें: [support@example.com](mailto:support@example.com)',
+    chooseLanguage: 'कृपया एक भाषा चुनें:',
+    talkToMe: 'मुझसे बात करें',
   },
   mr: {
     placeholder: 'आपला संदेश टाइप करा...',
@@ -90,18 +95,28 @@ const translations = {
     purchaseRedirect: 'खरेदी पृष्ठावर पुनर्निर्देशित होत आहे...',
     demoLink: 'निवडलेल्या उत्पादनासाठी डेमो लिंक येथे आहे.',
     phoneNumber: 'आमच्याशी संपर्क साधा: +91-123-456-7890',
-    emailContact: 'आम्हाला ईमेल करा: support@example.com',
+    emailContact: 'आम्हाला ईमेल करा: [support@example.com](mailto:support@example.com)',
+    chooseLanguage: 'कृपया एक भाषा निवडा:',
+    talkToMe: 'माझ्याशी बोला',
   },
 };
 
-// Chatbot flow data (unchanged from your provided code)
+// Chatbot flow data
 const chatbotFlowData = {
+  languageSelection: {
+    options: [
+      { id: '1', name: { en: 'English', hi: 'अंग्रेजी', mr: 'इंग्रजी' }, nextState: 'mainMenu', language: 'en' },
+      { id: '2', name: { en: 'Hindi', hi: 'हिन्दी', mr: 'हिन्दी' }, nextState: 'mainMenu', language: 'hi' },
+      { id: '3', name: { en: 'Marathi', hi: 'मराठी', mr: 'मराठी' }, nextState: 'mainMenu', language: 'mr' },
+    ],
+  },
   mainMenu: {
     options: [
       { id: '1', name: { en: 'Products', hi: 'उत्पाद', mr: 'उत्पादने' }, nextState: 'products' },
       { id: '2', name: { en: 'Services', hi: 'सेवाएँ', mr: 'सेवा' }, nextState: 'services' },
       { id: '3', name: { en: 'Support & AMC', hi: 'सहायता और AMC', mr: 'सहाय्य आणि AMC' }, nextState: 'support' },
       { id: '4', name: { en: 'Contact Customer Care', hi: 'ग्राहक सेवा से संपर्क करें', mr: 'ग्राहक सेवा संपर्क' }, nextState: 'contact' },
+      { id: '5', name: { en: 'Talk to me', hi: 'मुझसे बात करें', mr: 'माझ्याशी बोला' }, nextState: 'randomChat' },
     ],
   },
   products: {
@@ -203,7 +218,20 @@ const chatbotFlowData = {
       { id: '2', name: { en: 'Back to Service Options', hi: 'सेवा विकल्पों पर वापस जाएं', mr: 'सेवा पर्यायांवर परत जा' }, nextState: 'serviceOptions' },
     ],
   },
+  randomChat: {
+    options: [
+      { id: '1', name: { en: 'Back to Main Menu', hi: 'मुख्य मेनू पर वापस जाएं', mr: 'मुख्य मेनू वर परत जा' }, nextState: 'mainMenu' },
+    ],
+  },
 };
+
+// Company information document
+const companyInfo = `Company Name: Your Company Name
+About: Your Company Name is a leading provider of innovative software solutions, specializing in agricultural technology, e-commerce, and digital marketing services. Founded in 2010, we aim to empower businesses with cutting-edge tools.
+Products: Shetkari Krushi Software, Shopcare, Kbazzar, Pharma Chemist
+Services: Web Design & Development, Digital Marketing, E-commerce Development, Android App Development, LMS, CRM Solutions
+Contact: support@yourcompany.com, +91-123-456-7890
+Website: https://yourcompany.com`;
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -211,8 +239,8 @@ const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [language, setLanguage] = useState('en');
-  const [currentState, setCurrentState] = useState('mainMenu');
+  const [language, setLanguage] = useState(null);
+  const [currentState, setCurrentState] = useState('languageSelection');
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -225,7 +253,6 @@ const Chatbot = () => {
   // Initialize speech recognition and synthesis
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Speech Recognition
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
@@ -253,7 +280,6 @@ const Chatbot = () => {
         setSpeechRecognition(recognition);
       }
 
-      // Speech Synthesis
       if ('speechSynthesis' in window) {
         setSpeechSynthesis(window.speechSynthesis);
       }
@@ -285,18 +311,31 @@ const Chatbot = () => {
 
   useEffect(() => {
     if (isOpen) {
-      const initialMessage = {
-        type: 'bot',
-        content: getWelcomeMessage(),
-        options: chatbotFlowData[currentState].options.map((option) => ({
-          id: option.id,
-          name: option.name[language],
-        })),
-      };
-      setMessages([initialMessage]);
-      speakText(initialMessage.content);
+      if (!language) {
+        const initialMessage = {
+          type: 'bot',
+          content: translations.en.chooseLanguage,
+          options: chatbotFlowData.languageSelection.options.map((option) => ({
+            id: option.id,
+            name: option.name.en,
+          })),
+        };
+        setMessages([initialMessage]);
+        speakText(initialMessage.content);
+      } else {
+        const initialMessage = {
+          type: 'bot',
+          content: currentState === 'mainMenu' ? getWelcomeMessage() : getResponseForState(currentState, ''),
+          options: chatbotFlowData[currentState].options.map((option) => ({
+            id: option.id,
+            name: option.name[language],
+          })),
+        };
+        setMessages([initialMessage]);
+        speakText(initialMessage.content);
+      }
     }
-  }, [language, isOpen]);
+  }, [language, isOpen, currentState]);
 
   useEffect(() => {
     scrollToBottom();
@@ -333,6 +372,8 @@ const Chatbot = () => {
     try {
       if (showEmailForm) {
         await handleEmailSubmission(inputValue);
+      } else if (currentState === 'randomChat') {
+        await handleRandomChat(inputValue);
       } else {
         await processUserInput(inputValue);
       }
@@ -354,15 +395,14 @@ const Chatbot = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailInput)) {
       setEmailError(translations[language].invalidEmail);
+      setIsLoading(false);
       return;
     }
 
     setEmailError('');
     setShowEmailForm(false);
     setEmail(emailInput);
-console.log('Email submitted:', emailInput);
-    // Simulate API call for booking
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    setCurrentState('mainMenu');
 
     const confirmationMessage = {
       type: 'bot',
@@ -372,10 +412,79 @@ console.log('Email submitted:', emailInput);
         name: option.name[language],
       })),
     };
-
     setMessages((prev) => [...prev, confirmationMessage]);
     speakText(confirmationMessage.content);
-    setCurrentState('mainMenu');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userEmail: emailInput }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      const errorMessage = {
+        type: 'bot',
+        content: `${translations[language].errorMessage} (Email may not have been sent, please contact support.)`,
+        options: chatbotFlowData.mainMenu.options.map((option) => ({
+          id: option.id,
+          name: option.name[language],
+        })),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      speakText(errorMessage.content);
+    }
+  };
+
+  const handleRandomChat = async (input) => {
+    try {
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: input,
+          language,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get response from Gemini API');
+      }
+
+      const botResponse = {
+        type: 'bot',
+        content: data.response,
+        options: chatbotFlowData.randomChat.options.map((option) => ({
+          id: option.id,
+          name: option.name[language],
+        })),
+      };
+
+      setMessages((prev) => [...prev, botResponse]);
+      speakText(botResponse.content);
+    } catch (error) {
+      console.error('Error in random chat:', error);
+      const errorMessage = {
+        type: 'bot',
+        content: translations[language].errorMessage,
+        options: chatbotFlowData.randomChat.options.map((option) => ({
+          id: option.id,
+          name: option.name[language],
+        })),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      speakText(errorMessage.content);
+    }
   };
 
   const processUserInput = async (input) => {
@@ -407,6 +516,11 @@ console.log('Email submitted:', emailInput);
 
   const getResponseForState = (state, input) => {
     const responses = {
+      languageSelection: {
+        en: translations.en.chooseLanguage,
+        hi: translations.hi.chooseLanguage,
+        mr: translations.mr.chooseLanguage,
+      },
       mainMenu: {
         en: 'I understand you need help. Please select an option from the menu below:',
         hi: 'मैं समझता हूं कि आपको मदद चाहिए। कृपया नीचे दिए गए मेनू से एक विकल्प चुनें:',
@@ -432,6 +546,11 @@ console.log('Email submitted:', emailInput);
         hi: 'कृपया एक संपर्क पद्धति चुनें:',
         mr: 'कृपया एक संपर्क पद्धत निवडा:',
       },
+      randomChat: {
+        en: 'Feel free to ask anything!',
+        hi: 'कुछ भी पूछने के लिए स्वतंत्र महसूस करें!',
+        mr: 'काहीही विचारण्यास मोकळे व्हा!',
+      },
     };
 
     return responses[state]?.[language] || translations[language].typeNumber;
@@ -439,6 +558,22 @@ console.log('Email submitted:', emailInput);
 
   const handleOptionSelection = async (option) => {
     const nextState = option.nextState;
+
+    if (currentState === 'languageSelection') {
+      setLanguage(option.language);
+      setCurrentState(nextState);
+      const welcomeMessage = {
+        type: 'bot',
+        content: getWelcomeMessage(),
+        options: chatbotFlowData.mainMenu.options.map((opt) => ({
+          id: opt.id,
+          name: opt.name[option.language],
+        })),
+      };
+      setMessages((prev) => [...prev, welcomeMessage]);
+      speakText(welcomeMessage.content);
+      return;
+    }
 
     switch (nextState) {
       case 'bookDemo':
@@ -452,30 +587,26 @@ console.log('Email submitted:', emailInput);
         break;
 
       case 'purchase':
-        // Simulate redirect to purchase page
         const purchaseMessage = {
           type: 'bot',
           content: translations[language].purchaseRedirect,
-          options: chatbotFlowData.mainMenu.options.map((option) => ({
-            id: option.id,
-            name: option.name[language],
+          options: chatbotFlowData.mainMenu.options.map((opt) => ({
+            id: opt.id,
+            name: opt.name[language],
           })),
         };
         setMessages((prev) => [...prev, purchaseMessage]);
         speakText(purchaseMessage.content);
-        // In a real app, redirect to purchase page
-        // window.location.href = '/purchase';
         setCurrentState('mainMenu');
         break;
 
       case 'viewDemo':
-        // Provide a demo link or information
         const demoMessage = {
           type: 'bot',
           content: translations[language].demoLink,
-          options: chatbotFlowData.productOptions.options.map((option) => ({
-            id: option.id,
-            name: option.name[language],
+          options: chatbotFlowData.productOptions.options.map((opt) => ({
+            id: opt.id,
+            name: opt.name[language],
           })),
         };
         setMessages((prev) => [...prev, demoMessage]);
@@ -484,13 +615,12 @@ console.log('Email submitted:', emailInput);
         break;
 
       case 'showPhone':
-        // Show phone number
         const phoneMessage = {
           type: 'bot',
           content: translations[language].phoneNumber,
-          options: chatbotFlowData.contact.options.map((option) => ({
-            id: option.id,
-            name: option.name[language],
+          options: chatbotFlowData.contact.options.map((opt) => ({
+            id: opt.id,
+            name: opt.name[language],
           })),
         };
         setMessages((prev) => [...prev, phoneMessage]);
@@ -499,13 +629,12 @@ console.log('Email submitted:', emailInput);
         break;
 
       case 'showEmail':
-        // Show email contact
         const emailMessage = {
           type: 'bot',
           content: translations[language].emailContact,
-          options: chatbotFlowData.contact.options.map((option) => ({
-            id: option.id,
-            name: option.name[language],
+          options: chatbotFlowData.contact.options.map((opt) => ({
+            id: opt.id,
+            name: opt.name[language],
           })),
         };
         setMessages((prev) => [...prev, emailMessage]);
@@ -514,14 +643,13 @@ console.log('Email submitted:', emailInput);
         break;
 
       default:
-        // Transition to the next state
         setCurrentState(nextState);
         const responseMessage = {
           type: 'bot',
           content: getResponseForState(nextState, ''),
-          options: chatbotFlowData[nextState].options.map((option) => ({
-            id: option.id,
-            name: option.name[language],
+          options: chatbotFlowData[nextState].options.map((opt) => ({
+            id: opt.id,
+            name: opt.name[language],
           })),
         };
         setMessages((prev) => [...prev, responseMessage]);
@@ -548,43 +676,95 @@ console.log('Email submitted:', emailInput);
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div style={{ position: 'fixed', bottom: '16px', right: '16px', zIndex: 50 }}>
       {!isOpen ? (
         <button
           onClick={toggleChatbot}
-          className="bg-blue-600 text-white rounded-full p-4 shadow-lg hover:bg-blue-700 transition"
+          style={{
+            backgroundColor: '#1e40af',
+            color: '#ffffff',
+            borderRadius: '9999px',
+            padding: '16px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = '#1e3a8a')}
+          onMouseOut={(e) => (e.target.style.backgroundColor = '#1e40af')}
         >
-          {translations[language].chatbotHeader}
+          {language ? translations[language].chatbotHeader : 'Customer Support'}
         </button>
       ) : (
         <div
-          className={`bg-white rounded-lg shadow-xl flex flex-col ${
-            isMinimized ? 'h-12' : 'h-[500px]'
-          } w-80 sm:w-96 transition-all duration-300`}
+          style={{
+            backgroundColor: '#1f2937',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px rgba(0, 0, 0, 0.2)',
+            display: 'flex',
+            flexDirection: 'column',
+            height: isMinimized ? '48px' : '500px',
+            width: '320px',
+            transition: 'height 0.3s',
+            color: '#e5e7eb',
+          }}
         >
           {/* Header */}
-          <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
-            <h2 className="text-lg font-semibold">
-              {translations[language].chatbotHeader}
+          <div
+            style={{
+              backgroundColor: '#1e40af',
+              color: '#ffffff',
+              padding: '16px',
+              borderTopLeftRadius: '8px',
+              borderTopRightRadius: '8px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <h2 style={{ fontSize: '18px', fontWeight: '600' }}>
+              {language ? translations[language].chatbotHeader : 'Customer Support'}
             </h2>
-            <div className="flex space-x-2">
+            <div style={{ display: 'flex', gap: '8px' }}>
               <button
                 onClick={toggleMinimize}
-                className="hover:bg-blue-700 p-1 rounded"
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  padding: '4px',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                }}
                 title={
                   isMinimized
-                    ? translations[language].maximizeChat
-                    : translations[language].minimizeChat
+                    ? language
+                      ? translations[language].maximizeChat
+                      : 'Maximize chat'
+                    : language
+                    ? translations[language].minimizeChat
+                    : 'Minimize chat'
                 }
+                onMouseOver={(e) => (e.target.style.backgroundColor = '#1e3a8a')}
+                onMouseOut={(e) => (e.target.style.backgroundColor = 'transparent')}
               >
-                {isMinimized ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                {isMinimized ? <ChevronUp size={20} color="#ffffff" /> : <ChevronDown size={20} color="#ffffff" />}
               </button>
               <button
                 onClick={toggleChatbot}
-                className="hover:bg-blue-700 p-1 rounded"
-                title={translations[language].closeChat}
+                style={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  padding: '4px',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                }}
+                title={language ? translations[language].closeChat : 'Close chat'}
+                onMouseOver={(e) => (e.target.style.backgroundColor = '#1e3a8a')}
+                onMouseOut={(e) => (e.target.style.backgroundColor = 'transparent')}
               >
-                <X size={20} />
+                <X size={20} color="#ffffff" />
               </button>
             </div>
           </div>
@@ -592,37 +772,52 @@ console.log('Email submitted:', emailInput);
           {!isMinimized && (
             <>
               {/* Language Selector */}
-              <div className="p-2 border-b">
-                <select
-                  value={language}
-                  onChange={handleLanguageChange}
-                  className="w-full p-2 border rounded"
-                >
-                  {languages.map((lang) => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {language && (
+                <div style={{ padding: '8px', borderBottom: '1px solid #374151' }}>
+                  <select
+                    value={language}
+                    onChange={handleLanguageChange}
+                    style={{
+                      width: '100%',
+                      padding: '8px',
+                      border: '1px solid #4b5563',
+                      borderRadius: '4px',
+                      backgroundColor: '#374151',
+                      color: '#e5e7eb',
+                      outline: 'none',
+                    }}
+                  >
+                    {languages.map((lang) => (
+                      <option key={lang.code} value={lang.code} style={{ backgroundColor: '#374151', color: '#e5e7eb' }}>
+                        {lang.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {messages.map((message, index) => (
                   <div
                     key={index}
-                    className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                    style={{
+                      display: 'flex',
+                      justifyContent: message.type === 'user' ? 'flex-end' : 'flex-start',
+                    }}
                   >
                     <div
-                      className={`max-w-[80%] p-3 rounded-lg ${
-                        message.type === 'user'
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 text-gray-800'
-                      }`}
+                      style={{
+                        maxWidth: '80%',
+                        padding: '12px',
+                        borderRadius: '8px',
+                        backgroundColor: message.type === 'user' ? '#1e40af' : '#374151',
+                        color: message.type === 'user' ? '#ffffff' : '#e5e7eb',
+                      }}
                     >
                       <p>{message.content}</p>
                       {message.options && (
-                        <ul className="mt-2 space-y-1">
+                        <ul style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                           {message.options.map((option) => (
                             <li key={option.id}>
                               {option.id}. {option.name}
@@ -634,9 +829,16 @@ console.log('Email submitted:', emailInput);
                   </div>
                 ))}
                 {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="bg-gray-200 text-gray-800 p-3 rounded-lg">
-                      <p>...</p>
+                  <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                    <div
+                      style={{
+                        backgroundColor: '#374151',
+                        color: '#e5e7eb',
+                        padding: '12px',
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <p>Processing...</p>
                     </div>
                   </div>
                 )}
@@ -644,19 +846,38 @@ console.log('Email submitted:', emailInput);
               </div>
 
               {/* Input Area */}
-              <div className="p-4 border-t flex items-center space-x-2">
+              <div
+                style={{
+                  padding: '16px',
+                  borderTop: '1px solid #374151',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
                 <button
                   onClick={toggleListening}
-                  className={`p-2 rounded-full ${
-                    isListening ? 'bg-red-600' : 'bg-gray-200'
-                  } hover:bg-opacity-80 transition`}
+                  style={{
+                    padding: '8px',
+                    borderRadius: '9999px',
+                    backgroundColor: isListening ? '#dc2626' : '#4b5563',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s',
+                  }}
                   title={
                     isListening
-                      ? translations[language].stopVoice
-                      : translations[language].startVoice
+                      ? language
+                        ? translations[language].stopVoice
+                        : 'Stop voice input'
+                      : language
+                      ? translations[language].startVoice
+                      : 'Start voice input'
                   }
+                  onMouseOver={(e) => (e.target.style.backgroundColor = isListening ? '#b91c1c' : '#6b7280')}
+                  onMouseOut={(e) => (e.target.style.backgroundColor = isListening ? '#dc2626' : '#4b5563')}
                 >
-                  {isListening ? <MicOff size={20} className="text-white" /> : <Mic size={20} />}
+                  {isListening ? <MicOff size={20} color="#ffffff" /> : <Mic size={20} color="#ffffff" />}
                 </button>
                 <input
                   ref={inputRef}
@@ -666,24 +887,48 @@ console.log('Email submitted:', emailInput);
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder={
                     isListening
-                      ? translations[language].listening
-                      : translations[language].placeholder
+                      ? language
+                        ? translations[language].listening
+                        : 'Listening...'
+                      : language
+                      ? translations[language].placeholder
+                      : 'Type your message...'
                   }
-                  className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  style={{
+                    flex: 1,
+                    padding: '8px',
+                    border: '1px solid #4b5563',
+                    borderRadius: '8px',
+                    backgroundColor: '#374151',
+                    color: '#e5e7eb',
+                    outline: 'none',
+                  }}
                   disabled={isLoading}
+                  onFocus={(e) => (e.target.style.borderColor = '#1e40af')}
+                  onBlur={(e) => (e.target.style.borderColor = '#4b5563')}
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition"
-                  title={translations[language].sendMessage}
+                  style={{
+                    backgroundColor: '#1e40af',
+                    color: '#ffffff',
+                    padding: '8px',
+                    borderRadius: '9999px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s',
+                  }}
+                  title={language ? translations[language].sendMessage : 'Send message'}
                   disabled={isLoading}
+                  onMouseOver={(e) => (e.target.style.backgroundColor = '#1e3a8a')}
+                  onMouseOut={(e) => (e.target.style.backgroundColor = '#1e40af')}
                 >
                   <Send size={20} />
                 </button>
               </div>
 
               {emailError && (
-                <p className="text-red-600 text-sm p-2">{emailError}</p>
+                <p style={{ color: '#dc2626', fontSize: '14px', padding: '8px' }}>{emailError}</p>
               )}
             </>
           )}

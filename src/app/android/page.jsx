@@ -8,9 +8,10 @@ function Web() {
   const [isVisible, setIsVisible] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const heroRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState(null);
   const [scrollY, setScrollY] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+  const heroRef = useRef(null);
 
   // Track scroll position for parallax effects
   useEffect(() => {
@@ -26,12 +27,21 @@ function Web() {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('mousemove', handleMouseMove);
+      }
+    };
   }, []);
 
   useEffect(() => {
     setIsVisible(true);
+    setIsMounted(true);
     
     // Initialize animated background
     initParticleBackground();
@@ -288,6 +298,21 @@ function Web() {
     }
   ];
 
+  const getTransformStyle = (multiplierX, multiplierY) => {
+    if (!isMounted || !mousePosition) {
+      return {
+        transform: 'translate(0px, 0px)'
+      };
+    }
+
+    const x = ((mousePosition.x - window.innerWidth / 2) * multiplierX);
+    const y = ((mousePosition.y - window.innerHeight / 2) * multiplierY);
+    
+    return {
+      transform: `translate(${x}px, ${y}px)`
+    };
+  };
+
   return (
     <div className="container">
       {/* Particle background canvas */}
@@ -324,40 +349,19 @@ function Web() {
           <div className="hero-float-elements">
             <div
               className="float-element code-element"
-              style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * 0.02
-                      }px)`
-                    : 'translate(0px, 0px)', // Default value for SSR
-              }}
+              style={getTransformStyle(0.02, 0.02)}
             >
               <Code />
             </div>
             <div
               className="float-element shop-element"
-              style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * -0.01}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * -0.01
-                      }px)`
-                    : 'translate(0px, 0px)', // Default value for SSR
-              }}
+              style={getTransformStyle(-0.01, -0.01)}
             >
               <ShoppingCart />
             </div>
             <div
               className="float-element search-element"
-              style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * 0.03
-                      }px)`
-                    : 'translate(0px, 0px)', // Default value for SSR
-              }}
+              style={getTransformStyle(0.03, 0.03)}
             >
               <Search />
             </div>

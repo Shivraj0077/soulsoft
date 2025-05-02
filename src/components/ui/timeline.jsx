@@ -25,14 +25,14 @@ export const Timeline = ({ data }) => {
 
   return (
     <div
-      className="w-full bg-white dark:bg-neutral-950 font-sans md:px-10"
+      className="w-full bg-black dark:bg-neutral-950 font-sans md:px-10"
       ref={containerRef}
     >
       <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10">
         <h2 className="text-lg md:text-4xl mb-4 text-black dark:text-white max-w-4xl">
           OUR POS PRODUCTS
         </h2>
-        <p className="text-neutral-700 dark:text-neutral-300 text-sm md:text-base max-w-sm">
+        <p className="text-white dark:text-neutral-300 text-sm md:text-base max-w-sm">
          MORE THAN 3000 CLIENTS ARE USING OUR POS PRODUCTS 
         </p>
       </div>
@@ -53,14 +53,7 @@ export const Timeline = ({ data }) => {
                 {item.title}
               </h3>
               {item.content}
-              <div className="mt-8 flex justify-start">
-                <button
-                  className="px-6 py-2 bg-white text-black rounded-lg shadow-md hover:shadow-lg transition-all duration-300 font-medium text-sm"
-                  onClick={() => console.log(`Learn more about ${item.title}`)}
-                >
-                  Know More
-                </button>
-              </div>
+              
             </div>
           </div>
         ))}

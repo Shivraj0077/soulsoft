@@ -7,6 +7,7 @@ import { register } from "swiper/element/bundle";
 import dynamic from "next/dynamic";
 import { HeroScrollDemo } from "./globe/page";
 import ScrollToHash from "./ScrollToHash";
+import { Menu, X } from 'lucide-react';
 import "../style.css";
 // Import swiper styles
 import "swiper/css";
@@ -16,10 +17,13 @@ import ModernSwiper from "../../components/MordernSwiper";
 import LineSlides from "../../components/LineSlide";
 import Footer from "../../components/Footer";
 import WorldMap from "@/components/ui/world-map";
+import { NavbarDemo } from "../../components/Navbar";
+import Link from "next/link";
 
 import { BentoGridDemo } from "../../components/globe";
 import { CompareDemo } from "../../components/Before";
 import { WobbleCardDemo } from "../../components/card";
+import InlineNavbar from "../../components/Navbar";
 // Import locomotive scroll dynamically with no SSR
 const LocomotiveScrollProvider = dynamic(
   () => import("../../components/LocomotiveScrollProvider"),
@@ -123,15 +127,16 @@ export default function Home() {
       swiperEl.initialize();
     }
   }, []);
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
+      <InlineNavbar />
       <Head>
         <title>soulsoft</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/icon.png" />
       </Head>
-     
+    
       <CustomCursor />
 
       {isLoading && (
@@ -149,9 +154,10 @@ export default function Home() {
 
       <div id="main">
         <div id="page1">
-         
+          
           <div id="center">
             <div id="left">
+            
               <h3>
                 Soulsoft Infotech: Innovative, tailored solutions that simplify,
                 streamline, and scale your business. .
@@ -251,73 +257,72 @@ export default function Home() {
     Our Services
   </h2>
 </div>
-  <section id="services">   
-<div
-  id="elem-container"
-  ref={elemContainerRef}
-  style={{
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "30px",
-    padding: "30px",
-    justifyContent: "space-between",
-    marginTop: "-150px",
-    position: "relative",
-    zIndex: "10",
-  }}
->
-  {[
-    "E-commerce",
-    "Digital Marketing",
-    "Web Design and Development",
-    "Learning Management System",
-    "Windows Billing Software",
-    "Software Development",
-    "Customer Relationship Management",
-    "Mobile App Development",
-  ].map((item, index) => (
-    <a
-      key={index}
-      href="/"
-      className="group"
-      style={{
-        flex: "2 2 auto",
-        minWidth: "200px",
-        padding: "30px",
-        backgroundColor: "#EFEAE3",
-        borderRadius: "15px",
-        textDecoration: "none",
-        color: "black",
-        fontSize: "2rem",
-        fontWeight: "400",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        transition: "all 0.3s ease",
-        transform: "translateY(0px)", // initial
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-5px)";
-        e.currentTarget.querySelector(".arrow").style.transform = "translateX(5px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0px)";
-        e.currentTarget.querySelector(".arrow").style.transform = "translateX(0px)";
-      }}
-    >
-      <span>{item}</span>
-      <span
-        className="arrow"
+<section id="services">   
+  <div
+    id="elem-container"
+    ref={elemContainerRef}
+    style={{
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "30px",
+      padding: "30px",
+      justifyContent: "space-between",
+      marginTop: "-150px",
+      position: "relative",
+      zIndex: "10",
+    }}
+  >
+    {[
+      { label: "E-commerce", link: "/ecomerce" },
+      { label: "Digital Marketing", link: "/dp" },
+      { label: "Web Design and Development", link: "/webdev" },
+      { label: "Learning Management System", link: "/lms" },
+      { label: "Windows Billing Software", link: "/billlingsoftware" },
+      { label: "Software Development", link: "/software" },
+      { label: "Customer Relationship Management", link: "/crm" },
+      { label: "Mobile App Development", link: "/android" },
+    ].map((item, index) => (
+      <a
+        key={index}
+        href={item.link}
+        className="group"
         style={{
-          fontSize: "1.5rem",
-          transition: "transform 0.3s ease",
+          flex: "2 2 auto",
+          minWidth: "200px",
+          padding: "30px",
+          backgroundColor: "#EFEAE3",
+          borderRadius: "15px",
+          textDecoration: "none",
+          color: "black",
+          fontSize: "2rem",
+          fontWeight: "400",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          transition: "all 0.3s ease",
+          transform: "translateY(0px)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-5px)";
+          e.currentTarget.querySelector(".arrow").style.transform = "translateX(5px)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0px)";
+          e.currentTarget.querySelector(".arrow").style.transform = "translateX(0px)";
         }}
       >
-        →
-      </span>
-    </a>
-
-  ))}
+        <span>{item.label}</span>
+        <span
+          className="arrow"
+          style={{
+            fontSize: "1.5rem",
+            transition: "transform 0.3s ease",
+          }}
+        >
+          →
+        </span>
+      </a>
+    ))}
 
  <CompareDemo/>
  

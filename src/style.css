@@ -27,6 +27,13 @@ html, body {
     width: 100%;
     cursor: none;
     overflow-x: hidden;
+    padding-top: 0; /* Remove the top padding */
+}
+
+@media (max-width: 768px) {
+    html, body {
+        padding-top: 0; /* Remove padding on mobile */
+    }
 }
 
 #main {
@@ -40,79 +47,15 @@ html, body {
     background-color: black;
     position: relative;
     padding: 0 2vw;
+    margin-top: 60px; /* Adjust this value based on your navbar height */
 }
 
+/* Remove the conflicting nav styles since AnimatedNavbar handles this */
 nav {
-    padding: 2vw 0vw;
+    position: absolute; /* Change from fixed to absolute */
     width: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
     z-index: 100;
-    justify-content: space-between;
-}
-
-#nav-part2 {
-    display: flex;
-    align-items: center;
-    gap: 1vw;
-}
-
-#nav-part2 h4 {
-    padding: 10px 25px;
-    border: 1px solid white;
-    border-radius: 50px;
-    font-weight: 500;
-    color: white;
-    transition: all ease 0.4s;
-    position: relative;
-    font-size: 18px;
-    overflow: hidden;
-}
-
-#nav-part2 h4::after {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: white;
-    left: 0;
-    bottom: -100%;
-    border-radius: 50%;
-    transition: all ease 0.4s;
-}
-
-#nav-part2 h4:hover::after {
-    bottom: 0;
-    border-radius: 0;
-}
-
-#nav-part2 h4 a {
-    color: white;
-    text-decoration: none;
-    position: relative;
-    z-index: 9;
-}
-@media (max-width: 768px) {
-    .responsive-text {
-      color: white !important;
-
-    }
-  }
-  
-  @media (min-width: 769px) {
-    .responsive-text {
-      color: black !important;
-    }
-  }
-  
-
-#nav-part2 h4:hover a {
-    color: black;
-}
-
-nav h3 {
-    display: none;
+    top: 0;
 }
 
 #center {
@@ -129,12 +72,14 @@ nav h3 {
     width: 25vw;
     font-size: 2vw;
     line-height: 2vw;
+    color: white;
 }
 
 #center h1 {
     font-size: 10vw;
     text-align: right;
     line-height: 8vw;
+    color: white;
 }
 
 #page1 video {
@@ -314,9 +259,9 @@ nav h3 {
 @media (max-width: 768px) {
     #page2 #gooey {
       transform: translateY(-30vh) !important;
-
     }
-  }
+}
+
 @keyframes gooey {
     from {
         filter: blur(30px);
@@ -350,20 +295,21 @@ nav h3 {
     padding: 0 2vw;
     justify-content: space-between;
 }
+
 @media (max-width: 768px) {
     #bottom-part2 {
       width: 100% !important;
       max-width: none;
-      margin: 0;          /* remove auto‐margins */
-      padding: 0 1rem; 
-      margin-top: 4cm;   /* optional side padding */
+      margin: 0;
+      padding: 0 1rem;
+      margin-top: 4cm;
     }
-    /* if you want the Next.js <Image> to also fill */
+
     #bottom-part2 img {
       width: 100% !important;
       height: 10cm !important;
     }
-  }
+}
 
 .elem h2 {
     font-size: 3vw;
@@ -580,35 +526,24 @@ nav h3 {
     color: white;
 }
 
+/* Modified media query to exclude navbar links */
+@media (max-width: 768px) {
+    .responsive-text:not(.nav-link) {
+      color: white !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .responsive-text:not(.nav-link) {
+      color: black !important;
+    }
+}
+
 @media (max-width: 700px) {
     #page1 {
         min-height: 100vh;
         width: 100%;
         padding: 0;
-    }
-
-    nav {
-        padding: 8vw 5vw;
-        background-color: #EFEAE3;
-    }
-
-    nav img {
-        transition: all ease 0.2s;
-        height: 9vh;
-    }
-
-    #nav-part2 {
-        display: none;
-    }
-
-    nav h3 {
-        display: block;
-        padding: 3vw 5vw;
-        border: 1px solid #ababab;
-        border-radius: 50px;
-        font-size: 4vw;
-        font-weight: 200;
-        padding-left: 10vw;
     }
 
     #center {
@@ -629,7 +564,7 @@ nav h3 {
         width: 80%;
         font-size: 5.5vw;
         line-height: 6vw;
-        margin-bottom:1rem;
+        margin-bottom: 1rem;
     }
 
     #right {
@@ -737,11 +672,11 @@ nav h3 {
         width: 100%;
         border-radius: 10px;
     }
+
     .services {
-        /* move it down by 3cm only on phones */
-        margin-bottom:-4cm !important;
+        margin-bottom: -4cm !important;
         margin-top: 7cm;
-      }
+    }
 
     #bottom-part2 p {
         font-weight: 300;
@@ -770,6 +705,7 @@ nav h3 {
         width: 100%;
         padding: 8vw 4vw;
     }
+
     #elem-container {
         margin-top: -1cm !important;
         padding-left: 5px !important;
@@ -778,16 +714,15 @@ nav h3 {
         margin-left: -0.8cm !important;
         gap: 15px !important;
     }
-    
-   
-      /* Make each button full width with only 2px margin on sides */
-      #elem-container .group {
+
+    #elem-container .group {
         flex: none !important;
         width: 100% !important;
         font-size: 1.4rem !important;
         padding: 15px !important;
-        box-sizing:content-box;
-      }
+        box-sizing: content-box;
+    }
+
     #elem-container a.group .arrow {
         font-size: 4vw;
     }
@@ -810,23 +745,23 @@ nav h3 {
     #page3 > div > div > div > div:last-child video {
         border-radius: 10px;
     }
+
     .video-container {
         margin-top: 50px;
-        width: calc(100vw - 2px); /* Full viewport width minus 2px */
+        width: calc(100vw - 2px);
         margin-left: auto;
         margin-right: auto;
         padding-left: 0 !important;
         padding-right: 0 !important;
-      }
-      
-      
-      /* force the video to be exactly 10cm wide */
-      .mobile-video {
+    }
+
+    .mobile-video {
         width: 30cm !important;
         height: auto !important;
-        margin: 0 auto; /* center it horizontally */
+        margin: 0 auto;
         display: block;
-      }
+    }
+
     #loader h1 {
         font-size: 9vw;
     }

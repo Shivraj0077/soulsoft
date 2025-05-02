@@ -58,56 +58,7 @@ export default function ShopcareBillingSoftware() {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       {/* Navigation */}
-      <nav className="relative z-10 px-6 py-4 md:px-12 lg:px-24">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="relative w-10 h-10 md:w-12 md:h-12">
-              <div className="absolute inset-0 bg-emerald-500 rounded-full opacity-20 animate-pulse"></div>
-              <Image
-                src="/placeholder.svg?height=48&width=48"
-                alt="SoulSoft Logo"
-                width={48}
-                height={48}
-                className="relative z-10"
-              />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">
-              SoulSoft Infotech
-            </span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8">
-            {["Home", "About Us", "Services", "POS Products", "Career", "Blog", "Contact"].map((item) => (
-              <Link key={item} href="#" className="text-gray-300 hover:text-emerald-400 transition-colors duration-300">
-                {item}
-              </Link>
-            ))}
-          </div>
-
-          <button className="md:hidden text-gray-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-
-        {isMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden mt-4 py-4 flex flex-col gap-4"
-          >
-            {["Home", "About Us", "Services", "POS Products", "Career", "Blog", "Contact"].map((item) => (
-              <Link
-                key={item}
-                href="#"
-                className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 py-2"
-              >
-                {item}
-              </Link>
-            ))}
-          </motion.div>
-        )}
-      </nav>
+      
 
       {/* Hero Section */}
       <section className="relative pt-12 pb-24 px-6 md:px-12 lg:px-24">
@@ -139,7 +90,10 @@ export default function ShopcareBillingSoftware() {
               <button className="bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-3 rounded-full font-medium flex items-center gap-2 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300">
                 Purchase Now <ArrowRight className="w-4 h-4" />
               </button>
-              <button className="border border-emerald-500/30 px-6 py-3 rounded-full font-medium hover:bg-emerald-500/10 transition-all duration-300">
+              <button 
+                onClick={() => window.open('https://www.youtube.com/watch?v=b-vLaye6f_I&t=5s', '_blank')}
+                className="border border-emerald-500/30 px-6 py-3 rounded-full font-medium hover:bg-emerald-500/10 transition-all duration-300"
+              >
                 Product Demo
               </button>
             </motion.div>
@@ -387,9 +341,7 @@ export default function ShopcareBillingSoftware() {
             <button className="bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-4 rounded-full font-medium flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300">
               Purchase Now <ChevronRight className="w-5 h-5" />
             </button>
-            <button className="border border-emerald-500/30 px-8 py-4 rounded-full font-medium hover:bg-emerald-500/10 transition-all duration-300">
-              Request Demo
-            </button>
+           
           </div>
         </motion.div>
       </section>

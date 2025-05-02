@@ -233,10 +233,10 @@ body {
 }
 
 .main-heading {
-  font-size: 4rem;
+  font-size: 6rem;
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
 }
 
 .highlight {
@@ -268,7 +268,7 @@ body {
 .button-group {
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 3rem;
 }
 
 .primary-button {
@@ -448,9 +448,9 @@ body {
 .service-icon {
   font-size: 2.5rem;
   color: var(--primary-blue);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.3rem;
   position: relative;
-  display: inline-flex;
+  display: flex;
   justify-content: center;
 }
 
@@ -1011,7 +1011,7 @@ footer {
   }
 
   .main-heading {
-      font-size: var(--font-size-xl);
+      font-size:xx-large;
   }
 
   .sub-heading {
@@ -1048,12 +1048,12 @@ footer {
 
   /* Header Section */
   .header {
-      min-height: 600px;
+      min-height:500px;
       padding: 1rem;
   }
 
   .main-heading {
-      font-size: var(--font-size-lg);
+      font-size: var(--font-size-xl);
       margin-bottom: 1rem;
       text-align: center;
   }
@@ -1122,7 +1122,7 @@ footer {
   .service-title {
       font-size: var(--font-size-md);
       top: 0; /* Fix negative positioning causing overlap */
-      margin-bottom: 0.8rem;
+      margin-bottom: 3rem;
   }
 
   .service-description {
@@ -1195,7 +1195,7 @@ footer {
 
   .tab-title {
       font-size: var(--font-size-md);
-      margin-bottom: 2rem;
+      margin-bottom: 3.3rem;
   }
 
   .tab-description {
@@ -1216,7 +1216,7 @@ footer {
 
   .cta-heading {
       font-size: var(--font-size-lg);
-      margin-bottom: 6rem;
+      margin-bottom: 8rem;
   }
 
   .cta-features {
