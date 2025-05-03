@@ -27,7 +27,7 @@ export default function InlineNavbar() {
 
         .nav-links {
           display: flex;
-          gap: 1.5rem;
+          gap: 2rem;
         }
 
         .nav-links a {
