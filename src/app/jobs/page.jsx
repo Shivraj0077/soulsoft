@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { JobCard } from '@/components/JobCard';
 
 const RECRUITER_EMAILS = [
   'recruiter1@example.com',
@@ -12,13 +13,19 @@ const RECRUITER_EMAILS = [
   'shivrajpawar7700@gmail.com'
 ];
 
+const ADMIN_EMAILS = [
+  'admin1@example.com',
+  'admin2@example.com',
+  'shivrajpawar0077@gmail.com',
+];
+
 export default function JobsPage() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Fetch all jobs
+  // Remove the redirect effect and only keep the jobs fetch effect
   useEffect(() => {
     async function fetchJobs() {
       try {
@@ -39,16 +46,6 @@ export default function JobsPage() {
     fetchJobs();
   }, []);
 
-  // Redirect authenticated users based on email
-  useEffect(() => {
-    if (status === 'authenticated' && session?.user?.email) {
-      const isRecruiter = RECRUITER_EMAILS.includes(session.user.email);
-      const destination = isRecruiter ? '/recruiter/dashboard' : '/applicant/dashboard';
-      router.push(destination);
-    }
-  }, [session, status, router]);
-
-  // Handle logout
   const handleLogout = async () => {
     try {
       await signOut({ redirect: false });
@@ -58,26 +55,35 @@ export default function JobsPage() {
     }
   };
 
-  // Render loading state
+  // Helper function to determine user type
+  const getUserType = () => {
+    if (!session?.user?.email) return 'guest';
+    if (ADMIN_EMAILS.includes(session.user.email)) return 'admin';
+    if (RECRUITER_EMAILS.includes(session.user.email)) return 'recruiter';
+    return 'applicant';
+  };
+
   if (loading || status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-lg text-black">Loading jobs...</p>
+          <p className="mt-4 text-lg text-white">Loading jobs...</p>
         </div>
       </div>
     );
   }
 
+  const userType = getUserType();
+
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-black py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-black sm:text-5xl sm:tracking-tight">
+          <h1 className="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight">
             Careers at Our Company
           </h1>
-          <p className="mt-5 max-w-xl mx-auto text-xl text-black">
+          <p className="mt-5 max-w-xl mx-auto text-xl text-gray-300">
             Join our team and make an impact. Explore our open positions below.
           </p>
 
@@ -90,20 +96,38 @@ export default function JobsPage() {
                 Sign in to apply
               </Link>
             ) : (
-              <>
-                <Link
-                  href="/applicant/dashboard"
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
-                >
-                  Go to Dashboard
-                </Link>
+              <div className="flex gap-4">
+                {userType === 'admin' && (
+                  <Link
+                    href="/admin/dashboard"
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700"
+                  >
+                    Admin Dashboard
+                  </Link>
+                )}
+                {userType === 'recruiter' && (
+                  <Link
+                    href="/recruiter/dashboard"
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700"
+                  >
+                    Recruiter Dashboard
+                  </Link>
+                )}
+                {userType === 'applicant' && (
+                  <Link
+                    href="/applicant/dashboard"
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+                  >
+                    My Applications
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700"
                 >
                   Sign Out
                 </button>
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -111,50 +135,11 @@ export default function JobsPage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {jobs.length > 0 ? (
             jobs.map((job) => (
-              <div
-                key={job.job_id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-              >
-                <div className="px-6 py-8">
-                  <div className="flex justify-between items-start">
-                    <h3 className="text-xl font-semibold text-black">{job.title}</h3>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      {job.employment_type || 'Not specified'}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-black text-sm">{job.location || 'Remote'}</p>
-                  <div className="mt-4">
-                    <p className="text-black line-clamp-3">{job.description}</p>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-sm text-black">
-                      <span className="font-semibold">Skills:</span>{' '}
-                      {job.skills_required || 'Not specified'}
-                    </p>
-                  </div>
-                  <div className="mt-4 flex justify-between items-center">
-                    <p className="text-sm text-black">
-                      <span className="font-semibold">Salary:</span>{' '}
-                      {job.salary_range || 'Competitive'}
-                    </p>
-                    <p className="text-sm text-black">
-                      Posted: {new Date(job.posted_date).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="mt-6">
-                    <Link
-                      href={`/applicant/jobs/${job.job_id}`}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 w-full justify-center"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              </div>
+              <JobCard key={job.job_id} job={job} />
             ))
           ) : (
             <div className="col-span-3 text-center py-12">
-              <p className="text-lg text-black">No jobs available at the moment.</p>
+              <p className="text-lg text-white">No jobs available at the moment.</p>
             </div>
           )}
         </div>

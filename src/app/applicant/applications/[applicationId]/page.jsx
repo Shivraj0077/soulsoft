@@ -7,17 +7,56 @@ import Link from 'next/link';
 import { getFileProxyUrl, getFileKeyFromUrl } from '@/lib/cloudflare';
 
 const ResumeLink = ({ resumeUrl }) => {
-  const fileKey = getFileKeyFromUrl(resumeUrl);
-  const proxyUrl = getFileProxyUrl(fileKey);
+  const [error, setError] = useState(null);
+  
+  const testResumeUrl = async (url) => {
+    try {
+      // Extract filename from the full Cloudflare URL
+      const filename = url.split('/').pop();
+      if (!filename) {
+        throw new Error('Invalid file URL');
+      }
+
+      // Make request to our API endpoint
+      const response = await fetch(`/api/files/${filename}`, {
+        method: 'HEAD',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return true;
+    } catch (error) {
+      console.error('Error accessing resume:', error);
+      setError('Unable to access resume file');
+      return false;
+    }
+  };
+
+  if (!resumeUrl) {
+    return <span className="text-red-400">Resume URL not provided</span>;
+  }
 
   return (
     <a
-      href={proxyUrl}
+      href={`/api/files/${resumeUrl.split('/').pop()}`}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noopener noreferrer" 
       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+      onClick={async (e) => {
+        e.preventDefault();
+        try {
+          const isAccessible = await testResumeUrl(resumeUrl);
+          if (isAccessible) {
+            window.open(`/api/files/${resumeUrl.split('/').pop()}`, '_blank');
+          }
+        } catch (err) {
+          setError('Error accessing resume');
+          console.error('Resume access error:', err);
+        }
+      }}
     >
-      View Resume
+      {error || 'View Resume'}
     </a>
   );
 };
@@ -85,26 +124,6 @@ export default function ApplicationDetails() {
       month: 'long',
       day: 'numeric',
     }) : 'Unknown';
-  };
-
-  const testResumeUrl = async (url) => {
-    try {
-      const fileKey = getFileKeyFromUrl(url);
-      const proxyUrl = getFileProxyUrl(fileKey);
-      
-      const response = await fetch(proxyUrl, {
-        method: 'HEAD',
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return true;
-    } catch (error) {
-      console.error('Error accessing resume:', url, error);
-      setResumeError('Unable to access resume file');
-      return false;
-    }
   };
 
   if (status === 'loading' || isLoading) {

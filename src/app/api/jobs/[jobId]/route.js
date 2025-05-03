@@ -3,42 +3,61 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-export async function GET(request, { params }) {
+export async function GET(request, { params: rawParams }) {
   try {
-    console.log(`GET /api/jobs/[jobId]: Received jobId = ${params.jobId}, type = ${typeof params.jobId}`);
-    const jobId = parseInt(params.jobId, 10);
-    if (isNaN(jobId) || jobId <= 0) {
-      console.error(`GET /api/jobs/[jobId]: Invalid job ID '${params.jobId}'`);
-      return NextResponse.json({ error: 'Invalid job ID' }, { status: 400 });
+    // Await params
+    const params = await Promise.resolve(rawParams);
+    const { jobId } = params; // Don't rename it here since we use jobId throughout
+
+    console.log(`GET /api/jobs/[jobId]: Received jobId = ${jobId}, type = ${typeof jobId}`);
+
+    // Parse and validate the job ID
+    const id = parseInt(jobId, 10);
+    if (isNaN(id) || id <= 0) {
+      console.error(`GET /api/jobs/[jobId]: Invalid job ID '${jobId}'`);
+      return NextResponse.json(
+        { error: 'Invalid job ID' }, 
+        { status: 400 }
+      );
     }
-    console.log(`GET /api/jobs/${jobId}: Fetching job`);
+
+    console.log(`GET /api/jobs/${id}: Fetching job`);
+
+    // Query the database
     const result = await pool.query(
-      'SELECT job_id, title, location, salary_range, employment_type, description, skills_required, posted_date, deadline_date FROM jobs WHERE job_id = $1',
-      [jobId]
+      'SELECT * FROM jobs WHERE job_id = $1',
+      [id]
     );
+
     if (result.rows.length === 0) {
-      console.log(`GET /api/jobs/${jobId}: Job not found`);
-      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+      console.log(`GET /api/jobs/${id}: Job not found`);
+      return NextResponse.json(
+        { error: 'Job not found' },
+        { status: 404 }
+      );
     }
-    const job = {
-      ...result.rows[0],
-      job_id: parseInt(result.rows[0].job_id, 10),
-    };
-    console.log(`GET /api/jobs/${jobId}: Found job`, { job_id: job.job_id, title: job.title });
+
+    const job = result.rows[0];
+    console.log(`GET /api/jobs/${id}: Found job`, { job_id: job.job_id, title: job.title });
+
     return NextResponse.json({ job });
+
   } catch (error) {
-    console.error(`GET /api/jobs/[jobId]: Error fetching job`, {
-      message: error.message,
-      stack: error.stack,
-      jobId: params.jobId,
-    });
-    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
+    console.error('Error in GET /api/jobs/[jobId]:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch job details' },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, { params: rawParams }) {
   try {
-    console.log(`DELETE /api/jobs/[jobId]: Received jobId = ${params.jobId}, type = ${typeof params.jobId}`);
+    // Await params
+    const params = await Promise.resolve(rawParams);
+    const { jobId: rawJobId } = params;
+
+    console.log(`DELETE /api/jobs/[jobId]: Received jobId = ${rawJobId}, type = ${typeof rawJobId}`);
     const session = await getServerSession(authOptions);
     if (!session) {
       console.error('DELETE /api/jobs/[jobId]: Unauthorized access attempt');
@@ -54,7 +73,7 @@ export async function DELETE(request, { params }) {
       return NextResponse.json({ error: 'Recruiter not found' }, { status: 404 });
     }
     
-    const jobId = parseInt(params.jobId, 10);
+    const jobId = parseInt(rawJobId, 10);
     if (isNaN(jobId) || jobId <= 0) {
       console.error(`DELETE /api/jobs/[jobId]: Invalid job ID '${params.jobId}'`);
       return NextResponse.json({ error: 'Invalid job ID' }, { status: 400 });
@@ -83,7 +102,7 @@ export async function DELETE(request, { params }) {
     console.error(`DELETE /api/jobs/[jobId]: Error deleting job`, {
       message: error.message,
       stack: error.stack,
-      jobId: params.jobId,
+      jobId: params?.jobId,
     });
     return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
   }

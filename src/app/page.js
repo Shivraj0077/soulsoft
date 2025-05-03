@@ -233,7 +233,7 @@ export default function Home() {
                 With 14+ years of experience, our expert team understands what
                 your business needs to succeed. We work closely with you to
                 deliver modern, reliable, and customized solutions. From
-                planning to launch, we're committed to turning your vision into
+                planning to launch, we&apos;re committed to turning your vision into
                 reality.
               </p>
             </div>
@@ -368,7 +368,7 @@ export default function Home() {
     }}>
       <h3 style={{ fontWeight: "500", fontSize: "1.5rem", fontFamily: "neu" }}>Slide 3</h3>
       <div className="slide-content" style={{ marginTop: "2rem" }}>
-        <p style={{ fontWeight: "100", lineHeight: "1.6" }}>Your content for slide 3 goes here. Use the 'neu' font with lighter weight for body text.</p>
+        <p style={{ fontWeight: "100", lineHeight: "1.6" }}>Your content for slide 3 goes here. Use the &apos;neu&apos; font with lighter weight for body text.</p>
       </div>
     </div>
     
