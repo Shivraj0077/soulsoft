@@ -47,23 +47,23 @@ export default function TicketsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-lg text-black">Loading tickets...</p>
+          <p className="mt-4 text-lg text-white">Loading tickets...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-black py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-black sm:text-5xl sm:tracking-tight">
+          <h1 className="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight">
             Support Tickets System
           </h1>
-          <p className="mt-5 max-w-xl mx-auto text-xl text-black">
+          <p className="mt-5 max-w-xl mx-auto text-xl text-white">
             Get help with your issues. Raise a ticket and our support team will assist you.
           </p>
 
@@ -80,7 +80,7 @@ export default function TicketsPage() {
                 {isAdmin && (
                   <Link
                     href="/admin/dashboard"
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700"
+                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-slate-500 hover:bg-white-700"
                   >
                     Admin Dashboard
                   </Link>
@@ -107,39 +107,7 @@ export default function TicketsPage() {
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {tickets.length > 0 ? (
-            tickets.map((ticket) => (
-              <div
-                key={ticket.ticket_id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-              >
-                <div className="px-6 py-8">
-                  <div className="flex justify-between items-start">
-                    <h3 className="text-xl font-semibold text-black">{ticket.title}</h3>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      ticket.status === 'open' ? 'bg-green-100 text-green-800' : 
-                      ticket.status === 'closed' ? 'bg-red-100 text-red-800' : 
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {ticket.status}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-black text-sm line-clamp-3">{ticket.description}</p>
-                  <div className="mt-4 text-sm text-gray-600">
-                    <p>Created: {new Date(ticket.created_at).toLocaleDateString()}</p>
-                    <p>Category: {ticket.category}</p>
-                    <p>Priority: {ticket.priority}</p>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="col-span-3 text-center py-12">
-              <p className="text-lg text-black">No public tickets available.</p>
-            </div>
-          )}
-        </div>
+     
       </div>
     </div>
   );

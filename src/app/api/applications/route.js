@@ -93,10 +93,8 @@ export async function POST(request) {
     }, { status: 201 });
   } catch (error) {
     console.error('POST /api/applications: Error creating application', {
-      message: error.message,
       stack: error.stack,
       email: session?.user?.email || 'unknown',
     });
-    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
   }
 }
