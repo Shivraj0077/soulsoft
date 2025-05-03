@@ -273,7 +273,7 @@ export default function Home() {
     }}
   >
     {[
-      { label: "E-commerce", link: "/ecomerce" },
+      { label: "E-commerce", link: "/dp/ecomerce" },
       { label: "Digital Marketing", link: "/dp" },
       { label: "Web Design and Development", link: "/webdev" },
       { label: "Learning Management System", link: "/lms" },
