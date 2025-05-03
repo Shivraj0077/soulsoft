@@ -34,12 +34,12 @@ const translations = {
     appointmentConfirm: 'Your appointment has been scheduled. You will receive an email confirmation shortly.',
     typeNumber: 'Type a number to select an option',
     errorMessage: 'Sorry, there was an error processing your request.',
-    purchaseRedirect: 'This is your purchase link',
-    demoLink: 'Here is the demo link for the selected product.',
-    phoneNumber: 'Contact us at: +91-123-456-7890',
-    emailContact: 'Email us at: [support@example.com](mailto:support@example.com)',
+    purchaseRedirect: 'Redirecting to purchase page...',
+    demoLink: 'Here is the demo link for the selected product: ',
+    phoneNumber: 'Contact us at: + 8530798679',
+    emailContact: 'Email us at: [ soulsoftinfotech@gmail.com](mailto: soulsoftinfotech@gmail.com)',
     chooseLanguage: 'Please select a language:',
-    talkToMe: 'Talk to me',
+    talkToMe: 'Talk to expert',
   },
   hi: {
     placeholder: 'अपना संदेश लिखें...',
@@ -64,9 +64,9 @@ const translations = {
     typeNumber: 'कोई विकल्प चुनने के लिए एक नंबर टाइप करें',
     errorMessage: 'क्षमा करें, आपके अनुरोध को संसाधित करने में एक त्रुटि हुई थी।',
     purchaseRedirect: 'खरीद पृष्ठ पर पुनर्निर्देशित हो रहा है...',
-    demoLink: 'चयनित उत्पाद के लिए डेमो लिंक यहाँ है।',
-    phoneNumber: 'हमसे संपर्क करें: +91-123-456-7890',
-    emailContact: 'हमें ईमेल करें: [support@example.com](mailto:support@example.com)',
+    demoLink: 'चयनित उत्पाद के लिए डेमो लिंक यहाँ है: ',
+    phoneNumber: 'हमसे संपर्क करें: + 8530798679',
+    emailContact: 'हमें ईमेल करें: [ soulsoftinfotech@gmail.com](mailto: soulsoftinfotech@gmail.com)',
     chooseLanguage: 'कृपया एक भाषा चुनें:',
     talkToMe: 'मुझसे बात करें',
   },
@@ -93,9 +93,9 @@ const translations = {
     typeNumber: 'पर्याय निवडण्यासाठी एक क्रमांक टाइप करा',
     errorMessage: 'क्षमा करा, आपल्या विनंतीवर प्रक्रिया करताना त्रुटी आली.',
     purchaseRedirect: 'खरेदी पृष्ठावर पुनर्निर्देशित होत आहे...',
-    demoLink: 'निवडलेल्या उत्पादनासाठी डेमो लिंक येथे आहे.',
-    phoneNumber: 'आमच्याशी संपर्क साधा: +91-123-456-7890',
-    emailContact: 'आम्हाला ईमेल करा: [support@example.com](mailto:support@example.com)',
+    demoLink: 'निवडलेल्या उत्पादनासाठी डेमो लिंक येथे आहे: ',
+    phoneNumber: 'आमच्याशी संपर्क साधा: + 8530798679',
+    emailContact: 'आम्हाला ईमेल करा: [ soulsoftinfotech@gmail.com](mailto: soulsoftinfotech@gmail.com)',
     chooseLanguage: 'कृपया एक भाषा निवडा:',
     talkToMe: 'माझ्याशी बोला',
   },
@@ -121,10 +121,34 @@ const chatbotFlowData = {
   },
   products: {
     options: [
-      { id: '1', name: { en: 'Shetkari Krushi Software', hi: 'शेतकरी कृषि सॉफ्टवेयर', mr: 'शेतकरी कृषी सॉफ्टवेअर' }, nextState: 'productOptions' },
-      { id: '2', name: { en: 'Shopcare', hi: 'शॉपकेयर', mr: 'शॉपकेअर' }, nextState: 'productOptions' },
-      { id: '3', name: { en: 'Kbazzar', hi: 'के-बाज़ार', mr: 'के-बाजार' }, nextState: 'productOptions' },
-      { id: '4', name: { en: 'Pharma Chemist', hi: 'फार्मा केमिस्ट', mr: 'फार्मा केमिस्ट' }, nextState: 'productOptions' },
+      { 
+        id: '1', 
+        name: { en: 'Shetkari Krushi Software', hi: 'शेतकरी कृषि सॉफ्टवेयर', mr: 'शेतकरी कृषी सॉफ्टवेअर' }, 
+        nextState: 'productOptions', 
+        demoLink: 'https://www.youtube.com/watch?v=OGsO4XIuxC0', 
+        purchaseLink: 'https://shetkari.soulsoftinfotech.com/purchase' 
+      },
+      { 
+        id: '2', 
+        name: { en: 'Shopcare', hi: 'शॉपकेयर', mr: 'शॉपकेअर' }, 
+        nextState: 'productOptions', 
+        demoLink: 'https://www.youtube.com/watch?v=b-vLaye6f_I&t=5s', 
+        purchaseLink: 'https://shopcare.soulsoftinfotech.com/purchase' 
+      },
+      { 
+        id: '3', 
+        name: { en: 'Kbazzar', hi: 'के-बाज़ार', mr: 'के-बाजार' }, 
+        nextState: 'productOptions', 
+        demoLink: 'https://www.youtube.com/watch?v=cgPNFA8y_U0&t=3s', 
+        purchaseLink: 'https://kbazzar.soulsoftinfotech.com/purchase' 
+      },
+      { 
+        id: '4', 
+        name: { en: 'Pharma Chemist', hi: 'फार्मा केमिस्ट', mr: 'फार्मा केमिस्ट' }, 
+        nextState: 'productOptions', 
+        demoLink: 'https://www.youtube.com/watch?v=CHP5k1No-RM', 
+        purchaseLink: 'https://pharma.soulsoftinfotech.com/purchase' 
+      },
       { id: '5', name: { en: 'Back to Main Menu', hi: 'मुख्य मेनू पर वापस जाएं', mr: 'मुख्य मेनू वर परत जा' }, nextState: 'mainMenu' },
     ],
   },
@@ -226,12 +250,7 @@ const chatbotFlowData = {
 };
 
 // Company information document
-const companyInfo = `Company Name: Your Company Name
-About: Your Company Name is a leading provider of innovative software solutions, specializing in agricultural technology, e-commerce, and digital marketing services. Founded in 2010, we aim to empower businesses with cutting-edge tools.
-Products: Shetkari Krushi Software, Shopcare, Kbazzar, Pharma Chemist
-Services: Web Design & Development, Digital Marketing, E-commerce Development, Android App Development, LMS, CRM Solutions
-Contact: support@yourcompany.com, +91-123-456-7890
-Website: https://yourcompany.com`;
+const companyInfo = `Our pricing for services is as follows: Web Development ranges from ₹25,000 to ₹1,50,000. Mobile App Development is priced between ₹60,000 and ₹5,00,000. Custom Software Development costs range from ₹75,000 to ₹7,00,000. Digital Marketing services are available on a monthly retainer basis from ₹10,000 to ₹1,00,000. Billing Software development is priced between ₹30,000 and ₹1,00,000. E-commerce Website or App solutions range from ₹50,000 to ₹4,00,000. LMS Development services are available between ₹70,000 and ₹4,00,000. CRM Development projects range from ₹80,000 to ₹5,00,000.`;
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -249,6 +268,7 @@ const Chatbot = () => {
   const inputRef = useRef(null);
   const [speechRecognition, setSpeechRecognition] = useState(null);
   const [speechSynthesis, setSpeechSynthesis] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Initialize speech recognition and synthesis
   useEffect(() => {
@@ -495,6 +515,9 @@ const Chatbot = () => {
       const selectedOption = currentOptions.find((option) => option.id === numInput.toString());
 
       if (selectedOption) {
+        if (currentState === 'products') {
+          setSelectedProduct(selectedOption);
+        }
         return handleOptionSelection(selectedOption);
       }
     }
@@ -587,31 +610,59 @@ const Chatbot = () => {
         break;
 
       case 'purchase':
-        const purchaseMessage = {
-          type: 'bot',
-          content: translations[language].purchaseRedirect,
-          options: chatbotFlowData.mainMenu.options.map((opt) => ({
-            id: opt.id,
-            name: opt.name[language],
-          })),
-        };
-        setMessages((prev) => [...prev, purchaseMessage]);
-        speakText(purchaseMessage.content);
-        setCurrentState('mainMenu');
+        if (selectedProduct && selectedProduct.purchaseLink) {
+          const purchaseMessage = {
+            type: 'bot',
+            content: `${translations[language].purchaseRedirect} [${selectedProduct.purchaseLink}](${selectedProduct.purchaseLink})`,
+            options: chatbotFlowData.productOptions.options.map((opt) => ({
+              id: opt.id,
+              name: opt.name[language],
+            })),
+          };
+          setMessages((prev) => [...prev, purchaseMessage]);
+          speakText(purchaseMessage.content);
+          setCurrentState('productOptions');
+        } else {
+          const errorMessage = {
+            type: 'bot',
+            content: translations[language].errorMessage,
+            options: chatbotFlowData.productOptions.options.map((opt) => ({
+              id: opt.id,
+              name: opt.name[language],
+            })),
+          };
+          setMessages((prev) => [...prev, errorMessage]);
+          speakText(errorMessage.content);
+          setCurrentState('productOptions');
+        }
         break;
 
       case 'viewDemo':
-        const demoMessage = {
-          type: 'bot',
-          content: translations[language].demoLink,
-          options: chatbotFlowData.productOptions.options.map((opt) => ({
-            id: opt.id,
-            name: opt.name[language],
-          })),
-        };
-        setMessages((prev) => [...prev, demoMessage]);
-        speakText(demoMessage.content);
-        setCurrentState('productOptions');
+        if (selectedProduct && selectedProduct.demoLink) {
+          const demoMessage = {
+            type: 'bot',
+            content: `${translations[language].demoLink} [${selectedProduct.demoLink}](${selectedProduct.demoLink})`,
+            options: chatbotFlowData.productOptions.options.map((opt) => ({
+              id: opt.id,
+              name: opt.name[language],
+            })),
+          };
+          setMessages((prev) => [...prev, demoMessage]);
+          speakText(demoMessage.content);
+          setCurrentState('productOptions');
+        } else {
+          const errorMessage = {
+            type: 'bot',
+            content: translations[language].errorMessage,
+            options: chatbotFlowData.productOptions.options.map((opt) => ({
+              id: opt.id,
+              name: opt.name[language],
+            })),
+          };
+          setMessages((prev) => [...prev, errorMessage]);
+          speakText(errorMessage.content);
+          setCurrentState('productOptions');
+        }
         break;
 
       case 'showPhone':
@@ -673,6 +724,7 @@ const Chatbot = () => {
     setCurrentState('mainMenu');
     setShowEmailForm(false);
     setEmailError('');
+    setSelectedProduct(null);
   };
 
   return (

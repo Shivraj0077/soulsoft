@@ -3,8 +3,14 @@ import React from 'react';
 const Footer = () => {
   return (
     <div style={styles.footer} className="footer-wrapper">
-      {/* Responsive Styles */}
+      {/* Responsive & Logo Visibility Styles */}
       <style jsx>{`
+        .footer-logo {
+          display: block;
+          margin: 0 auto 20px;
+          width: 150px !important;
+        }
+
         @media (max-width: 768px) {
           .footer-container {
             flex-direction: column;
@@ -16,9 +22,7 @@ const Footer = () => {
             min-width: auto;
           }
           .footer-logo {
-            display: block;
-            margin: 0 auto 20px;
-            width: 150px !important;
+            display: none !important;
           }
           .footer-section h2 {
             font-size: 1.2rem;
@@ -34,10 +38,9 @@ const Footer = () => {
       `}</style>
 
       <div style={styles.container} className="footer-container">
-
-        {/* Logo and About */}
+        {/* Logo */}
         <div style={styles.section} className="footer-section">
-          <img src="so.png" style={styles.logo} className="footer-logo" alt="Soulsoft Logo" />
+          <img src="so.png" className="footer-logo" alt="Soulsoft Logo" />
         </div>
 
         {/* Get in Touch */}
@@ -58,15 +61,28 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Company */}
-        <div style={styles.section} className="footer-section">
-          <h2 style={styles.heading}>Company</h2>
-          {['Home','About Us','POS Products','Services','Download','Contact','Privacy Policy','Terms & Conditions'].map((item,idx)=>(
-            <p style={styles.text} key={idx}>{item}</p>
-          ))}
-        </div>
+      
+          <div style={styles.section} className="footer-section">
+            <h2 style={styles.heading}>Company</h2>
+            {[
+              { name: 'Home', link: '/' },
+              { name: 'About Us', link: '/revew' },
+              { name: 'POS Products', link: '/products' },
+          
+              { name: 'Download', link: '/download' },
+              { name: 'Contact', link: '/contact' },
+              { name: 'Privacy Policy', link: '/privacy-policy' },
+              { name: 'Terms & Conditions', link: '/terms' },
+            ].map((item, idx) => (
+              <p style={styles.text} key={idx}>
+                <a href={item.link} style={{ color: '#fff', textDecoration: 'none' }}>
+            {item.name}
+                </a>
+              </p>
+            ))}
+          </div>
 
-        {/* Business Hours */}
+          {/* Business Hours */}
         <div style={styles.section} className="footer-section">
           <h2 style={styles.heading}>Business Hours</h2>
           <p style={styles.text}>
@@ -118,10 +134,6 @@ const styles = {
     fontSize: '17px',
     marginBottom: '10px',
     lineHeight: '1.5',
-  },
-  logo: {
-    width: '200px',
-    marginBottom: '-13px',
   },
   bottom: {
     textAlign: 'center',

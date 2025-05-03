@@ -21,9 +21,8 @@ export default function InlineNavbar() {
           z-index: 1000;
         }
 
-        .logo {
-          font-weight: bold;
-          font-size: 1.5rem;
+        .logo img {
+          height: 40px; /* Adjust the height of the logo */
         }
 
         .nav-links {
@@ -74,17 +73,25 @@ export default function InlineNavbar() {
             margin-bottom: 20px;
             font-size: 1.2rem;
           }
+          
         }
       `}</style>
 
       <nav className="navbar">
-        <div className="logo">Soulsoft</div>
+        <div className="logo">
+          <a href="/">
+            <img src="/so.png" alt="Soulsoft Logo" />
+          </a>
+    
+        </div>
 
         <div className="nav-links">
-          <a href="#">Home</a>
-          <a href="#">Services</a>
-          <a href="#">About</a>
-          <a href="#">Contact</a>
+          <a href="/">Home</a>
+          <a href="/revew">About</a>
+          <a href="contactus">Contact</a>
+          <a href="/products">Products</a>
+          <a href="#">Career</a>
+          <a href="#">Raise a Ticket</a>
         </div>
 
         <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
@@ -93,10 +100,12 @@ export default function InlineNavbar() {
       </nav>
 
       <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
-        <a href="#">Home</a>
-        <a href="#">Services</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
+        <a href="/">Home</a>
+        <a href="/revew">About</a>
+        <a href="/contactus">Contact</a>
+        <a href="/products">Products</a>
+        <a href="#">Career</a>
+        <a href="#">Raise a Ticket</a>
       </div>
     </>
   );

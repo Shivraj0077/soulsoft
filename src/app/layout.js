@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
         {/* Wrapping the app in the AuthProvider to handle user authentication */}
         <AuthProvider>
           {/* Navigation bar visible across pages */}
-     
+     <Chatbot/>
           <InlineNavbar/>
           {/* Main content wrapper with proper spacing */}
           <main className="pt-16 min-h-screen">
