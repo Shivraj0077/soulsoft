@@ -10,6 +10,9 @@ const nextConfig = {
       // Add your webpack customizations here if needed
       return config
     },
+    experimental: {
+      serverActions: true,
+    },
     
   };
   
