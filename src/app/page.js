@@ -185,7 +185,7 @@ export default function Home() {
             loop
             muted
         
-            src="/solo.mp4"
+            src="/SOLO.mp4"
             
             
           ></video>
