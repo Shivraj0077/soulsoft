@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ChevronRight, BarChart2, Package, Clock, Users, Database, PieChart, Menu, X, ArrowRight } from "lucide-react"
+import Footer from "../../../components/Footer"
 
 export default function ShetkariKrushiSoftware() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -29,14 +30,14 @@ export default function ShetkariKrushiSoftware() {
       icon: <BarChart2 className="w-6 h-6" />,
     },
     {
-      title: "Seamless Inventory Tracking",
-      description: "Real-time inventory updates. Low stock alerts and automated reordering.",
-      icon: <Package className="w-6 h-6" />,
+      title: "Comprehensive Product and Financial Insights",
+      description: "Product features in sales prints. Profit & Loss, by Bill & by Product.",
+      icon: <PieChart className="w-6 h-6" />,
     },
     {
-      title: "Comprehensive Reporting",
-      description: "Detailed analytics and insights. Export reports in multiple formats.",
-      icon: <PieChart className="w-6 h-6" />,
+      title: "Track Sales, Purchases & Dues",
+      description: "Stock tracking, credit management, text message and WhatsApp facility, outstanding.",
+      icon: <Package className="w-6 h-6" />,
     },
   ]
 
@@ -62,57 +63,7 @@ export default function ShetkariKrushiSoftware() {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       {/* Navigation */}
-      <nav className="relative z-10 px-6 py-4 md:px-12 lg:px-24">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="relative w-10 h-10 md:w-12 md:h-12">
-              <div className="absolute inset-0 bg-emerald-500 rounded-full opacity-20 animate-pulse"></div>
-              <Image
-                src="/placeholder.svg?height=48&width=48"
-                alt="SoulSoft Logo"
-                width={48}
-                height={48}
-                className="relative z-10"
-              />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">
-              SoulSoft
-            </span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8">
-            {["Home", "About Us", "Services", "POS Products", "Career", "Blog", "Contact"].map((item) => (
-              <Link key={item} href="#" className="text-gray-300 hover:text-emerald-400 transition-colors duration-300">
-                {item}
-              </Link>
-            ))}
-          </div>
-
-          <button className="md:hidden text-gray-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-
-        {/* Mobile menu */}
-        {isMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden mt-4 py-4 flex flex-col gap-4"
-          >
-            {["Home", "About Us", "Services", "POS Products", "Career", "Blog", "Contact"].map((item) => (
-              <Link
-                key={item}
-                href="#"
-                className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 py-2"
-              >
-                {item}
-              </Link>
-            ))}
-          </motion.div>
-        )}
-      </nav>
+    
 
       {/* Hero Section */}
       <section className="relative pt-12 pb-24 px-6 md:px-12 lg:px-24">
@@ -145,9 +96,12 @@ export default function ShetkariKrushiSoftware() {
               <button className="bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-3 rounded-full font-medium flex items-center gap-2 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300">
                 Get Started <ArrowRight className="w-4 h-4" />
               </button>
-              <button className="border border-emerald-500/30 px-6 py-3 rounded-full font-medium hover:bg-emerald-500/10 transition-all duration-300">
-                Learn More
-              </button>
+              <button 
+  onClick={() => window.open('https://www.youtube.com/watch?v=lHQXiW9GIiM&t=297s', '_blank')}
+  className="border border-emerald-500/30 px-6 py-3 rounded-full font-medium hover:bg-emerald-500/10 transition-all duration-300"
+>
+  Product Demo
+</button>
             </motion.div>
           </motion.div>
 
@@ -160,7 +114,7 @@ export default function ShetkariKrushiSoftware() {
             <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 rounded-2xl blur-xl"></div>
             <div className="relative bg-gradient-to-tr from-gray-900 to-gray-800 p-2 rounded-2xl border border-gray-700/50">
               <Image
-                src="/placeholder.svg?height=600&width=800"
+                src="/2-21.png?height=800&width=800"
                 alt="Shetkari Krushi Software Interface"
                 width={800}
                 height={600}
@@ -262,7 +216,7 @@ export default function ShetkariKrushiSoftware() {
               <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 rounded-2xl blur-xl"></div>
               <div className="relative overflow-hidden rounded-2xl border border-gray-700/50">
                 <Image
-                  src="/placeholder.svg?height=600&width=800"
+                  src="/mon.png?height=600&width=800"
                   alt="Shetkari Krushi Software Dashboard"
                   width={800}
                   height={600}
@@ -326,7 +280,7 @@ export default function ShetkariKrushiSoftware() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Powerful{" "}
+              Amazing{" "}
               <span className="bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">
                 Features
               </span>
@@ -344,18 +298,15 @@ export default function ShetkariKrushiSoftware() {
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {[
-              { title: "Sales Management", desc: "Track all sales transactions with detailed customer information" },
-              { title: "Inventory Control", desc: "Manage stock levels with expiry tracking and low stock alerts" },
-              { title: "Customer Database", desc: "Maintain comprehensive customer profiles and purchase history" },
-              { title: "Financial Reporting", desc: "Generate detailed financial reports and statements" },
-              {
-                title: "Multi-location Support",
-                desc: "Manage multiple Krishi Seva Kendra locations from one dashboard",
-              },
-              { title: "Offline Capability", desc: "Continue operations even without internet connectivity" },
+              { title: "Easy Purchase and Sale Forms", desc: "Very easy and understandable forms for anyone" },
+              { title: "Medicine Usage in Bills", desc: "Medicine usage rate is printed in the bill itself" },
+              { title: "Customer Bill History", desc: "All previous bills of the customer can be seen in the current bill" },
+              { title: "Crop-wise Reports", desc: "Annual crop-wise reports for better insights" },
+              { title: "Panchayat Samiti Reports", desc: "Necessary reports for Panchayat Samiti compliance" },
+              { title: "E-way Bill Facility", desc: "Seamless e-way bill generation for transportation" },
+              { title: "Data Backup Security", desc: "Secure data backups to protect your business data" },
+              { title: "GST Compliance", desc: "Fully compliant with GST regulations" },
               { title: "Mobile Accessibility", desc: "Access your data from any device, anywhere, anytime" },
-              { title: "Data Security", desc: "Enterprise-grade security to protect your valuable business data" },
-              { title: "Easy Integration", desc: "Seamlessly connect with other business tools and systems" },
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -397,93 +348,20 @@ export default function ShetkariKrushiSoftware() {
             <button className="bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-4 rounded-full font-medium flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300">
               Get Started Now <ChevronRight className="w-5 h-5" />
             </button>
-            <button className="border border-emerald-500/30 px-8 py-4 rounded-full font-medium hover:bg-emerald-500/10 transition-all duration-300">
-              Request Demo
-            </button>
+           
           </div>
         </motion.div>
       </section>
 
+      {/* Newsletter Section */}
+     
+
       {/* Footer */}
-      <footer className="py-12 px-6 md:px-12 lg:px-24 border-t border-gray-800">
-        <div className="grid md:grid-cols-4 gap-8">
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="relative w-10 h-10">
-                <div className="absolute inset-0 bg-emerald-500 rounded-full opacity-20 animate-pulse"></div>
-                <Image
-                  src="/placeholder.svg?height=40&width=40"
-                  alt="SoulSoft Logo"
-                  width={40}
-                  height={40}
-                  className="relative z-10"
-                />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">
-                SoulSoft
-              </span>
-            </div>
-            <p className="text-gray-400 mb-4">
-              Empowering agricultural businesses with innovative software solutions since 2005.
-            </p>
-            <div className="flex gap-4">
-              {["Facebook", "Twitter", "LinkedIn", "Instagram"].map((social) => (
-                <Link
-                  key={social}
-                  href="#"
-                  className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-emerald-500/20 transition-colors duration-300"
-                >
-                  <span className="sr-only">{social}</span>
-                  <div className="w-4 h-4 bg-gray-400 mask-image"></div>
-                </Link>
-              ))}
-            </div>
-          </div>
+     
+        <Footer/>
+        
 
-          <div>
-            <h3 className="font-bold text-lg mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              {["Home", "About Us", "Services", "Products", "Career", "Blog", "Contact"].map((link) => (
-                <li key={link}>
-                  <Link href="#" className="text-gray-400 hover:text-emerald-400 transition-colors duration-300">
-                    {link}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-lg mb-4">Products</h3>
-            <ul className="space-y-2">
-              {["Shetkari Krushi Software", "POS System", "Inventory Management", "Financial Tools", "Mobile App"].map(
-                (product) => (
-                  <li key={product}>
-                    <Link href="#" className="text-gray-400 hover:text-emerald-400 transition-colors duration-300">
-                      {product}
-                    </Link>
-                  </li>
-                ),
-              )}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-lg mb-4">Contact Us</h3>
-            <ul className="space-y-2 text-gray-400">
-              <li>SoulSoft Infotech</li>
-              <li>123 Tech Park, Pune</li>
-              <li>Maharashtra, India</li>
-              <li>contact@soulsoft.in</li>
-              <li>+91 1234567890</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} SoulSoft Infotech. All rights reserved.</p>
-        </div>
-      </footer>
+       
     </div>
   )
 }

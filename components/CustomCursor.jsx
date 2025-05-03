@@ -43,31 +43,35 @@ const CustomCursor = () => {
 
       {/* Scoped styling inside component */}
       <style jsx>{`
-  .custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100px;
-  height: 100px;
-  background-color: rgba(240, 63, 63, 0.9); /* Semi-transparent background */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); /* Shadow for depth */
-  border-radius: 50%; /* Perfect circle */
-  transform: translate(-50%, -50%); /* Only centering, no rotation */
-  pointer-events: none;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: sans-serif;
-  font-size: 13px;
-  color: white;
-    text-align: center;
-  font-weight: bold;
-}
+        .custom-cursor {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100px;
+          height: 100px;
+          background-color: white;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: sans-serif;
+          font-size: 13px;
+          color: black;
+          text-align: center;
+          font-weight: bold;
+          cursor: pointer; /* Added cursor property */
+        }
 
-`}
-</style>
-
+        @media (pointer: coarse) {
+          .custom-cursor {
+            display: none;
+          }
+        }
+      `}</style>
     </>
   );
 };

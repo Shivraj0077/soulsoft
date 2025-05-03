@@ -5,6 +5,9 @@ import Image from "next/image";
 import Script from "next/script";
 import { register } from "swiper/element/bundle";
 import dynamic from "next/dynamic";
+import { HeroScrollDemo } from "./globe/page";
+import ScrollToHash from "./ScrollToHash";
+import { Menu, X } from 'lucide-react';
 import "../style.css";
 // Import swiper styles
 import "swiper/css";
@@ -13,7 +16,14 @@ import CustomCursor from "../../components/CustomCursor";
 import ModernSwiper from "../../components/MordernSwiper";
 import LineSlides from "../../components/LineSlide";
 import Footer from "../../components/Footer";
+import WorldMap from "@/components/ui/world-map";
+import { NavbarDemo } from "../../components/Navbar";
+import Link from "next/link";
 
+import { BentoGridDemo } from "../../components/globe";
+import { CompareDemo } from "../../components/Before";
+import { WobbleCardDemo } from "../../components/card";
+import InlineNavbar from "../../components/Navbar";
 // Import locomotive scroll dynamically with no SSR
 const LocomotiveScrollProvider = dynamic(
   () => import("../../components/LocomotiveScrollProvider"),
@@ -117,17 +127,16 @@ export default function Home() {
       swiperEl.initialize();
     }
   }, []);
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
+      <InlineNavbar />
       <Head>
         <title>soulsoft</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/icon.png" />
       </Head>
-      <div className="custom-cursor">
-        <span>Soulsoft</span>
-      </div>
+    
       <CustomCursor />
 
       {isLoading && (
@@ -145,30 +154,10 @@ export default function Home() {
 
       <div id="main">
         <div id="page1">
-          <nav>
-            <Image src="/so.png" alt="soulsoft Logo" width={200} height={60} />
-            <div id="nav-part2">
-              <h4>
-                <a href="#">product</a>
-              </h4>
-              <h4>
-                <a href="#">about</a>
-              </h4>
-              <h4>
-                <a href="#">Contact</a>
-              </h4>
-              <h4>
-                <a href="#">review</a>
-              </h4>
-              <h4>
-                <a href="#">jobs</a>
-              </h4>
-            </div>
-            <h3>Menu</h3>
-          </nav>
-
+          
           <div id="center">
             <div id="left">
+            
               <h3>
                 Soulsoft Infotech: Innovative, tailored solutions that simplify,
                 streamline, and scale your business. .
@@ -190,7 +179,16 @@ export default function Home() {
             <div id="hero-3"></div>
           </div>
 
-          <video autoPlay loop muted src="/video.mp4"></video>
+          <video
+           
+            autoPlay
+            loop
+            muted
+        
+            src="/solo.mp4"
+            
+            
+          ></video>
 
           <div
             id="arrow-container"
@@ -239,162 +237,172 @@ export default function Home() {
             </div>
           </div>
 
-          <div id="gooey"></div>
-        </div>
-        
-       
+          <div id="gooey">
           
-        <div id="page3" >
-          <div id="elem-container" ref={elemContainerRef}>
-            <div
-              id="elem1"
-              className="elem"
-              data-image="https://images.unsplash.com/photo-1701001308648-7b731a52b8d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D"
-            >
-              <div className="overlay"></div>
-              
-              <h2 className="flex items-center gap-[1cm]">E-commerce</h2>
-              <h2 className="flex items-center gap-[1cm]">Digital Marketing</h2>
-            </div>
-            <div
-              id="elem1"
-              className="elem"
-              data-image="https://images.unsplash.com/photo-1701001308648-7b731a52b8d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D"
-            >
-              <div className="overlay"></div>
-              <h2 className="flex items-center gap-[1cm]">
-                Web Design and Development
-              </h2>
-              <h2 className="flex items-center gap-[1cm]">
-                Learning Management System
-              </h2>
-            </div>
-            <div
-              id="elem1"
-              className="elem"
-              data-image="https://images.unsplash.com/photo-1701001308648-7b731a52b8d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D"
-            >
-              <div className="overlay"></div>
-              <h2 className="flex items-center gap-[1cm]">
-                Windows Billing Software
-              </h2>
-              <h2 className="flex items-center gap-[1cm]">
-                Software Development
-              </h2>
-            </div>
-
-            <div
-              className="elem"
-              data-image="https://images.unsplash.com/photo-1700975928909-da4a46227a47?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8"
-            >
-              <div className="overlay"></div>
-              <h2 className="flex items-center gap-4">
-                Customer Relationship Management
-              </h2>
-              <h2 className="flex items-center gap-[1cm]">
-                Mobile App Development
-              </h2>
-            </div>
           </div>
         </div>
+        
+        <ScrollToHash />
+          
+        <div id="page3">
+        <div id="page3">
+        <div id="page3">
+        <div id="page3">
+        <div style={{ textAlign: "center", marginBottom: "150px", marginTop: "-150px" }}>
+  <h2  className="services"style={{ 
+    fontSize: "3rem", 
+    fontWeight: "600", 
+    color: "white"
+  }}>
+    Our Services
+  </h2>
+</div>
+<section id="services">   
+  <div
+    id="elem-container"
+    ref={elemContainerRef}
+    style={{
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "30px",
+      padding: "30px",
+      justifyContent: "space-between",
+      marginTop: "-150px",
+      position: "relative",
+      zIndex: "10",
+    }}
+  >
+    {[
+      { label: "E-commerce", link: "/ecomerce" },
+      { label: "Digital Marketing", link: "/dp" },
+      { label: "Web Design and Development", link: "/webdev" },
+      { label: "Learning Management System", link: "/lms" },
+      { label: "Windows Billing Software", link: "/billlingsoftware" },
+      { label: "Software Development", link: "/software" },
+      { label: "Customer Relationship Management", link: "/crm" },
+      { label: "Mobile App Development", link: "/android" },
+    ].map((item, index) => (
+      <a
+        key={index}
+        href={item.link}
+        className="group"
+        style={{
+          flex: "2 2 auto",
+          minWidth: "200px",
+          padding: "30px",
+          backgroundColor: "#EFEAE3",
+          borderRadius: "15px",
+          textDecoration: "none",
+          color: "black",
+          fontSize: "2rem",
+          fontWeight: "400",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          transition: "all 0.3s ease",
+          transform: "translateY(0px)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-5px)";
+          e.currentTarget.querySelector(".arrow").style.transform = "translateX(5px)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0px)";
+          e.currentTarget.querySelector(".arrow").style.transform = "translateX(0px)";
+        }}
+      >
+        <span>{item.label}</span>
+        <span
+          className="arrow"
+          style={{
+            fontSize: "1.5rem",
+            transition: "transform 0.3s ease",
+          }}
+        >
+          →
+        </span>
+      </a>
+    ))}
+
+ <CompareDemo/>
+ 
+
+</div>
+</section>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div className="w-full overflow-hidden">
+      <style>
+        {`
+          .full-width-video-container {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            overflow: hidden;
+            border-radius: 50px;
+            padding: 0 20px;
+          }
+          
+          .full-width-video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+             border-radius: 30px;
+          }
+        `}
+      </style>
+      
+      <div className="full-width-video-container">
+        <video 
+          autoPlay
+          muted
+          loop
+          src="/fotter.mp4"
+        ></video>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+</div>
       </div>
       {/* Replace your current page5 div with this */}
-<div id="page5" style={{
-  height: "50vh",
-  width: "100%",
-  backgroundColor: "#EFEAE3",
-  display: "flex",
-  position: "relative",
-  zIndex: "20"
-}}>
-  <div style={{
-    flex: "1",
-    borderRight: "3px solid #ddd",
-    padding: "30px",
-    display: "flex",
-    flexDirection: "column"
-  }}>
-  
-    <h1 style={{fontWeight: "350", color:"black", fontSize:"20"}}> we ensure uninterrupted assistance with our round-the-clock customer support. Whether you need technical help or quick answers, our team is just a call or click away.</h1>
-  </div>
-  
-  <div style={{
-    flex: "1",
-    borderRight: "3px solid #ddd",
-    padding: "30px",
-    display: "flex",
-    flexDirection: "column"
-  }}>
-   
-    <h1 style={{fontWeight: "350", color:"black",fontSize:"20"}}>Our skilled professionals bring years of experience to deliver innovative solutions. With technical expertise and a client-focused approach, we ensure your business achieves its goals seamlessly.</h1>
-  </div>
-  
-  <div style={{
-    flex: "1",
-    padding: "30px",
-    display: "flex",
-    flexDirection: "column"
-  }}>
-  
-    <h1 style={{fontWeight: "350" ,color:"black",fontSize:"20"}}>We provide tailored solutions to simplify processes, enhance efficiency, and drive growth. At Soulsoft Infotech, we combine creativity and technology to empower your business for success.</h1>
-  </div>
-</div>
-  
-      <div id="page6">
-  <div className="slides-container" style={{ 
-    display: "flex", 
-    width: "100%", 
-    height: "100vh",
-    backgroundColor: "#EFEAE3",
-    borderTop: "1px solid #ddd"
-  }}>
-    <div className="slide" style={{ 
-      flex: "1", 
-      padding: "2rem", 
-      position: "relative",
-      borderRight: "1px solid #ddd" 
-    }}>
-      <h3 style={{ fontWeight: "500", fontSize: "1.5rem", fontFamily: "neu" }}>Slide 2</h3>
-      <div className="slide-content" style={{ marginTop: "2rem" }}>
-        <p style={{ fontWeight: "100", lineHeight: "1.6" }}>Your content for slide 2 goes here. Match the minimal aesthetic with clean typography.</p>
-      </div>
-    </div>
     
-    <div className="slide" style={{ 
-      flex: "1", 
-      padding: "2rem", 
-      position: "relative",
-      borderRight: "1px solid #ddd" 
-    }}>
-      <h3 style={{ fontWeight: "500", fontSize: "1.5rem", fontFamily: "neu" }}>Slide 3</h3>
-      <div className="slide-content" style={{ marginTop: "2rem" }}>
-        <p style={{ fontWeight: "100", lineHeight: "1.6" }}>Your content for slide 3 goes here. Use the &apos;neu&apos; font with lighter weight for body text.</p>
-      </div>
-    </div>
+
+
+  
     
-    <div className="slide" style={{ 
-      flex: "1", 
-      padding: "2rem", 
-      position: "relative"
-    }}>
-      <h3 style={{ fontWeight: "500", fontSize: "1.5rem", fontFamily: "neu" }}>Slide 4</h3>
-      <div className="slide-content" style={{ marginTop: "2rem" }}>
-        <p style={{ fontWeight: "100", lineHeight: "1.6" }}>Your content for slide 4 goes here. Keep the design clean and minimal like the rest of your site.</p>
-      </div>
-    </div>
-  </div>
-</div>
+  
+      
+
 
 
       
 
-      <div id="footer">
-        <div id="footer-div"></div>
-        <h1>
+     
+      
           <Footer />
-       </h1>
-      </div>
-      
+       
+  
+ 
      
 
       {/* Load locomotive-scroll from CDN (necessary for client-side) */}

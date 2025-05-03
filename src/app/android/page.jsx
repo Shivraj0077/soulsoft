@@ -8,9 +8,10 @@ function Web() {
   const [isVisible, setIsVisible] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const heroRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState(null);
   const [scrollY, setScrollY] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+  const heroRef = useRef(null);
 
   // Track scroll position for parallax effects
   useEffect(() => {
@@ -26,12 +27,21 @@ function Web() {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('mousemove', handleMouseMove);
+      }
+    };
   }, []);
 
   useEffect(() => {
     setIsVisible(true);
+    setIsMounted(true);
     
     // Initialize animated background
     initParticleBackground();
@@ -271,22 +281,37 @@ function Web() {
 
   const faqs = [
     {
-      question: "How much does it cost to develop a website?",
-      answer: "Website development costs vary based on complexity, features, and design requirements. Basic websites typically range from $3,000-$10,000, while complex e-commerce or custom web applications can range from $10,000-$50,000+. We provide detailed quotes after understanding your specific requirements."
+      question: "How much does It depends on features, complexity & platform. Contact us for a free quote. mobile app development cost?",
+      answer: ""
     },
     {
-      question: "Do you offer SEO-friendly web design?",
-      answer: "Yes, all our websites are built with SEO best practices in mind. This includes clean code, fast loading speeds, mobile responsiveness, proper heading structure, schema markup, and optimized images. We also offer additional SEO services to help improve your search engine rankings."
+      question: "Do you develop both Android & iOS apps?",
+      answer: "Yes! We offer Android, iOS & cross-platform app development using the latest technologies."
     },
     {
-      question: "Can you develop an e-commerce website?",
-      answer: "Absolutely! We specialize in developing custom e-commerce websites that are tailored to your business needs. Our e-commerce solutions include secure payment processing, inventory management, user-friendly product catalogs, and seamless checkout experiences. We work with platforms like WooCommerce, Shopify, and Magento, or can build custom solutions."
+      question: "How long does it take to build a mobile app?",
+      answer: "Typically, 2-6 months, depending on the project scope."
     },
     {
-      question: "How long does it take to build a website?",
-      answer: "Typically, websites take 2–6 weeks depending on requirements. Simple websites can be completed in 2-3 weeks, while more complex sites may take 8-12 weeks or more. We ensure timely delivery without compromising quality and provide clear timelines during the project scoping phase."
+      question: "Will you help with App Store submission?",
+      answer: "Yes! We handle the Google Play Store & App Store submission process for you."
     }
   ];
+
+  const getTransformStyle = (multiplierX, multiplierY) => {
+    if (!isMounted || !mousePosition) {
+      return {
+        transform: 'translate(0px, 0px)'
+      };
+    }
+
+    const x = ((mousePosition.x - window.innerWidth / 2) * multiplierX);
+    const y = ((mousePosition.y - window.innerHeight / 2) * multiplierY);
+    
+    return {
+      transform: `translate(${x}px, ${y}px)`
+    };
+  };
 
   return (
     <div className="container">
@@ -324,40 +349,19 @@ function Web() {
           <div className="hero-float-elements">
             <div
               className="float-element code-element"
-              style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * 0.02
-                      }px)`
-                    : 'translate(0px, 0px)', // Default value for SSR
-              }}
+              style={getTransformStyle(0.02, 0.02)}
             >
               <Code />
             </div>
             <div
               className="float-element shop-element"
-              style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * -0.01}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * -0.01
-                      }px)`
-                    : 'translate(0px, 0px)', // Default value for SSR
-              }}
+              style={getTransformStyle(-0.01, -0.01)}
             >
               <ShoppingCart />
             </div>
             <div
               className="float-element search-element"
-              style={{
-                transform:
-                  typeof window !== 'undefined'
-                    ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${
-                        (mousePosition.y - window.innerHeight / 2) * 0.03
-                      }px)`
-                    : 'translate(0px, 0px)', // Default value for SSR
-              }}
+              style={getTransformStyle(0.03, 0.03)}
             >
               <Search />
             </div>
