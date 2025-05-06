@@ -1,18 +1,92 @@
-// components/CustomCursor.jsx
-import { useEffect, useRef } from "react";
+"use client";
+import { useEffect, useRef, useState } from "react";
 
 const CustomCursor = () => {
   const cursorRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const cursor = cursorRef.current;
-    let mouseX = 0, mouseY = 0;
-    let currentX = 0, currentY = 0;
+    let mouseX = 0,
+      mouseY = 0;
+    let currentX = 0,
+      currentY = 0;
     const speed = 0.1;
 
     const onMouseMove = (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+    };
+
+    const checkElementHover = () => {
+      let hovering = false;
+
+      // Get all navbar elements
+      const navbarElements = document.querySelectorAll(
+        ".navbar, .nav-links a, .logo, .menu-icon, .mobile-menu.open"
+      );
+
+      // Get chatbot elements (including the main chatbot container)
+      const chatbotElements = document.querySelectorAll(
+        ".soulsoft-chatbot, .soulsoft-chatbot button, .soulsoft-chatbot *"
+      );
+
+      // Check navbar elements
+      navbarElements.forEach((element) => {
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (
+            mouseX >= rect.left &&
+            mouseX <= rect.right &&
+            mouseY >= rect.top &&
+            mouseY <= rect.bottom
+          ) {
+            hovering = true;
+            console.log("Hovering over navbar element:", element);
+          }
+        }
+      });
+
+      // Check chatbot elements
+      chatbotElements.forEach((element) => {
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (
+            mouseX >= rect.left &&
+            mouseX <= rect.right &&
+            mouseY >= rect.top &&
+            mouseY <= rect.bottom
+          ) {
+            hovering = true;
+            console.log("Hovering over chatbot element:", element);
+          }
+        }
+      });
+
+      // Optional: Keep the bottom-right corner check for redundancy
+      const bottomRightElements = Array.from(
+        document.querySelectorAll(".soulsoft-chatbot, .soulsoft-chatbot *")
+      ).filter((el) => {
+        const rect = el.getBoundingClientRect();
+        const rightSide = window.innerWidth - rect.right < 100;
+        const bottomSide = window.innerHeight - rect.bottom < 100;
+        return rightSide && bottomSide;
+      });
+
+      bottomRightElements.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        if (
+          mouseX >= rect.left &&
+          mouseX <= rect.right &&
+          mouseY >= rect.top &&
+          mouseY <= rect.bottom
+        ) {
+          hovering = true;
+          console.log("Hovering over bottom-right chatbot element:", element);
+        }
+      });
+
+      setIsVisible(!hovering);
     };
 
     const animate = () => {
@@ -24,6 +98,7 @@ const CustomCursor = () => {
         cursor.style.top = `${currentY}px`;
       }
 
+      checkElementHover();
       requestAnimationFrame(animate);
     };
 
@@ -37,11 +112,14 @@ const CustomCursor = () => {
 
   return (
     <>
-      <div ref={cursorRef} className="custom-cursor">
-        <span>SCALE YOUR BUSSINESS</span>
+      <div
+        ref={cursorRef}
+        className="custom-cursor"
+        style={{ opacity: isVisible ? 1 : 0 }}
+      >
+        <span>SCALE YOUR BUSINESS</span>
       </div>
 
-      {/* Scoped styling inside component */}
       <style jsx>{`
         .custom-cursor {
           position: fixed;
@@ -63,7 +141,7 @@ const CustomCursor = () => {
           color: black;
           text-align: center;
           font-weight: bold;
-          cursor: pointer; /* Added cursor property */
+          transition: opacity 0.2s ease;
         }
 
         @media (pointer: coarse) {
