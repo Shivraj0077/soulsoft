@@ -1,12 +1,13 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import { getSession } from 'next-auth/react';
 import { pool } from '@/lib/db';
 
 // Hardcoded admin emails for ticket system
 const ADMIN_EMAILS = [
   'admin1@example.com',
   'admin2@example.com',
-  'shivrajpawar0077@gmail.com', // Add your admin email
+  'shivrajpawar0077@gmail.com',
 ];
 
 // Hardcoded recruiter emails for job system
@@ -42,7 +43,7 @@ export const authOptions = {
           } else if (RECRUITER_EMAILS.includes(user.email)) {
             role = 'recruiter';
           } else {
-            role = 'user'; // Default role for ticket system users
+            role = 'user';
           }
 
           // Check if user exists
@@ -59,13 +60,14 @@ export const authOptions = {
               'INSERT INTO users (email, name, provider_id, provider_name, role, google_sub) VALUES ($1, $2, $3, $4, $5, $6) RETURNING user_id',
               [user.email, user.name, account.providerAccountId, 'google', role, user.id]
             );
+
             userId = newUserResult.rows[0].user_id;
 
             // Create role-specific record
             if (role === 'admin') {
               await pool.query(
-                'INSERT INTO admins (user_id, name, email, phone_number) VALUES ($1, $2, $3, $4)',
-                [userId, user.name, user.email, null] // Phone number set via admin configuration
+                'INSERT INTO admins (user_id, name, email) VALUES ($1, $2, $3)',
+                [userId, user.name, user.email]
               );
             } else if (role === 'recruiter') {
               await pool.query(
@@ -94,8 +96,8 @@ export const authOptions = {
               );
               if (adminResult.rows.length === 0) {
                 await pool.query(
-                  'INSERT INTO admins (user_id, name, email, phone_number) VALUES ($1, $2, $3, $4)',
-                  [userId, user.name, user.email, null]
+                  'INSERT INTO admins (user_id, name, email) VALUES ($1, $2, $3)',
+                  [userId, user.name, user.email]
                 );
               }
             } else if (role === 'recruiter') {
@@ -131,6 +133,7 @@ export const authOptions = {
       }
       return true;
     },
+
     async jwt({ token, user }) {
       if (user) {
         token.role = ADMIN_EMAILS.includes(user.email)
@@ -138,10 +141,12 @@ export const authOptions = {
           : RECRUITER_EMAILS.includes(user.email)
           ? 'recruiter'
           : 'user';
-        token.id = user.id; // Store Google sub for database queries
+        token.id = user.id;
+        token.email = user.email;
       }
       return token;
     },
+
     async session({ session, token }) {
       if (session?.user) {
         session.user.role = ADMIN_EMAILS.includes(session.user.email)
@@ -149,10 +154,14 @@ export const authOptions = {
           : RECRUITER_EMAILS.includes(session.user.email)
           ? 'recruiter'
           : 'user';
-        session.user.id = token.id; // Add user ID to session
+        session.user.id = token.id;
       }
       return session;
     },
+
+    async redirect({ url, baseUrl }) {
+      return '/auth/signin';
+    }
   },
   pages: {
     signIn: '/auth/signin',

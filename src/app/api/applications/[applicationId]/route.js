@@ -3,7 +3,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { pool } from '@/lib/db';
 
-
 export async function GET(request, { params }) {
   let session;
   try {
@@ -80,5 +79,97 @@ export async function GET(request, { params }) {
       { error: 'Failed to fetch application', details: error.message },
       { status: 500 }
     );
+  }
+}
+
+export async function POST(request) {
+  let session;
+  try {
+    session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ 
+        success: false,
+        error: 'Unauthorized',
+        message: 'You must be logged in to apply' 
+      }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { job_id, cover_letter, resume_url } = body;
+
+    if (!job_id) {
+      return NextResponse.json({ 
+        success: false,
+        error: 'Job ID is required',
+        message: 'Please provide a valid job ID'
+      }, { status: 400 });
+    }
+
+    // Get the user's applicant_id
+    const applicantResult = await pool.query(
+      `SELECT a.applicant_id 
+       FROM applicants a 
+       JOIN users u ON a.user_id = u.user_id 
+       WHERE u.email = $1`,
+      [session.user.email]
+    );
+
+    if (applicantResult.rows.length === 0) {
+      return NextResponse.json({ 
+        success: false,
+        error: 'Applicant profile not found',
+        message: 'Please complete your applicant profile first'
+      }, { status: 404 });
+    }
+
+    const applicantId = applicantResult.rows[0].applicant_id;
+
+    // Check if user has already applied to this job
+    const existingApplication = await pool.query(
+      'SELECT application_id FROM applications WHERE job_id = $1 AND applicant_id = $2',
+      [job_id, applicantId]
+    );
+
+    if (existingApplication.rows.length > 0) {
+      return NextResponse.json({ 
+        success: false,
+        error: 'Duplicate application',
+        message: 'You have already applied for this job'
+      }, { status: 400 });
+    }
+
+    // Create the application
+    const result = await pool.query(
+      `INSERT INTO applications (job_id, applicant_id, resume_url, cover_letter, application_status, applied_date)
+       VALUES ($1, $2, $3, $4, 'pending', NOW())
+       RETURNING application_id, job_id, applicant_id, application_status`,
+      [job_id, applicantId, resume_url, cover_letter]
+    );
+
+    // Ensure we have a valid result before sending response
+    if (!result.rows[0]) {
+      throw new Error('Failed to create application record');
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Application submitted successfully',
+      application: {
+        ...result.rows[0],
+        application_id: parseInt(result.rows[0].application_id, 10),
+        job_id: parseInt(result.rows[0].job_id, 10),
+        applicant_id: parseInt(result.rows[0].applicant_id, 10)
+      }
+    }, { status: 201 });
+
+  } catch (error) {
+    console.error('Application submission error:', error);
+    
+    // Always return a properly formatted JSON response
+    return NextResponse.json({
+      success: false,
+      error: 'Server error',
+      message: 'Failed to submit application. Please try again later.'
+    }, { status: 500 });
   }
 }

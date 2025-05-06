@@ -90,8 +90,8 @@ export default function InlineNavbar() {
           <a href="/revew">About</a>
           <a href="contactus">Contact</a>
           <a href="/products">Products</a>
-          <a href="#">Career</a>
-          <a href="#">Raise a Ticket</a>
+          <a href="/jobs">Career</a>
+          <a href="/tickets">Raise a Ticket</a>
         </div>
 
         <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
@@ -104,8 +104,8 @@ export default function InlineNavbar() {
         <a href="/revew">About</a>
         <a href="/contactus">Contact</a>
         <a href="/products">Products</a>
-        <a href="#">Career</a>
-        <a href="#">Raise a Ticket</a>
+        <a href="/jobs">Career</a>
+        <a href="/tickets">Raise a Ticket</a>
       </div>
     </>
   );

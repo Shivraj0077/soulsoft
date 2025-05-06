@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Loader2, AlertTriangle, Upload } from 'lucide-react';
 
 const PRODUCT_OPTIONS = [
   'Shetkari Krushi Software',
@@ -99,105 +101,146 @@ export default function CreateTicket() {
   const options = formData.problem_type === 'product' ? PRODUCT_OPTIONS : SERVICE_OPTIONS;
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Create New Support Ticket</h1>
-          <Link href="/user/tickets" className="text-blue-600 hover:text-blue-800">
+    <div className="min-h-screen bg-black text-zinc-100 bg-[radial-gradient(ellipse_at_top_right,rgba(30,30,30,0.3),transparent_70%),radial-gradient(ellipse_at_bottom_left,rgba(30,30,30,0.3),transparent_70%)]">
+      <div className="container mx-auto p-6 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-center mb-8"
+        >
+          <Link
+            href="/user/tickets"
+            className="flex items-center text-zinc-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="h-5 w-5 mr-2" />
             Back to Tickets
           </Link>
-        </div>
+        </motion.div>
+
+        <motion.h1 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-3xl md:text-4xl font-bold text-white mb-8"
+        >
+          Create New Support Ticket
+        </motion.h1>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-red-900/20 backdrop-blur-sm border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-8 flex items-center"
+          >
+            <AlertTriangle className="h-5 w-5 mr-2" />
             {error}
-          </div>
+          </motion.div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Title</label>
-            <input
-              type="text"
-              name="title"
-              required
-              value={formData.title}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            />
-          </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <form onSubmit={handleSubmit} className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 rounded-xl p-6 space-y-6">
+            <div>
+              <label className="block text-zinc-400 font-medium mb-2">Title</label>
+              <input
+                type="text"
+                name="title"
+                required
+                value={formData.title}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-600"
+                placeholder="Enter ticket title"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              name="description"
-              required
-              value={formData.description}
-              onChange={handleChange}
-              rows={4}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            />
-          </div>
+            <div>
+              <label className="block text-zinc-400 font-medium mb-2">Description</label>
+              <textarea
+                name="description"
+                required
+                value={formData.description}
+                onChange={handleChange}
+                rows={4}
+                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-600"
+                placeholder="Describe your issue in detail"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Type</label>
-            <select
-              name="problem_type"
-              value={formData.problem_type}
-              onChange={handleTypeChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            >
-              <option value="product">Product</option>
-              <option value="service">Service</option>
-            </select>
-          </div>
+            <div>
+              <label className="block text-zinc-400 font-medium mb-2">Type</label>
+              <select
+                name="problem_type"
+                value={formData.problem_type}
+                onChange={handleTypeChange}
+                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 focus:outline-none focus:border-zinc-600"
+              >
+                <option value="product">Product</option>
+                <option value="service">Service</option>
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              {formData.problem_type === 'product' ? 'Product' : 'Service'}
-            </label>
-            <select
-              name="product_service_name"
-              value={formData.product_service_name}
-              onChange={handleServiceProductChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            >
-              {options.map((opt) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-          </div>
+            <div>
+              <label className="block text-zinc-400 font-medium mb-2">
+                {formData.problem_type === 'product' ? 'Product' : 'Service'}
+              </label>
+              <select
+                name="product_service_name"
+                value={formData.product_service_name}
+                onChange={handleServiceProductChange}
+                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 focus:outline-none focus:border-zinc-600"
+              >
+                {options.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Attachment (Optional)
-            </label>
-            <input
-              type="file"
-              onChange={handleFileChange}
-              accept="image/*"
-              className="mt-1 block w-full"
-            />
-          </div>
+            <div>
+              <label className="block text-zinc-400 font-medium mb-2">
+                Attachment (Optional)
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-zinc-700 file:text-zinc-100 hover:file:bg-zinc-600"
+                />
+                <Upload className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-500 pointer-events-none" />
+              </div>
+            </div>
 
-          <div className="flex justify-end space-x-4">
-            <Link
-              href="/user/tickets"
-              className="bg-gray-100 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-200"
-            >
-              Cancel
-            </Link>
-            <button
-              type="submit"
-              disabled={loading}
-              className={`bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-            >
-              {loading ? 'Creating...' : 'Create Ticket'}
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-end space-x-4 pt-4">
+              <Link
+                href="/user/tickets"
+                className="px-6 py-2.5 rounded-lg border border-zinc-700 text-zinc-300 hover:bg-zinc-800 transition-colors duration-200"
+              >
+                Cancel
+              </Link>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={loading}
+                className={`flex items-center justify-center px-6 py-2.5 rounded-lg bg-white text-black font-medium hover:bg-zinc-200 transition-all duration-200 ${
+                  loading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                    Creating...
+                  </>
+                ) : (
+                  'Create Ticket'
+                )}
+              </motion.button>
+            </div>
+          </form>
+        </motion.div>
       </div>
     </div>
   );

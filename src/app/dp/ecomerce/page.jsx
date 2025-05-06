@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Code, ShoppingCart, Search, Smartphone, Check, ChevronDown, ChevronUp, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, CheckCircle, HeartHandshake, Layers } from 'lucide-react';
-import Footer from '../../../components/Footer';
+import Footer from '../../../../components/Footer';
 import './style.css';
 
 function Web() {

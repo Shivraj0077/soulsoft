@@ -23,6 +23,16 @@ export async function middleware(request) {
   const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
 
   if (isPublicPath) {
+    // Store previous path when redirecting to signin
+    if (pathname === '/auth/signin') {
+      const response = NextResponse.next();
+      const previousPath = request.headers.get('referer')?.replace(request.nextUrl.origin, '') || '/';
+      response.cookies.set('previousPath', previousPath, {
+        path: '/',
+        maxAge: 60 * 5 // 5 minutes
+      });
+      return response;
+    }
     return NextResponse.next();
   }
 
@@ -33,57 +43,50 @@ export async function middleware(request) {
 
   if (!token) {
     const url = new URL('/auth/signin', request.url);
-    url.searchParams.set('prompt', 'select_account');
-    url.searchParams.set('callbackUrl', encodeURI(request.url));
-    return NextResponse.redirect(url);
+    const response = NextResponse.redirect(url);
+    // Store the attempted URL as previous path
+    response.cookies.set('previousPath', pathname, {
+      path: '/',
+      maxAge: 60 * 5 // 5 minutes
+    });
+    return response;
   }
 
-  // Determine user role
   const isAdmin = ADMIN_EMAILS.includes(token.email);
   const isRecruiter = RECRUITER_EMAILS.includes(token.email);
-  const isUser = !isAdmin && !isRecruiter; // Regular ticket system user
-  const isApplicant = !isAdmin && !isRecruiter; // Job portal applicant
+  const previousPath = request.cookies.get('previousPath')?.value;
 
-  // Handle dashboard redirects
-  if (pathname === '/dashboard') {
-    let destination;
-    if (isAdmin) {
-      destination = '/admin/tickets';
-    } else if (isRecruiter) {
-      destination = '/recruiter/dashboard';
-    } else if (pathname.startsWith('/user')) {
-      destination = '/user/tickets'; // Ticket system users
-    } else {
-      destination = '/applicant/dashboard'; // Job portal applicants
+  // Handle redirects based on previous path and role
+  if (pathname.startsWith('/auth/signin') && previousPath) {
+    if (previousPath.includes('/jobs')) {
+      if (!isRecruiter && !isAdmin) {
+        return NextResponse.redirect(new URL('/applicant/dashboard', request.url));
+      }
+      return NextResponse.redirect(new URL('/jobs', request.url));
     }
-    return NextResponse.redirect(new URL(destination, request.url));
+
+    if (previousPath.includes('/tickets')) {
+      if (isAdmin) {
+        return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+      } else if (isRecruiter) {
+        return NextResponse.redirect(new URL('/recruiter/dashboard', request.url));
+      }
+      return NextResponse.redirect(new URL('/user/tickets', request.url));
+    }
   }
 
-  // Role-based access control
-  const isAdminPath = pathname.startsWith('/admin');
-  const isUserPath = pathname.startsWith('/user');
-  const isRecruiterPath = pathname.startsWith('/recruiter');
-  const isApplicantPath = pathname.startsWith('/applicant');
-
-  // Handle ticket system paths
-  if (isUserPath && !isUser) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+  // Prevent direct access to dashboard pages
+  if (pathname.startsWith('/recruiter')) {
+    return NextResponse.redirect(new URL('/jobs', request.url));
   }
 
-  // Handle admin paths
-  if (isAdminPath && !isAdmin) {
+  if (pathname.startsWith('/admin')) {
     return NextResponse.redirect(new URL('/user/tickets', request.url));
   }
 
-  // Handle recruiter paths
-  if (isRecruiterPath && !isRecruiter) {
-    return NextResponse.redirect(new URL('/user/tickets', request.url));
-  }
-
-  // Handle applicant paths
-  if (isApplicantPath && !isApplicant) {
-    const destination = isAdmin ? '/admin/tickets' : '/recruiter/dashboard';
-    return NextResponse.redirect(new URL(destination, request.url));
+  // Allow access to public pages
+  if (pathname.startsWith('/jobs') || pathname.startsWith('/user/tickets')) {
+    return NextResponse.next();
   }
 
   return NextResponse.next();
@@ -91,13 +94,12 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    '/',
-    '/dashboard',
     '/admin/:path*',
-    '/user/:path*',
     '/recruiter/:path*',
     '/applicant/:path*',
-    '/jobs',
-    '!(api/tickets/create)',  
-    '/api/tickets/:path*',],
+    '/user/:path*',
+    '/jobs/:path*',
+    '/auth/signin',
+    '!(api|_next/static|_next/image|favicon.ico)/:path*',
+  ]
 };

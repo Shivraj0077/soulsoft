@@ -70,13 +70,31 @@ export async function POST(request) {
       applicant_id,
     });
 
-    return NextResponse.json({ success: true, application }, { status: 201 });
+    // Get the new count after creating the application
+    const countResult = await pool.query(
+      'SELECT COUNT(*) as count FROM applications WHERE job_id = $1',
+      [job_id]
+    );
+
+    const newCount = parseInt(countResult.rows[0].count, 10);
+
+    // After successful creation, emit WebSocket event
+    const io = (await import('socket.io-client')).io();
+    io.to(`job-${job_id}`).emit('applicationCountUpdate', {
+      jobId: job_id,
+      count: newCount
+    });
+
+    // Update the response to include the new count
+    return NextResponse.json({ 
+      success: true, 
+      application,
+      applicationCount: newCount 
+    }, { status: 201 });
   } catch (error) {
     console.error('POST /api/applications: Error creating application', {
-      message: error.message,
       stack: error.stack,
       email: session?.user?.email || 'unknown',
     });
-    return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
   }
 }

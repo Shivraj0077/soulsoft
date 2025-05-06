@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
-import { sendWhatsAppMessage } from '@/lib/notifications';
+import { sendWhatsAppMessage } from '@/lib/notification';
 
 export async function POST(request) {
   try {

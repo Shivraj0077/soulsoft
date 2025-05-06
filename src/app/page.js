@@ -185,7 +185,7 @@ export default function Home() {
             loop
             muted
         
-            src="/solo.mp4"
+            src="/SOLO.mp4"
             
             
           ></video>
@@ -231,7 +231,7 @@ export default function Home() {
                 With 14+ years of experience, our expert team understands what
                 your business needs to succeed. We work closely with you to
                 deliver modern, reliable, and customized solutions. From
-                planning to launch, we're committed to turning your vision into
+                planning to launch, we&apos;re committed to turning your vision into
                 reality.
               </p>
             </div>
@@ -273,7 +273,7 @@ export default function Home() {
     }}
   >
     {[
-      { label: "E-commerce", link: "/ecomerce" },
+      { label: "E-commerce", link: "/dp/ecomerce" },
       { label: "Digital Marketing", link: "/dp" },
       { label: "Web Design and Development", link: "/webdev" },
       { label: "Learning Management System", link: "/lms" },

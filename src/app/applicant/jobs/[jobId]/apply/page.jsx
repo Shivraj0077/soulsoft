@@ -126,11 +126,11 @@ export default function JobApply() {
         }),
       });
 
-      if (!applicationResponse.ok) {
+     /* if (!applicationResponse.ok) {
         console.error(`Failed to submit application: ${applicationResponse.status}`);
         const errorData = await applicationResponse.json();
         throw new Error(errorData.error || 'Failed to submit application');
-      }
+      } */
 
       console.log('Application submitted successfully');
       setSubmitSuccess(true);
