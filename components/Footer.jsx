@@ -47,42 +47,51 @@ const Footer = () => {
         <div style={styles.section} className="footer-section">
           <h2 style={styles.heading}>Get In Touch</h2>
           <p style={styles.text}>
-            <strong>Office Location</strong><br />
-            S 10-D, 2nd Floor, Top-Ten Imperial, Sanganer, A-2605, A.Nagar
+            <strong>Office Location:</strong><br />
+            S 10-B, 2nd Floor, Top-Ten Imperial, Sangamner 422605, A.Nagar
           </p>
           <p style={styles.text}>
-            <strong>Registration Location</strong><br />
-            H-576, Near Bus stand, At post Chandanapur, Sanganer, 422605, A.Nagar
+            <strong>Registration Location:</strong><br />
+            H-576, Near Bus stand, At post Chandanapur, Sangamner 422605, A.Nagar
           </p>
           <p style={styles.text}>
-            <strong>Contact</strong><br />
-            Phone: +91 9146 79 86 79 / +91 9149 7986 79<br />
-            Email: soulsoftinfotech@gmail.com
+            <strong>Contact:</strong><br />
+            Phone:
+            <span>
+              +91 9146 79 86 79 /
+            </span>
+            <br/>
+            <span>
+              +91 8149 7986 79
+            </span>
+            <br />
+            Email: <span style={{ fontStyle: 'italic' }}>soulsoftinfotech@gmail.com</span>
           </p>
+
         </div>
 
-      
-          <div style={styles.section} className="footer-section">
-            <h2 style={styles.heading}>Company</h2>
-            {[
-              { name: 'Home', link: '/' },
-              { name: 'About Us', link: '/revew' },
-              { name: 'POS Products', link: '/products' },
-          
-              { name: 'Download', link: '/download' },
-              { name: 'Contact', link: '/contact' },
-              { name: 'Privacy Policy', link: '/privacy-policy' },
-              { name: 'Terms & Conditions', link: '/terms' },
-            ].map((item, idx) => (
-              <p style={styles.text} key={idx}>
-                <a href={item.link} style={{ color: '#fff', textDecoration: 'none' }}>
-            {item.name}
-                </a>
-              </p>
-            ))}
-          </div>
 
-          {/* Business Hours */}
+        <div style={styles.section} className="footer-section">
+          <h2 style={styles.heading}>Company</h2>
+          {[
+            { name: 'Home', link: '/' },
+            { name: 'About Us', link: '/revew' },
+            { name: 'POS Products', link: '/products' },
+
+            { name: 'Download', link: '/download' },
+            { name: 'Contact', link: '/contact' },
+            { name: 'Privacy Policy', link: '/privacy-policy' },
+            { name: 'Terms & Conditions', link: '/terms' },
+          ].map((item, idx) => (
+            <p style={styles.text} key={idx}>
+              <a href={item.link} style={{ color: '#fff', textDecoration: 'none' }}>
+                {item.name}
+              </a>
+            </p>
+          ))}
+        </div>
+
+        {/* Business Hours */}
         <div style={styles.section} className="footer-section">
           <h2 style={styles.heading}>Business Hours</h2>
           <p style={styles.text}>
