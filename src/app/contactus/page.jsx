@@ -5,6 +5,11 @@ import './animation.css'
 import Footer from '../../../components/Footer';
 
 function ContactForm() {
+  // Create refs for inputs to maintain focus
+  const nameInputRef = React.useRef(null);
+  const emailInputRef = React.useRef(null);
+  const subjectInputRef = React.useRef(null);
+  const messageInputRef = React.useRef(null);
   const [values, setValues] = useState({
     name: '',
     email: '',
@@ -17,6 +22,7 @@ function ContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   
   useEffect(() => {
     const handleScroll = () => {
@@ -44,27 +50,60 @@ function ContactForm() {
   
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
-    if (errors[name]) setErrors({ ...errors, [name]: undefined });
+    setValues(prevValues => ({ ...prevValues, [name]: value }));
+    if (errors[name]) {
+      setErrors(prevErrors => ({ ...prevErrors, [name]: undefined }));
+    }
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate(values);
     setErrors(validationErrors);
+    setSubmitError('');
     
-    if (Object.keys(validationErrors).length === 0) {
-      setIsSubmitting(true);
-      setTimeout(() => {
-        setIsSubmitting(false);
+    // Focus on the first field with an error
+    if (Object.keys(validationErrors).length > 0) {
+      if (validationErrors.name) {
+        nameInputRef.current?.focus();
+      } else if (validationErrors.email) {
+        emailInputRef.current?.focus();
+      } else if (validationErrors.subject) {
+        subjectInputRef.current?.focus();
+      } else if (validationErrors.message) {
+        messageInputRef.current?.focus();
+      }
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
         setIsSubmitted(true);
         setValues({ name: '', email: '', subject: '', message: '' });
         setTimeout(() => setIsSubmitted(false), 5000);
-      }, 1500);
+      } else {
+        throw new Error(data.message || 'Failed to send message');
+      }
+    } catch (error) {
+      setSubmitError(error.message || 'Something went wrong. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const ContactForm = () => {
+  const ContactFormContent = () => {
     if (isSubmitted) {
       return (
         <div className="w-full space-y-6 py-8 px-4 sm:px-8 rounded-xl bg-gray-900/50 backdrop-blur-sm border border-gray-800 animate-fadeIn">
@@ -106,6 +145,7 @@ function ContactForm() {
                 name={field.name}
                 value={values[field.name]}
                 onChange={handleChange}
+                ref={field.name === 'name' ? nameInputRef : field.name === 'email' ? emailInputRef : field.name === 'subject' ? subjectInputRef : null}
                 className={`w-full bg-gray-800 border ${
                   errors[field.name] ? 'border-red-500' : 'border-gray-700'
                 } rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300`}
@@ -125,6 +165,7 @@ function ContactForm() {
               rows={5}
               value={values.message}
               onChange={handleChange}
+              ref={messageInputRef}
               className={`w-full bg-gray-800 border ${
                 errors.message ? 'border-red-500' : 'border-gray-700'
               } rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300`}
@@ -133,6 +174,12 @@ function ContactForm() {
             {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
           </div>
         </div>
+        
+        {submitError && (
+          <div className="p-3 bg-red-900/50 border border-red-800 rounded-lg">
+            <p className="text-red-300 text-sm">{submitError}</p>
+          </div>
+        )}
         
         <button
           type="submit"
@@ -307,12 +354,10 @@ function ContactForm() {
                   </div>
                 ))}
               </div>
-              
-            
             </div>
             
             <div className="animate-fadeInRight">
-              <ContactForm />
+              <ContactFormContent />
             </div>
           </div>
           
@@ -356,7 +401,7 @@ function ContactForm() {
           </div>
         </main>
         
-     <Footer/>
+        <Footer/>
       </div>
     </div>
   );

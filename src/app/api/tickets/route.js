@@ -5,6 +5,14 @@ import { pool } from '@/lib/db';
 import { uploadToCloudflare } from '@/lib/cloudflare';
 import { notifyAdminsAboutNewTicket, notifyUserAboutTicket } from '@/lib/notification';
 
+// Helper function to handle database errors
+const handleDbError = (error, operation) => {
+  console.error(`Error during ${operation}:`, error);
+  return NextResponse.json({ 
+    error: 'Database error', 
+    details: error.message 
+  }, { status: 500 });
+};
 
 export async function GET(request) {
   try {
@@ -13,12 +21,14 @@ export async function GET(request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.log('GET /api/tickets - User:', session.user.email);
+
     let query, params;
-    if (session.user.role === 'admin') {
+    if (session.user.role === 'admin' || ADMIN_EMAILS.includes(session.user.email)) {
       query = `
         SELECT t.*, u.name, u.email, u.phone_number
         FROM tickets t
-        JOIN users u ON t.user_id = u.user_id
+        LEFT JOIN users u ON t.user_id = u.user_id
         ORDER BY t.created_at DESC
       `;
       params = [];
@@ -32,13 +42,27 @@ export async function GET(request) {
       params = [session.user.email];
     }
 
-    const result = await pool.query(query, params);
-    return NextResponse.json({ tickets: result.rows });
+    const result = await pool.query(query, params)
+      .catch(err => {
+        throw new Error(`Database query failed: ${err.message}`);
+      });
+
+    // Log the result for debugging
+    console.log(`Found ${result.rows.length} tickets`);
+
+    // Return the tickets directly (consistent format)
+    return NextResponse.json(result.rows);
   } catch (error) {
-    console.error('GET /api/tickets Error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return handleDbError(error, 'GET /api/tickets');
   }
 }
+
+// Define admin emails for direct access in this file
+const ADMIN_EMAILS = [
+  'admin1@example.com',
+  'admin2@example.com',
+  'shivrajpawar0077@gmail.com',
+];
 
 export async function POST(request) {
   try {
@@ -53,7 +77,7 @@ export async function POST(request) {
     const title = formData.get('title');
     const description = formData.get('description');
     const problemType = formData.get('problem_type');
-    const productServiceName = formData.get('product_service_name'); // Changed from product_service
+    const productServiceName = formData.get('product_service_name');
 
     // Validate required fields
     if (!title || !description || !problemType || !productServiceName) {
@@ -73,7 +97,9 @@ export async function POST(request) {
     const userResult = await pool.query(
       'SELECT user_id, phone_number FROM users WHERE email = $1',
       [session.user.email]
-    );
+    ).catch(err => {
+      throw new Error(`User lookup failed: ${err.message}`);
+    });
 
     if (userResult.rows.length === 0) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -107,18 +133,21 @@ export async function POST(request) {
         title,
         description,
         problemType,
-        productServiceName, // Changed from productService
+        productServiceName,
         imageUrl,
         session.user.email,
         phone_number || null,
         session.user.name
       ]
-    );
+    ).catch(err => {
+      throw new Error(`Ticket creation failed: ${err.message}`);
+    });
 
     const ticketId = result.rows[0].ticket_id;
 
     // Notify admins about new ticket
-    await notifyAdminsAboutNewTicket(ticketId, pool);
+    await notifyAdminsAboutNewTicket(ticketId, pool)
+      .catch(err => console.error('Failed to notify admins:', err));
 
     // Notify user about ticket creation
     await notifyUserAboutTicket({
@@ -129,7 +158,7 @@ export async function POST(request) {
       description,
       problemType,
       productServiceName
-    });
+    }).catch(err => console.error('Failed to notify user:', err));
 
     return NextResponse.json({
       success: true,
@@ -137,10 +166,6 @@ export async function POST(request) {
     });
 
   } catch (error) {
-    console.error('POST /api/tickets Error:', error);
-    return NextResponse.json({ 
-      error: 'Internal server error',
-      details: error.message 
-    }, { status: 500 });
+    return handleDbError(error, 'POST /api/tickets');
   }
 }

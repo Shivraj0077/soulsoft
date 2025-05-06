@@ -2,7 +2,7 @@
 'use client';
 
 import { createContext, useState, useContext, useEffect } from 'react';
-import { generateGeminiResponse } from '../services/geminiService';
+import { generateGeminiResponse } from '../ksk/services/geminiService';
 import { sendAppointmentEmail } from '../utils/emailService';
 
 const ChatbotContext = createContext();
