@@ -57,30 +57,42 @@ export async function middleware(request) {
   const previousPath = request.cookies.get('previousPath')?.value;
 
   // Handle redirects based on previous path and role
-  if (pathname.startsWith('/auth/signin') && previousPath) {
-    if (previousPath.includes('/jobs')) {
-      if (!isRecruiter && !isAdmin) {
-        return NextResponse.redirect(new URL('/applicant/dashboard', request.url));
+  if (pathname.startsWith('/auth/signin') || pathname.startsWith('/api/auth/callback')) {
+    if (previousPath) {
+      if (previousPath.includes('/tickets')) {
+        if (isAdmin) {
+          return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+        } else if (isRecruiter) {
+          return NextResponse.redirect(new URL('/recruiter/dashboard', request.url));
+        } else {
+          return NextResponse.redirect(new URL('/user/tickets', request.url));
+        }
       }
-      return NextResponse.redirect(new URL('/jobs', request.url));
-    }
-
-    if (previousPath.includes('/tickets')) {
-      if (isAdmin) {
-        return NextResponse.redirect(new URL('/admin/dashboard', request.url));
-      } else if (isRecruiter) {
-        return NextResponse.redirect(new URL('/recruiter/dashboard', request.url));
+      
+      if (previousPath.includes('/jobs')) {
+        if (!isRecruiter && !isAdmin) {
+          return NextResponse.redirect(new URL('/applicant/dashboard', request.url));
+        }
+        return NextResponse.redirect(new URL('/jobs', request.url));
       }
-      return NextResponse.redirect(new URL('/user/tickets', request.url));
     }
   }
 
   // Prevent direct access to dashboard pages
   if (pathname.startsWith('/recruiter')) {
-    return NextResponse.redirect(new URL('/jobs', request.url));
+    if (!isRecruiter) {
+      return NextResponse.redirect(new URL('/jobs', request.url));
+    }
   }
 
   if (pathname.startsWith('/admin')) {
+    if (!isAdmin) {
+      return NextResponse.redirect(new URL('/user/tickets', request.url));
+    }
+  }
+
+  // Prevent access to applicant dashboard if coming from tickets
+  if (pathname.startsWith('/applicant/dashboard') && previousPath?.includes('/tickets')) {
     return NextResponse.redirect(new URL('/user/tickets', request.url));
   }
 
