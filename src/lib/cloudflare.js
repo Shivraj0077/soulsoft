@@ -24,8 +24,8 @@ export async function uploadToCloudflare(file, folder = '') {
 
     await s3Client.send(command);
 
-    // Use public URL for access
-    const fileUrl = `${process.env.CLOUDFLARE_PUBLIC_URL}/${uniqueFileName}`;
+    // Use public URL for access with correct path structure
+    const fileUrl = `${process.env.CLOUDFLARE_PUBLIC_URL}/job2/tickets/${timestamp}_${file.name}`;
     return fileUrl;
   } catch (error) {
     console.error('Upload error:', error);
