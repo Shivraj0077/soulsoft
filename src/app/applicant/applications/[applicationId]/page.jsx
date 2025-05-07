@@ -72,15 +72,22 @@ export default function ApplicationDetails() {
 
   const testResumeUrl = async (url) => {
     try {
-      const res = await fetch(url, { method: 'HEAD', mode: 'cors' });
-      if (!res.ok) {
-        throw new Error(`Resume inaccessible (Status: ${res.status})`);
+      // Convert the URL to the correct format if needed
+      const correctUrl = url.replace(
+        '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
+        'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
+      );
+      
+      // Instead of using HEAD request, we'll just check if the URL is properly formatted
+      if (!correctUrl.startsWith('https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/')) {
+        throw new Error('Invalid resume URL format');
       }
+      
       setResumeError(null);
       return true;
     } catch (err) {
-      console.error(`Error accessing resume: ${url}`, err);
-      setResumeError(`Unable to access resume. Ensure the file is publicly accessible in Cloudflare R2 or contact support.`);
+      console.error(`Error with resume URL: ${url}`, err);
+      setResumeError(`Unable to access resume. Please contact support if the issue persists.`);
       return false;
     }
   };
@@ -97,6 +104,14 @@ export default function ApplicationDetails() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-red-600">{error || 'Application details not available'}</div>
+      </div>
+    );
+  }
+
+  if (!application.job) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-600">Job details not available</div>
       </div>
     );
   }
@@ -134,7 +149,7 @@ export default function ApplicationDetails() {
           <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
             <div className="px-4 py-5 sm:px-6">
               <h2 className="text-2xl font-bold text-gray-900">
-                Application for: {application.job.title}
+                Application for: {application.job?.title || 'Unknown Position'}
               </h2>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
                 Status: {application.application_status}
@@ -148,25 +163,25 @@ export default function ApplicationDetails() {
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Job Title</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.job.title}
+                    {application.job?.title || 'Not specified'}
                   </dd>
                 </div>
                 <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Location</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.job.location || 'Remote'}
+                    {application.job?.location || 'Remote'}
                   </dd>
                 </div>
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Salary Range</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.job.salary_range || 'Competitive'}
+                    {application.job?.salary_range || 'Competitive'}
                   </dd>
                 </div>
                 <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt className="text-sm font-medium text-gray-500">Employment Type</dt>
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.job.employment_type || 'Not specified'}
+                    {application.job?.employment_type || 'Not specified'}
                   </dd>
                 </div>
                 <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -186,10 +201,24 @@ export default function ApplicationDetails() {
                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                     {application.resume_url ? (
                       <a
-                        href={application.resume_url}
+                        href={application.resume_url.replace(
+                          '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
+                          'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
+                        )}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={() => testResumeUrl(application.resume_url)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const correctUrl = application.resume_url.replace(
+                            '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
+                            'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
+                          );
+                          if (correctUrl.startsWith('https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/')) {
+                            window.open(correctUrl, '_blank');
+                          } else {
+                            setResumeError('Invalid resume URL format. Please contact support.');
+                          }
+                        }}
                         className="text-indigo-600 hover:text-indigo-500"
                       >
                         View Resume
@@ -213,3 +242,8 @@ export default function ApplicationDetails() {
     </div>
   );
 }
+
+
+//https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/shivrajpawar4426_1746621580144_agasthu4.pdf
+
+//https://6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com/job2/shivrajpawar4426_1746621580144_agasthu4.pdf

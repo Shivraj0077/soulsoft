@@ -60,7 +60,15 @@ export async function GET(request, { params }) {
     const application = {
       ...result.rows[0],
       applied_date: result.rows[0].applied_date.toISOString(),
-      posted_date: result.rows[0].posted_date?.toISOString()
+      posted_date: result.rows[0].posted_date?.toISOString(),
+      job: {
+        title: result.rows[0].title,
+        description: result.rows[0].description,
+        location: result.rows[0].location,
+        salary_range: result.rows[0].salary_range,
+        employment_type: result.rows[0].employment_type,
+        posted_date: result.rows[0].posted_date?.toISOString()
+      }
     };
 
     return NextResponse.json({

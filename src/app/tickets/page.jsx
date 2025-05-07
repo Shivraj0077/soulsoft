@@ -103,18 +103,18 @@ export default function TicketsPage() {
 
   return (
     <div className="min-h-screen bg-black text-white bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.1),transparent_70%),radial-gradient(ellipse_at_bottom_left,rgba(59,130,246,0.05),transparent_70%)]">
-      <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto py-8 sm:py-16 px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-16">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center justify-center mb-6"
+            className="inline-flex items-center justify-center mb-4 sm:mb-6"
           >
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-xl"></div>
-              <div className="relative bg-black/40 backdrop-blur-sm p-3 rounded-full border border-blue-500/30">
-                <Ticket className="h-8 w-8 text-blue-400" />
+              <div className="relative bg-black/40 backdrop-blur-sm p-2 sm:p-3 rounded-full border border-blue-500/30">
+                <Ticket className="h-6 w-6 sm:h-8 sm:w-8 text-blue-400" />
               </div>
             </div>
           </motion.div>
@@ -123,15 +123,16 @@ export default function TicketsPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 sm:text-5xl sm:tracking-tight"
+            className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 tracking-tight"
           >
             Support Tickets System
           </motion.h1>
+
           <motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-5 max-w-xl mx-auto text-xl text-blue-100/80"
+            className="mt-4 sm:mt-5 max-w-xl mx-auto text-base sm:text-xl text-blue-100/80"
           >
             Get help with your issues. Raise a ticket and our support team will assist you.
           </motion.p>
@@ -140,27 +141,27 @@ export default function TicketsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-10 flex flex-wrap justify-center gap-4"
+            className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-3 sm:gap-4"
           >
             {!session ? (
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/auth/signin"
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300"
+                  className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300"
                 >
-                  <LogIn className="mr-2 h-5 w-5" />
+                  <LogIn className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Sign in to view tickets
                 </Link>
               </motion.div>
             ) : (
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
                 {isAdmin && (
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link
                       href="/admin/dashboard"
-                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 transition-all duration-300"
+                      className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 transition-all duration-300"
                     >
-                      <Shield className="mr-2 h-5 w-5" />
+                      <Shield className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                       Admin Dashboard
                     </Link>
                   </motion.div>
@@ -169,9 +170,9 @@ export default function TicketsPage() {
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link
                       href="/recruiter/dashboard"
-                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 transition-all duration-300"
+                      className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 transition-all duration-300"
                     >
-                      <Briefcase className="mr-2 h-5 w-5" />
+                      <Briefcase className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                       Recruiter Dashboard
                     </Link>
                   </motion.div>
@@ -180,9 +181,9 @@ export default function TicketsPage() {
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link
                       href="/user/tickets"
-                      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300"
+                      className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-full shadow-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300"
                     >
-                      <User className="mr-2 h-5 w-5" />
+                      <User className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                       My Tickets
                     </Link>
                   </motion.div>
@@ -200,15 +201,15 @@ export default function TicketsPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-3xl mx-auto bg-black/40 backdrop-blur-sm border border-blue-500/10 rounded-2xl shadow-lg p-8 relative overflow-hidden"
+          className="max-w-3xl mx-auto bg-black/40 backdrop-blur-sm border border-blue-500/10 rounded-2xl shadow-lg p-4 sm:p-8 relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -ml-32 -mb-32 pointer-events-none"></div>
 
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center">
-                <HelpCircle className="h-6 w-6 mr-3 text-blue-400" />
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500 flex items-center">
+                <HelpCircle className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3 text-blue-400" />
                 Frequently Asked Questions
               </h2>
               <div className="hidden md:block">
@@ -216,7 +217,7 @@ export default function TicketsPage() {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {faqs.map((faq, index) => (
                 <motion.div
                   key={index}
@@ -227,11 +228,11 @@ export default function TicketsPage() {
                 >
                   <motion.button
                     onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                    className="flex justify-between items-center w-full text-left p-5 focus:outline-none bg-blue-500/5 hover:bg-blue-500/10 transition-colors"
+                    className="flex justify-between items-center w-full text-left p-4 sm:p-5 focus:outline-none bg-blue-500/5 hover:bg-blue-500/10 transition-colors"
                     whileHover={{ backgroundColor: "rgba(59, 130, 246, 0.1)" }}
                   >
-                    <h3 className="text-lg font-medium text-white flex items-center">
-                      <span className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center mr-4 flex-shrink-0 text-blue-400">
+                    <h3 className="text-base sm:text-lg font-medium text-white flex items-center">
+                      <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-500/10 flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0 text-blue-400">
                         {faq.icon}
                       </span>
                       {faq.question}
@@ -239,12 +240,12 @@ export default function TicketsPage() {
                     <motion.div
                       animate={{ rotate: openFaqIndex === index ? 45 : 0 }}
                       transition={{ duration: 0.3 }}
-                      className="ml-4 flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center"
+                      className="ml-4 flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-500/10 flex items-center justify-center"
                     >
                       {openFaqIndex === index ? (
-                        <Minus className="h-4 w-4 text-blue-400" />
+                        <Minus className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />
                       ) : (
-                        <Plus className="h-4 w-4 text-blue-400" />
+                        <Plus className="h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />
                       )}
                     </motion.div>
                   </motion.button>
@@ -258,8 +259,8 @@ export default function TicketsPage() {
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                       >
-                        <div className="p-5 bg-blue-900/5 text-blue-100/80 border-t border-blue-500/10">
-                          <p>{faq.answer}</p>
+                        <div className="p-4 sm:p-5 bg-blue-900/5 text-blue-100/80 border-t border-blue-500/10">
+                          <p className="text-sm sm:text-base">{faq.answer}</p>
                         </div>
                       </motion.div>
                     )}
@@ -269,8 +270,6 @@ export default function TicketsPage() {
             </div>
           </div>
         </motion.div>
-
-
       </div>
     </div>
   )
