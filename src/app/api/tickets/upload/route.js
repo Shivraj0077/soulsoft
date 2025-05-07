@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
-import { uploadImage } from '@/lib/cloudflare';
+import { uploadToCloudflare } from '@/lib/cloudflare';
 
 export async function POST(request) {
   try {
@@ -17,7 +17,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'No image provided' }, { status: 400 });
     }
 
-    const imageUrl = await uploadImage(image);
+    const imageUrl = await uploadToCloudflare(image, 'job2/tickets');
     return NextResponse.json({ success: true, imageUrl });
   } catch (error) {
     console.error('Error uploading image:', error);

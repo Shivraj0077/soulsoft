@@ -33,6 +33,11 @@ export async function POST(request) {
       'application/pdf',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+      'image/svg+xml'
     ];
 
     if (!validTypes.includes(fileType)) {

@@ -4,62 +4,6 @@ import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getFileProxyUrl, getFileKeyFromUrl } from '@/lib/cloudflare';
-
-const ResumeLink = ({ resumeUrl }) => {
-  const [error, setError] = useState(null);
-  
-  const testResumeUrl = async (url) => {
-    try {
-      // Extract filename from the full Cloudflare URL
-      const filename = url.split('/').pop();
-      if (!filename) {
-        throw new Error('Invalid file URL');
-      }
-
-      // Make request to our API endpoint
-      const response = await fetch(`/api/files/${filename}`, {
-        method: 'HEAD',
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return true;
-    } catch (error) {
-      console.error('Error accessing resume:', error);
-      setError('Unable to access resume file');
-      return false;
-    }
-  };
-
-  if (!resumeUrl) {
-    return <span className="text-red-400">Resume URL not provided</span>;
-  }
-
-  return (
-    <a
-      href={`/api/files/${resumeUrl.split('/').pop()}`}
-      target="_blank"
-      rel="noopener noreferrer" 
-      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
-      onClick={async (e) => {
-        e.preventDefault();
-        try {
-          const isAccessible = await testResumeUrl(resumeUrl);
-          if (isAccessible) {
-            window.open(`/api/files/${resumeUrl.split('/').pop()}`, '_blank');
-          }
-        } catch (err) {
-          setError('Error accessing resume');
-          console.error('Resume access error:', err);
-        }
-      }}
-    >
-      {error || 'View Resume'}
-    </a>
-  );
-};
 
 export default function ApplicationDetails() {
   const { data: session, status } = useSession();
@@ -126,6 +70,28 @@ export default function ApplicationDetails() {
     }) : 'Unknown';
   };
 
+  const testResumeUrl = async (url) => {
+    try {
+      // Convert the URL to the correct format if needed
+      const correctUrl = url.replace(
+        '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
+        'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
+      );
+      
+      // Instead of using HEAD request, we'll just check if the URL is properly formatted
+      if (!correctUrl.startsWith('https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/')) {
+        throw new Error('Invalid resume URL format');
+      }
+      
+      setResumeError(null);
+      return true;
+    } catch (err) {
+      console.error(`Error with resume URL: ${url}`, err);
+      setResumeError(`Unable to access resume. Please contact support if the issue persists.`);
+      return false;
+    }
+  };
+
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -138,6 +104,14 @@ export default function ApplicationDetails() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-red-600">{error || 'Application details not available'}</div>
+      </div>
+    );
+  }
+
+  if (!application.job) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-600">Job details not available</div>
       </div>
     );
   }
@@ -166,76 +140,110 @@ export default function ApplicationDetails() {
           </Link>
         </div>
 
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
-          <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              Application for: {application.title}
-            </h2>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              Status: {application.application_status}
-            </p>
+        <div className="px-4 py-6 sm:px-0">
+          {resumeError && (
+            <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+              {resumeError}
+            </div>
+          )}
+          <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
+            <div className="px-4 py-5 sm:px-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Application for: {application.job?.title || 'Unknown Position'}
+              </h2>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                Status: {application.application_status}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="border-t border-gray-200">
-            <dl>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Job Title</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {application.title}
-                </dd>
-              </div>
-              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Location</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {application.location || 'Remote'}
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Salary Range</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {application.salary_range || 'Competitive'}
-                </dd>
-              </div>
-              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Employment Type</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {application.employment_type || 'Not specified'}
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Applied Date</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {formatDate(application.applied_date)}
-                </dd>
-              </div>
-              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Application Status</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {application.application_status}
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Resume</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {application.resume_url ? (
-                    <ResumeLink resumeUrl={application.resume_url} />
-                  ) : (
-                    'Not provided'
-                  )}
-                </dd>
-              </div>
-              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Cover Letter</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  {application.cover_letter || 'Not provided'}
-                </dd>
-              </div>
-            </dl>
+          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div className="border-t border-gray-200">
+              <dl>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Job Title</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.job?.title || 'Not specified'}
+                  </dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Location</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.job?.location || 'Remote'}
+                  </dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Salary Range</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.job?.salary_range || 'Competitive'}
+                  </dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Employment Type</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.job?.employment_type || 'Not specified'}
+                  </dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Applied Date</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {formatDate(application.applied_date)}
+                  </dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Application Status</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.application_status}
+                  </dd>
+                </div>
+                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Resume</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.resume_url ? (
+                      <a
+                        href={application.resume_url.replace(
+                          '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
+                          'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const correctUrl = application.resume_url.replace(
+                            '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
+                            'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
+                          );
+                          if (correctUrl.startsWith('https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/')) {
+                            window.open(correctUrl, '_blank');
+                          } else {
+                            setResumeError('Invalid resume URL format. Please contact support.');
+                          }
+                        }}
+                        className="text-indigo-600 hover:text-indigo-500"
+                      >
+                        View Resume
+                      </a>
+                    ) : (
+                      'Not provided'
+                    )}
+                  </dd>
+                </div>
+                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-gray-500">Cover Letter</dt>
+                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                    {application.cover_letter || 'Not provided'}
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+
+//https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/shivrajpawar4426_1746621580144_agasthu4.pdf
+
+//https://6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com/job2/shivrajpawar4426_1746621580144_agasthu4.pdf
