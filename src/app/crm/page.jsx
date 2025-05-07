@@ -298,70 +298,74 @@ function Web() {
       {/* Particle background canvas */}
       <canvas id="particle-canvas" className="particle-canvas"></canvas>
       
-      {/* Header Section */}
-      <header className="header" ref={heroRef}>
-        <div className="animated-bg"></div>
-        <div 
-          className={`content-container ${isVisible ? 'fade-in' : 'fade-out'}`}
-          style={{
-            transform: `translateY(${scrollY * 0.2}px)`,
-            position: 'relative',
-            zIndex: 2
-          }}
-        >
-          <div className="glowing-circle"></div>
-          <p className="subheading animate-text char-effect">SOULSOFT INFOTECH</p>
-          <h1 className="main-heading">
-            <span className="animate-text word-effect delay-1">Customer Relationship {""}</span>
-            <span className="highlight animate-text word-effect delay-2"> Management</span>
-          </h1>
-        
-          <h2 className="sub-heading animate-text fade-up Stewardship delay-3">
-            Simplify Lead Management & Supercharge Customer Relationships
-          </h2>
-          <div className="button-group">
-            <button className="primary-button hover-effect">
-              Contact us
-              <ArrowRight className="button-icon" />
-            </button>
-          </div>
+      
+        <header className="header" ref={heroRef}>
+          <div className="animated-bg"></div>
+          <div 
+            className={`content-container ${isVisible ? 'fade-in' : 'fade-out'}`}
+            style={{
+          transform: `translateY(${scrollY * 0.2}px)`,
+          position: 'relative',
+          zIndex: 2
+            }}
+          >
+            <div className="glowing-circle"></div>
+            <p className="subheading animate-text char-effect">SOULSOFT INFOTECH</p>
+            <h1 className="main-heading">
+            <span className="animate-text word-effect delay-1">Customer Relationship Management {""}</span>
+            <span className="highlight animate-text word-effect delay-2"></span>
           
-          <div className="hero-float-elements">
-            <div
-              className="float-element code-element"
-              style={{
-                transform: isClient
-                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${(mousePosition.y - window.innerHeight / 2) * 0.02}px)`
-                  : 'none'
-              }}
-            >
-              <Users />
+            </h1>
+          
+            <h2 className="sub-heading animate-text fade-up Stewardship delay-3">
+          Simplify Lead Management & Supercharge Customer Relationships
+            </h2>
+            <div className="button-group">
+            <button 
+            className="primary-button hover-effect"
+            onClick={() => window.location.href = '/contactus'}
+          >
+            Contact us
+            <ArrowRight className="button-icon" />
+          </button>
             </div>
-            <div
-              className="float-element shop-element"
-              style={{
-                transform: isClient
-                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * -0.01}px, ${(mousePosition.y - window.innerHeight / 2) * -0.01}px)`
-                  : 'none'
-              }}
-            >
-              <Cloud />
-            </div>
-            <div
-              className="float-element search-element"
-              style={{
-                transform: isClient
-                  ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${(mousePosition.y - window.innerHeight / 2) * 0.03}px)`
-                  : 'none'
-              }}
-            >
-              <Smartphone />
+            
+            <div className="hero-float-elements">
+          <div
+            className="float-element code-element"
+            style={{
+              transform: isClient
+            ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.02}px, ${(mousePosition.y - window.innerHeight / 2) * 0.02}px)`
+            : 'none'
+            }}
+          >
+            <Users />
+          </div>
+          <div
+            className="float-element shop-element"
+            style={{
+              transform: isClient
+            ? `translate(${(mousePosition.x - window.innerWidth / 2) * -0.01}px, ${(mousePosition.y - window.innerHeight / 2) * -0.01}px)`
+            : 'none'
+            }}
+          >
+            <Cloud />
+          </div>
+          <div
+            className="float-element search-element"
+            style={{
+              transform: isClient
+            ? `translate(${(mousePosition.x - window.innerWidth / 2) * 0.03}px, ${(mousePosition.y - window.innerHeight / 2) * 0.03}px)`
+            : 'none'
+            }}
+          >
+            <Smartphone />
+          </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Intro Section */}
+        {/* Intro Section */}
       <section className="intro-section">
         <div className="content-container">
           <h2 className="section-heading animate-text word-effect">

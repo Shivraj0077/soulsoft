@@ -1,0 +1,68 @@
+.soulsoftNavbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: black;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .soulsoftLogo img {
+    height: 40px;
+  }
+  
+  .soulsoftNavLinks {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .soulsoftNavLinks a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .soulsoftMenuIcon {
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+  
+  .soulsoftMobileMenu {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    .soulsoftNavLinks {
+      display: none;
+    }
+  
+    .soulsoftMenuIcon {
+      display: block;
+    }
+  
+    .soulsoftMobileMenu.open {
+      display: flex;
+      flex-direction: column;
+      background-color: black;
+      padding: 2rem;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      height: calc(100vh - 60px);
+      z-index: 9999;
+    }
+  
+    .soulsoftMobileMenu a {
+      color: white;
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+  }
+  

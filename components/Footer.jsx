@@ -48,15 +48,15 @@ const Footer = () => {
           <h2 style={styles.heading}>Get In Touch</h2>
           <p style={styles.text}>
             <strong>Office Location</strong><br />
-            S 10-D, 2nd Floor, Top-Ten Imperial, Sanganer, A-2605, A.Nagar
+            S 10-D, 2nd Floor, Top-Ten Imperial, Sangamner, A-2605, A.Nagar
           </p>
           <p style={styles.text}>
             <strong>Registration Location</strong><br />
-            H-576, Near Bus stand, At post Chandanapur, Sanganer, 422605, A.Nagar
+            H-576, Near Bus stand, At post Chandanapur, Sangamner, 422605, A.Nagar
           </p>
           <p style={styles.text}>
             <strong>Contact</strong><br />
-            Phone: +91 9146 79 86 79 / +91 9149 7986 79<br />
+            Phone:  +91 9146 79 86 79 /+91 8149 7986 79<br />
             Email: soulsoftinfotech@gmail.com
           </p>
         </div>

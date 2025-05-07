@@ -320,10 +320,13 @@ function Web() {
             Tailored Software Solutions to Drive Business Success
           </h2>
           <div className="button-group">
-            <button className="primary-button hover-effect">
-              Contact us
-              <ArrowRight className="button-icon" />
-            </button>
+             <button 
+                        className="primary-button hover-effect"
+                        onClick={() => window.location.href = '/contactus'}
+                      >
+                        Contact us
+                        <ArrowRight className="button-icon" />
+                      </button>
           </div>
           
           <div className="hero-float-elements">

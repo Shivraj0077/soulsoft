@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { LogIn, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 // Define email lists for role checking
 const ADMIN_EMAILS = [
@@ -77,7 +78,7 @@ function SignInContent() {
       } else if (isRecruiter) {
         router.push('/recruiter/dashboard');
       } else {
-        router.push('/applicant/dashboard'); // Changed from /user/tickets to /applicant/dashboard
+        router.push('/applicant/dashboard');
       }
     }
   }, [session, status, router, fromJobsPage, attemptingRecruiterAccess, attemptingAdminAccess, callbackUrl]);
@@ -87,7 +88,7 @@ function SignInContent() {
     setError(null);
     try {
       await signIn('google', {
-        callbackUrl: '/auth/signin', // Always redirect back to signin for our custom handling
+        callbackUrl: '/auth/signin',
         prompt: 'select_account'
       });
     } catch (error) {
@@ -113,118 +114,96 @@ function SignInContent() {
   }
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-black text-white">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 to-black opacity-80"></div>
+    <div className="flex min-h-screen bg-black">
+      {/* Left side - Image */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10 opacity-70"></div>
+        <Image 
+          src="/ppp.jpg" 
+          alt="Office workspace with dark aesthetic" 
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
       
-      {/* Animated glow effect */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse"></div>
-
-      {/* Card container with glass effect */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative z-10 w-full max-w-md p-8 space-y-8 bg-zinc-900/40 backdrop-blur-xl rounded-2xl border border-zinc-800/50 shadow-[0_0_30px_rgba(124,58,237,0.15)] hover:shadow-[0_0_40px_rgba(124,58,237,0.2)] transition-shadow duration-500"
-      >
-        
-        {/* Header */}
+      {/* Right side - Sign in */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="text-center"
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-md"
         >
-          <motion.div
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{
-              type: "spring",
-              stiffness: 200,
-              damping: 10,
-              delay: 0.3,
-            }}
-            className="mx-auto mb-6 w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center"
-          >
-            <LogIn className="w-8 h-8 text-white" />
-          </motion.div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Sign In</h1>
-          <p className="mt-2 text-zinc-400">Sign in to access the job board</p>
-        </motion.div>
-
-        {/* Error message */}
-        <AnimatePresence>
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="p-4 text-sm text-red-300 bg-red-900/30 border border-red-800/50 rounded-lg"
-            >
-              {error === "OAuthSignin" && "Error starting the sign in process. Please try again."}
-              {error === "OAuthCallback" && "Error during the sign in process. Please try again."}
-              {error === "Default" && "An error occurred. Please try again."}
-              {error}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Sign in button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          className="mt-8"
-        >
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
+          {/* Minimal Header */}
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              duration: 0.6,
-              y: {
-                type: "spring",
-                stiffness: 100,
-                damping: 15
-              }
-            }}
-            whileHover={{ 
-              y: -2,
-              transition: {
-                duration: 0.2,
-                ease: "easeOut"
-              }
-            }}
-            whileTap={{ 
-              y: 0,
-              transition: {
-                duration: 0.1,
-                ease: "easeIn"
-              }
-            }}
+            transition={{ delay: 0.2 }}
+            className="mb-10"
+          >
+            <h1 className="text-3xl font-light text-white mb-2">Welcome back</h1>
+            <p className="text-zinc-500 text-sm">Sign in to continue to the platform</p>
+          </motion.div>
+          
+          {/* Error message */}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-6 p-3 text-xs text-red-300 bg-red-900/20 border border-red-800/30 rounded-md"
+              >
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Sign in button - Modern and Minimal */}
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="flex justify-center items-center w-full py-2.5 px-4 border border-zinc-800 rounded-xl hover:bg-zinc-800/50 transition-colors duration-200 disabled:opacity-50"
+            className="w-full flex items-center justify-center bg-white/5 hover:bg-white/10 border border-zinc-800 rounded-md py-3 px-4 text-white text-sm transition-all duration-200 group"
           >
             {isLoading ? (
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1, ease: "linear" }}
-              >
-                <Loader2 className="w-5 h-5" />
-              </motion.div>
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <div className="flex items-center">
-                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+              <>
+                <svg className="w-4 h-4 mr-3 text-white" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
                 </svg>
                 <span>Continue with Google</span>
-              </div>
+              </>
             )}
           </motion.button>
+          
+          {/* Subtle divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-grow h-px bg-zinc-800"></div>
+            <span className="px-3 text-xs text-zinc-600">or</span>
+            <div className="flex-grow h-px bg-zinc-800"></div>
+          </div>
+          
+          {/* Secondary sign-in option */}
+          
+          
+          {/* Helper text */}
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-6 text-center text-xs text-zinc-600"
+          >
+            By continuing, you agree to our Terms of Service and Privacy Policy
+          </motion.p>
         </motion.div>
-      </motion.div>
+      </div>
     </div>
-  )
+  );
 }
 
 export default function SignInPage() {
