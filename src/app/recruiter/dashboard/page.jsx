@@ -26,6 +26,7 @@ export default function RecruiterJobsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [deleteLoading, setDeleteLoading] = useState(null)
+  const [showSuccess, setShowSuccess] = useState(false)
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -194,7 +195,8 @@ export default function RecruiterJobsPage() {
         })
         setIsModalOpen(false)
         await fetchJobs()
-        alert("Job created successfully")
+        setShowSuccess(true)
+        setTimeout(() => setShowSuccess(false), 3000)
       } else {
         const errorData = await res.json()
         console.error("Failed to create job:", res.status, errorData)
@@ -293,10 +295,10 @@ export default function RecruiterJobsPage() {
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
           <div className="relative w-16 h-16">
-            <div className="absolute top-0 left-0 w-full h-full border-4 border-blue-500 rounded-full opacity-20"></div>
-            <div className="absolute top-0 left-0 w-full h-full border-4 border-t-blue-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+            <div className="absolute top-0 left-0 w-full h-full border-4 border-white/20 rounded-full"></div>
+            <div className="absolute top-0 left-0 w-full h-full border-4 border-t-white border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
           </div>
-          <p className="mt-6 text-lg text-white font-light">Loading...</p>
+          <p className="mt-6 text-lg text-white/80 font-light">Loading...</p>
         </div>
       </div>
     )
@@ -308,54 +310,101 @@ export default function RecruiterJobsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Simple Header */}
-      <header className="sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-[#1a1a1a] py-4 px-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-bold">My Job Listings</h1>
-          
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search jobs..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-56 bg-[#1a1a1a] border border-[#333] rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
-              />
-              <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+    <div className="min-h-screen bg-black text-gray-200 antialiased">
+      {/* Success Notification */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -100 }}
+            className="fixed top-4 right-4 z-50"
+          >
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4 shadow-lg shadow-white/10">
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-white font-medium">Success!</h3>
+                  <p className="text-white/80 text-sm">Job has been created successfully</p>
+                </div>
+              </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Enhanced animated background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90 z-0">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
+      </div>
+
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-black/90 backdrop-blur-sm border-b border-white/10 py-4 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <h1 className="text-xl font-bold text-white">My Job Listings</h1>
             
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              <Plus size={18} />
-              <span>Post Job</span>
-            </motion.button>
-            
-            <button
-              onClick={handleLogout}
-              className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
-            >
-              <LogOut size={18} />
-              <span className="hidden sm:inline">Logout</span>
-            </button>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+              <div className="relative flex-1 sm:flex-none">
+                <input
+                  type="text"
+                  placeholder="Search jobs..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full sm:w-56 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/40 focus:outline-none focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
+                />
+                <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40" />
+              </div>
+              
+              <div className="flex items-center gap-3 sm:gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setIsModalOpen(true)}
+                  className="flex-1 sm:flex-none flex items-center justify-center space-x-2 bg-white text-black hover:bg-white/90 px-4 py-2 rounded-lg transition-all duration-200 shadow-lg shadow-white/20 hover:shadow-white/30"
+                >
+                  <Plus size={18} />
+                  <span>Post Job</span>
+                </motion.button>
+                
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center justify-center space-x-2 text-white/80 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5"
+                >
+                  <LogOut size={18} />
+                  <span className="hidden sm:inline">Logout</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 py-6 sm:py-8 mt-0">
         {error && (
-          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg">{error}</div>
+          <div className="mb-6 p-4 bg-white/5 border border-white/10 text-white/80 rounded-lg">{error}</div>
         )}
 
         {/* Display search results info if searching */}
         {searchQuery.trim() !== "" && (
-          <div className="mb-4 text-gray-400">
+          <div className="mb-4 text-white/80">
             {filteredJobs.length === 0 ? (
               <p>No jobs found matching "{searchQuery}"</p>
             ) : (
@@ -366,7 +415,7 @@ export default function RecruiterJobsPage() {
 
         {/* Jobs Grid */}
         {filteredJobs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <AnimatePresence>
               {filteredJobs.map((job, index) => (
                 <motion.div
@@ -375,20 +424,20 @@ export default function RecruiterJobsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.2, delay: index * 0.05 }}
-                  className="bg-[#0e0e0e] border border-[#1a1a1a] rounded-xl overflow-hidden group"
+                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden group hover:bg-white/10 transition-all duration-200"
                 >
-                  <div className="p-5">
+                  <div className="p-4 sm:p-5">
                     <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-lg font-medium">{job.title}</h3>
+                      <h3 className="text-lg font-medium text-white pr-4">{job.title}</h3>
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => handleDelete(job.job_id)}
                         disabled={deleteLoading === job.job_id}
-                        className="text-gray-500 hover:text-red-400 transition-colors"
+                        className="flex-shrink-0 text-white/60 hover:text-white transition-colors"
                       >
                         {deleteLoading === job.job_id ? (
-                          <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-5 h-5 border-2 border-white/60 border-t-transparent rounded-full animate-spin"></div>
                         ) : (
                           <Trash2 size={18} />
                         )}
@@ -396,28 +445,28 @@ export default function RecruiterJobsPage() {
                     </div>
 
                     <div className="space-y-3 mb-4">
-                      <div className="flex items-center text-gray-400">
-                        <MapPin size={16} className="mr-2 text-blue-500" />
-                        <span className="text-sm">{job.location || "Remote"}</span>
+                      <div className="flex items-center text-white/80">
+                        <MapPin size={16} className="mr-2 text-white/60 flex-shrink-0" />
+                        <span className="text-sm truncate">{job.location || "Remote"}</span>
                       </div>
-                      <div className="flex items-center text-gray-400">
-                        <DollarSign size={16} className="mr-2 text-blue-500" />
-                        <span className="text-sm">{formatSalaryWithRupee(job.salary_range)}</span>
+                      <div className="flex items-center text-white/80">
+                        <DollarSign size={16} className="mr-2 text-white/60 flex-shrink-0" />
+                        <span className="text-sm truncate">{formatSalaryWithRupee(job.salary_range)}</span>
                       </div>
-                      <div className="flex items-center text-gray-400">
-                        <Briefcase size={16} className="mr-2 text-blue-500" />
-                        <span className="text-sm">{job.employment_type || "Not specified"}</span>
+                      <div className="flex items-center text-white/80">
+                        <Briefcase size={16} className="mr-2 text-white/60 flex-shrink-0" />
+                        <span className="text-sm truncate">{job.employment_type || "Not specified"}</span>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-[#1a1a1a]">
-                      <div className="flex items-center text-gray-400">
-                        <FileText size={16} className="mr-2" />
+                    <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                      <div className="flex items-center text-white/80">
+                        <FileText size={16} className="mr-2 flex-shrink-0" />
                         <span className="text-sm">{jobApplications[job.job_id] || 0} applications</span>
                       </div>
                       <Link
                         href={`/recruiter/jobs/${job.job_id}/applications`}
-                        className="flex items-center text-blue-500 hover:text-blue-400 text-sm font-medium transition-colors"
+                        className="flex items-center text-white hover:text-white/90 text-sm font-medium transition-colors"
                       >
                         <span>View</span>
                         <ArrowRight
@@ -435,20 +484,20 @@ export default function RecruiterJobsPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-center py-16 px-4 border border-dashed border-[#1a1a1a] rounded-xl bg-[#0a0a0a]"
+            className="flex flex-col items-center justify-center py-12 sm:py-16 px-4 border border-dashed border-white/10 rounded-xl bg-white/5 backdrop-blur-sm"
           >
-            <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
-              <Briefcase size={24} className="text-blue-500" />
+            <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-4">
+              <Briefcase size={24} className="text-white/80" />
             </div>
-            <h3 className="text-xl font-medium mb-2">No jobs posted yet</h3>
-            <p className="text-gray-400 text-center max-w-md mb-6">
+            <h3 className="text-xl font-medium text-white mb-2 text-center">No jobs posted yet</h3>
+            <p className="text-white/80 text-center max-w-md mb-6">
               Create your first job posting to start receiving applications from candidates.
             </p>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+              className="flex items-center justify-center space-x-2 bg-white text-black hover:bg-white/90 px-4 py-2 rounded-lg transition-all duration-200 shadow-lg shadow-white/20 hover:shadow-white/30"
             >
               <Plus size={18} />
               <span>Post Your First Job</span>
@@ -470,13 +519,13 @@ export default function RecruiterJobsPage() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl w-full max-w-lg overflow-hidden"
+              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto"
             >
-              <div className="flex items-center justify-between p-4 border-b border-[#1a1a1a]">
-                <h2 className="text-lg font-medium">Create New Job</h2>
+              <div className="sticky top-0 bg-white/5 backdrop-blur-sm flex items-center justify-between p-4 border-b border-white/10">
+                <h2 className="text-lg font-medium text-white">Create New Job</h2>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-white/60 hover:text-white transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -485,7 +534,7 @@ export default function RecruiterJobsPage() {
               <form onSubmit={handleSubmit} className="p-4">
                 <div className="space-y-4">
                   <div>
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-400 mb-1">
+                    <label htmlFor="title" className="block text-sm font-medium text-white/80 mb-1">
                       Job Title
                     </label>
                     <input
@@ -495,12 +544,12 @@ export default function RecruiterJobsPage() {
                       value={formData.title}
                       onChange={handleChange}
                       required
-                      className="w-full bg-[#111] border border-[#222] rounded-lg p-2.5 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white placeholder-white/40 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
                       placeholder="e.g. Frontend Developer"
                     />
                   </div>
                   <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-400 mb-1">
+                    <label htmlFor="description" className="block text-sm font-medium text-white/80 mb-1">
                       Description
                     </label>
                     <textarea
@@ -510,13 +559,13 @@ export default function RecruiterJobsPage() {
                       onChange={handleChange}
                       required
                       rows={4}
-                      className="w-full bg-[#111] border border-[#222] rounded-lg p-2.5 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                      className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white placeholder-white/40 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
                       placeholder="Job description and requirements..."
                     />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="skills_required" className="block text-sm font-medium text-gray-400 mb-1">
+                      <label htmlFor="skills_required" className="block text-sm font-medium text-white/80 mb-1">
                         Skills Required
                       </label>
                       <input
@@ -525,12 +574,12 @@ export default function RecruiterJobsPage() {
                         id="skills_required"
                         value={formData.skills_required}
                         onChange={handleChange}
-                        className="w-full bg-[#111] border border-[#222] rounded-lg p-2.5 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white placeholder-white/40 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
                         placeholder="e.g. React, TypeScript"
                       />
                     </div>
                     <div>
-                      <label htmlFor="location" className="block text-sm font-medium text-gray-400 mb-1">
+                      <label htmlFor="location" className="block text-sm font-medium text-white/80 mb-1">
                         Location
                       </label>
                       <input
@@ -539,14 +588,14 @@ export default function RecruiterJobsPage() {
                         id="location"
                         value={formData.location}
                         onChange={handleChange}
-                        className="w-full bg-[#111] border border-[#222] rounded-lg p-2.5 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white placeholder-white/40 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
                         placeholder="e.g. Remote, New York"
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="salary_range" className="block text-sm font-medium text-gray-400 mb-1">
+                      <label htmlFor="salary_range" className="block text-sm font-medium text-white/80 mb-1">
                         Salary Range
                       </label>
                       <input
@@ -555,12 +604,12 @@ export default function RecruiterJobsPage() {
                         id="salary_range"
                         value={formData.salary_range}
                         onChange={handleChange}
-                        className="w-full bg-[#111] border border-[#222] rounded-lg p-2.5 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg p-2.5 text-white placeholder-white/40 focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
                         placeholder="e.g. ₹50,000 - ₹70,000"
                       />
                     </div>
                     <div>
-                      <label htmlFor="employment_type" className="block text-sm font-medium text-gray-400 mb-1">
+                      <label htmlFor="employment_type" className="block text-sm font-medium text-white/80 mb-1">
                         Employment Type
                       </label>
                       <select
@@ -569,22 +618,22 @@ export default function RecruiterJobsPage() {
                         value={formData.employment_type}
                         onChange={handleChange}
                         required
-                        className="w-full bg-[#111] border border-[#222] rounded-lg p-2.5 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all"
                       >
-                        <option value="">Select type</option>
-                        <option value="internship">Internship</option>
-                        <option value="full-time">Full-time</option>
-                        <option value="contract">Contract</option>
-                        <option value="freelance">Freelance</option>
+                        <option value="" className="bg-black text-white">Select type</option>
+                        <option value="internship" className="bg-black text-white">Internship</option>
+                        <option value="full-time" className="bg-black text-white">Full-time</option>
+                        <option value="contract" className="bg-black text-white">Contract</option>
+                        <option value="freelance" className="bg-black text-white">Freelance</option>
                       </select>
                     </div>
                   </div>
                 </div>
-                <div className="mt-6 flex justify-end space-x-3">
+                <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2 border border-[#222] rounded-lg text-gray-300 hover:text-white transition-colors"
+                    className="w-full sm:w-auto px-4 py-2 border border-white/10 rounded-lg text-white/80 hover:text-white hover:bg-white/5 transition-all"
                   >
                     Cancel
                   </button>
@@ -593,11 +642,11 @@ export default function RecruiterJobsPage() {
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={loading}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white transition-colors flex items-center"
+                    className="w-full sm:w-auto px-4 py-2 bg-white text-black hover:bg-white/90 rounded-lg transition-all duration-200 shadow-lg shadow-white/20 hover:shadow-white/30 flex items-center justify-center"
                   >
                     {loading ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                        <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin mr-2"></div>
                         <span>Creating...</span>
                       </>
                     ) : (

@@ -4,6 +4,8 @@ import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ArrowLeft, FileText, MapPin, DollarSign, Briefcase, Calendar, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function ApplicationDetails() {
   const { data: session, status } = useSession();
@@ -94,150 +96,194 @@ export default function ApplicationDetails() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl font-semibold">Loading...</div>
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="text-xl font-semibold text-white/80">Loading...</div>
       </div>
     );
   }
 
   if (error || !application) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-600">{error || 'Application details not available'}</div>
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="text-white/80">{error || 'Application details not available'}</div>
       </div>
     );
   }
 
   if (!application.job) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-600">Job details not available</div>
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="text-white/80">Job details not available</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 sm:px-0 mb-4">
+    <div className="min-h-screen bg-black text-gray-200 antialiased">
+      {/* Enhanced animated background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90 z-0">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
           <Link
             href="/applicant/dashboard"
-            className="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            className="inline-flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors duration-200"
           >
-            <svg
-              className="mr-1 h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Link>
-        </div>
+        </motion.div>
 
-        <div className="px-4 py-6 sm:px-0">
-          {resumeError && (
-            <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+        {resumeError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6 p-4 bg-white/5 border border-white/10 rounded-lg text-white/80"
+          >
+            <div className="flex items-center">
+              <AlertCircle className="h-5 w-5 mr-2" />
               {resumeError}
             </div>
-          )}
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
-            <div className="px-4 py-5 sm:px-6">
-              <h2 className="text-2xl font-bold text-gray-900">
-                Application for: {application.job?.title || 'Unknown Position'}
-              </h2>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                Status: {application.application_status}
-              </p>
+          </motion.div>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden mb-8"
+        >
+          <div className="p-6">
+            <h2 className="text-2xl font-bold text-white mb-2">
+              {application.job?.title || 'Unknown Position'}
+            </h2>
+            <div className="flex items-center text-white/80">
+              <CheckCircle className="h-4 w-4 mr-2" />
+              <span className="text-sm">Status: {application.application_status}</span>
             </div>
           </div>
+        </motion.div>
 
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="border-t border-gray-200">
-              <dl>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Job Title</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.job?.title || 'Not specified'}
-                  </dd>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden"
+        >
+          <div className="divide-y divide-white/10">
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex items-center text-white/80 mb-2">
+                      <FileText className="h-4 w-4 mr-2" />
+                      <span className="text-sm font-medium">Job Title</span>
+                    </div>
+                    <p className="text-white">{application.job?.title || 'Not specified'}</p>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center text-white/80 mb-2">
+                      <MapPin className="h-4 w-4 mr-2" />
+                      <span className="text-sm font-medium">Location</span>
+                    </div>
+                    <p className="text-white">{application.job?.location || 'Remote'}</p>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center text-white/80 mb-2">
+                      <DollarSign className="h-4 w-4 mr-2" />
+                      <span className="text-sm font-medium">Salary Range</span>
+                    </div>
+                    <p className="text-white">{application.job?.salary_range || 'Competitive'}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Location</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.job?.location || 'Remote'}
-                  </dd>
+
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex items-center text-white/80 mb-2">
+                      <Briefcase className="h-4 w-4 mr-2" />
+                      <span className="text-sm font-medium">Employment Type</span>
+                    </div>
+                    <p className="text-white">{application.job?.employment_type || 'Not specified'}</p>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center text-white/80 mb-2">
+                      <Calendar className="h-4 w-4 mr-2" />
+                      <span className="text-sm font-medium">Applied Date</span>
+                    </div>
+                    <p className="text-white">{formatDate(application.applied_date)}</p>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center text-white/80 mb-2">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      <span className="text-sm font-medium">Application Status</span>
+                    </div>
+                    <p className="text-white">{application.application_status}</p>
+                  </div>
                 </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Salary Range</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.job?.salary_range || 'Competitive'}
-                  </dd>
-                </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Employment Type</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.job?.employment_type || 'Not specified'}
-                  </dd>
-                </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Applied Date</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {formatDate(application.applied_date)}
-                  </dd>
-                </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Application Status</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.application_status}
-                  </dd>
-                </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Resume</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.resume_url ? (
-                      <a
-                        href={application.resume_url.replace(
+              </div>
+            </div>
+
+            <div className="p-6">
+              <div className="space-y-6">
+                <div>
+                  <div className="flex items-center text-white/80 mb-2">
+                    <FileText className="h-4 w-4 mr-2" />
+                    <span className="text-sm font-medium">Resume</span>
+                  </div>
+                  {application.resume_url ? (
+                    <a
+                      href={application.resume_url.replace(
+                        '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
+                        'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const correctUrl = application.resume_url.replace(
                           '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
                           'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          const correctUrl = application.resume_url.replace(
-                            '6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com',
-                            'pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev'
-                          );
-                          if (correctUrl.startsWith('https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/')) {
-                            window.open(correctUrl, '_blank');
-                          } else {
-                            setResumeError('Invalid resume URL format. Please contact support.');
-                          }
-                        }}
-                        className="text-indigo-600 hover:text-indigo-500"
-                      >
-                        View Resume
-                      </a>
-                    ) : (
-                      'Not provided'
-                    )}
-                  </dd>
+                        );
+                        if (correctUrl.startsWith('https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/')) {
+                          window.open(correctUrl, '_blank');
+                        } else {
+                          setResumeError('Invalid resume URL format. Please contact support.');
+                        }
+                      }}
+                      className="inline-flex items-center px-4 py-2 rounded-lg text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all duration-200 ease-in-out"
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Resume
+                    </a>
+                  ) : (
+                    <p className="text-white/80">Not provided</p>
+                  )}
                 </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Cover Letter</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                    {application.cover_letter || 'Not provided'}
-                  </dd>
+
+                <div>
+                  <div className="flex items-center text-white/80 mb-2">
+                    <FileText className="h-4 w-4 mr-2" />
+                    <span className="text-sm font-medium">Cover Letter</span>
+                  </div>
+                  <p className="text-white/90">{application.cover_letter || 'Not provided'}</p>
                 </div>
-              </dl>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -248,5 +294,3 @@ export default function ApplicationDetails() {
 
 //https://6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com/job2/shivrajpawar4426_1746621580144_agasthu4.pdf
 
-//025340388952
-//9921323202

@@ -163,10 +163,17 @@ export default function JobApply() {
 
   if (submitSuccess) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+      <div className="min-h-screen bg-black text-gray-200 antialiased flex items-center justify-center">
+        {/* Enhanced animated background gradient */}
+        <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90 z-0">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
+        </div>
+
+        <div className="relative z-10 bg-white/10 backdrop-blur-sm p-8 rounded-xl shadow-xl border border-white/20 max-w-md w-full text-center">
           <svg
-            className="mx-auto h-12 w-12 text-green-500"
+            className="mx-auto h-12 w-12 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -179,14 +186,14 @@ export default function JobApply() {
               d="M5 13l4 4L19 7"
             ></path>
           </svg>
-          <h3 className="mt-2 text-lg font-medium text-gray-900">Application Submitted!</h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <h3 className="mt-4 text-lg font-medium text-white">Application Submitted!</h3>
+          <p className="mt-2 text-white/80">
             Your application for "{job.title}" has been submitted successfully.
           </p>
-          <div className="mt-4">
+          <div className="mt-6">
             <Link
               href="/applicant/dashboard"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center px-6 py-3 border border-white text-sm font-medium rounded-lg text-black bg-white hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/20 transition-all duration-200 ease-in-out shadow-lg shadow-white/20 hover:shadow-white/30"
             >
               Go to Dashboard
             </Link>
@@ -197,28 +204,37 @@ export default function JobApply() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-black text-gray-200 antialiased">
+      {/* Enhanced animated background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90 z-0">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-white mb-6">
             Apply for: {job.title}
           </h2>
-          <div className="bg-white shadow overflow-hidden sm:rounded-md p-6">
+          <div className="bg-white/10 backdrop-blur-sm shadow-xl border border-white/20 overflow-hidden rounded-xl p-6">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="bg-gray-50 p-4 rounded-md mb-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Job Summary</h3>
-                <p className="text-sm text-gray-700 mb-2">
-                  <span className="font-medium">Location:</span> {job.location || 'Remote'}
-                </p>
-                <p className="text-sm text-gray-700 mb-2">
-                  <span className="font-medium">Salary:</span> {job.salary_range || 'Competitive'}
-                </p>
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium">Type:</span> {job.employment_type || 'Not specified'}
-                </p>
+              <div className="bg-white/5 p-6 rounded-lg border border-white/10">
+                <h3 className="text-lg font-medium text-white mb-4">Job Summary</h3>
+                <div className="space-y-3">
+                  <p className="text-sm text-white/80">
+                    <span className="font-medium text-white">Location:</span> {job.location || 'Remote'}
+                  </p>
+                  <p className="text-sm text-white/80">
+                    <span className="font-medium text-white">Salary:</span> {job.salary_range || 'Competitive'}
+                  </p>
+                  <p className="text-sm text-white/80">
+                    <span className="font-medium text-white">Type:</span> {job.employment_type || 'Not specified'}
+                  </p>
+                </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-white mb-2">
                   Resume / CV *
                 </label>
                 <div className="flex items-center">
@@ -233,20 +249,20 @@ export default function JobApply() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current.click()}
-                    className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex items-center px-6 py-3 border border-white/20 text-sm font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/20 transition-all duration-200 ease-in-out"
                   >
                     Select File
                   </button>
-                  <span className="ml-3 text-sm text-gray-500">
+                  <span className="ml-4 text-sm text-white/80">
                     {resumeFile ? resumeFile.name : 'No file selected'}
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-white/60">
                   Accepted formats: PDF, DOC, DOCX. Max size: 5MB.
                 </p>
               </div>
               <div>
-                <label htmlFor="coverLetter" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="coverLetter" className="block text-sm font-medium text-white mb-2">
                   Cover Letter (Optional)
                 </label>
                 <textarea
@@ -255,16 +271,16 @@ export default function JobApply() {
                   rows={6}
                   value={formData.coverLetter}
                   onChange={handleInputChange}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="block w-full rounded-lg border-white/20 bg-white/5 text-white placeholder-white/40 focus:border-white/40 focus:ring-white/20 sm:text-sm transition-colors duration-200"
                   placeholder="Tell us why you're interested in this position and what makes you a good fit."
                 />
               </div>
               {submitError && (
-                <div className="rounded-md bg-red-50 p-4">
+                <div className="rounded-lg bg-white/5 border border-white/10 p-4">
                   <div className="flex">
                     <div className="flex-shrink-0">
                       <svg
-                        className="h-5 w-5 text-red-400"
+                        className="h-5 w-5 text-white/80"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                         fill="currentColor"
@@ -277,25 +293,27 @@ export default function JobApply() {
                       </svg>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-sm font-medium text-red-800">Error</h3>
-                      <div className="mt-2 text-sm text-red-700">
+                      <h3 className="text-sm font-medium text-white">Error</h3>
+                      <div className="mt-2 text-sm text-white/80">
                         <p>{submitError}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
-              <div className="flex justify-end">
+              <div className="flex justify-end space-x-4">
                 <Link
                   href={`/applicant/jobs/${jobId}`}
-                  className="mr-4 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex items-center px-6 py-3 border border-white/20 text-sm font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/20 transition-all duration-200 ease-in-out"
                 >
                   Cancel
                 </Link>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className={`inline-flex items-center px-6 py-3 border border-white text-sm font-medium rounded-lg text-black bg-white hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/20 transition-all duration-200 ease-in-out shadow-lg shadow-white/20 hover:shadow-white/30 ${
+                    isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 </button>
