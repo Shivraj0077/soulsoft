@@ -12,7 +12,6 @@ import "../style.css";
 // Import swiper styles
 import "swiper/css";
 import "swiper/css/bundle";
-import CustomCursor from "../../components/CustomCursor";
 import ModernSwiper from "../../components/MordernSwiper";
 import LineSlides from "../../components/LineSlide";
 import Footer from "../../components/Footer";
@@ -137,7 +136,6 @@ export default function Home() {
         <link rel="icon" href="/icon.png" />
       </Head>
     
-      <CustomCursor />
 
       {isLoading && (
         <div id="loader">

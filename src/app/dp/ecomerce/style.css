@@ -1011,9 +1011,12 @@
     }
   
     .main-heading {
-        font-size:xx-large;
+      font-size: var(--font-size-md);
+      
     }
-
+    .animate-text{
+      font-size: var(--font-size-xl);
+    }
     .sub-heading {
         font-size: var(--font-size-md);
         max-width: 90%;

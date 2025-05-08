@@ -290,18 +290,22 @@ function Web() {
           <div className="glowing-circle"></div>
           <p className="subheading animate-text char-effect">SOULSOFT INFOTECH</p>
           <h1 className="main-heading">
-            <span className="animate-text word-effect delay-1">Learning Management {""}</span>
-            <span className="highlight animate-text word-effect delay-2"> System (LMS)</span>
+          <span className="animate-text word-effect delay-1">Learning Management System{""}</span>
+          <span className="highlight animate-text word-effect delay-2"></span>
+            
           </h1>
         
           <h2 className="sub-heading animate-text fade-up Stewardship delay-3">
             Transform the Way You Train, Educate, and Upskill
           </h2>
           <div className="button-group">
-            <button className="primary-button hover-effect">
-              Contact us
-              <ArrowRight className="button-icon" />
-            </button>
+            <button 
+                       className="primary-button hover-effect"
+                       onClick={() => window.location.href = '/contactus'}
+                     >
+                       Contact us
+                       <ArrowRight className="button-icon" />
+                     </button>
           </div>
           
           <div className="hero-float-elements">

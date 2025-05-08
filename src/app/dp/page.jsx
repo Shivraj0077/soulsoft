@@ -12,6 +12,7 @@ function Web() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const heroRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
+  const [hasMounted, setHasMounted] = useState(false);
 
   // Track scroll position for parallax effects
   useEffect(() => {
@@ -33,13 +34,18 @@ function Web() {
 
   useEffect(() => {
     setIsVisible(true);
-    
-    // Initialize animated background
-    initParticleBackground();
-    
-    // Initialize text reveal animations
-    initTextAnimations();
+    setHasMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (hasMounted) {
+      // Initialize animated background
+      initParticleBackground();
+      
+      // Initialize text reveal animations
+      initTextAnimations();
+    }
+  }, [hasMounted]);
 
   // Particle background animation
   const initParticleBackground = () => {
@@ -317,10 +323,13 @@ function Web() {
           Grow Your Business with Soulsoft Infotech
           </h2>
           <div className="button-group">
-            <button className="primary-button hover-effect">
-              Contact us
-              <ArrowRight className="button-icon" />
-            </button>
+           <button 
+                      className="primary-button hover-effect"
+                      onClick={() => window.location.href = '/contactus'}
+                    >
+                      Contact us
+                      <ArrowRight className="button-icon" />
+                    </button>
           </div>
           
           <div className="hero-float-elements">

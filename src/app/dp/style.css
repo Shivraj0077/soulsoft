@@ -1013,6 +1013,9 @@ footer {
   .main-heading {
       font-size:xx-large;
   }
+  .animate-text{
+    font-size: var(--font-size-xl)
+  }
 
   .sub-heading {
       font-size: var(--font-size-md);
