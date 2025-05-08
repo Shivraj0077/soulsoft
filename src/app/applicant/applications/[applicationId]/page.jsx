@@ -247,3 +247,6 @@ export default function ApplicationDetails() {
 //https://pub-dce3ac5205e24e14ac4e87998fe0031c.r2.dev/job2/shivrajpawar4426_1746621580144_agasthu4.pdf
 
 //https://6d4e4b4efec34acc3857bede42a73f58.r2.cloudflarestorage.com/job2/shivrajpawar4426_1746621580144_agasthu4.pdf
+
+//025340388952
+//9921323202
