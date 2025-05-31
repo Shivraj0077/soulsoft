@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Briefcase, MapPin, Calendar, Clock, Building } from 'lucide-react';
+import { formatSalaryWithRupee } from '@/lib/utils';
 
 export default function JobDetailsPage() {
   const [job, setJob] = useState(null);
@@ -32,10 +33,17 @@ export default function JobDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-          <p className="mt-4 text-lg text-white">Loading job details...</p>
+      <div className="min-h-screen bg-black text-gray-200 antialiased">
+        <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90 z-0">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
+        </div>
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+            <div className="mt-4 text-gray-400">Loading job details...</div>
+          </div>
         </div>
       </div>
     );
@@ -43,96 +51,146 @@ export default function JobDetailsPage() {
 
   if (!job) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-white mb-4">Job not found</h2>
-          <Link
-            href="/jobs"
-            className="inline-flex items-center text-blue-400 hover:text-blue-300"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Jobs
-          </Link>
+      <div className="min-h-screen bg-black text-gray-200 antialiased">
+        <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90 z-0">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
+        </div>
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold text-white mb-4">Job not found</h2>
+            <Link
+              href="/jobs"
+              className="group inline-flex items-center text-white hover:text-white/90 transition-colors duration-200"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" />
+              Back to Jobs
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Back button */}
-        <Link
-          href="/jobs"
-          className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-8"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Jobs
-        </Link>
+    <div className="min-h-screen bg-black text-gray-200 antialiased">
+      {/* Enhanced animated background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90 z-0">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
+      </div>
 
-        {/* Job header */}
-        <div className="bg-zinc-900/90 rounded-xl p-8 backdrop-blur-xl border border-white/10">
-          <div className="flex justify-between items-start">
-            <h1 className="text-3xl font-bold text-white mb-4">{job.title}</h1>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500/20 text-blue-300">
-              {job.employment_type}
-            </span>
-          </div>
+      <main className="relative z-10 max-w-7xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+        <div className="animate-fade-in">
+          {/* Back button */}
+          <Link
+            href="/jobs"
+            className="group inline-flex items-center text-white/80 hover:text-white transition-colors duration-200 mb-8"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" />
+            Back to Jobs
+          </Link>
 
-          {/* Job meta information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <div className="flex items-center text-gray-300">
-              <Building className="w-5 h-5 mr-2 text-gray-400" />
-              <span>Company Name</span>
-            </div>
-            <div className="flex items-center text-gray-300">
-              <MapPin className="w-5 h-5 mr-2 text-gray-400" />
-              <span>{job.location}</span>
-            </div>
-            <div className="flex items-center text-gray-300">
-              <Briefcase className="w-5 h-5 mr-2 text-gray-400" />
-              <span>{job.salary_range}</span>
-            </div>
-            <div className="flex items-center text-gray-300">
-              <Calendar className="w-5 h-5 mr-2 text-gray-400" />
-              <span>{new Date(job.posted_date).toLocaleDateString()}</span>
-            </div>
-          </div>
-
-          {/* Job description */}
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold text-white mb-4">Description</h2>
-            <div className="prose prose-invert max-w-none">
-              <p className="text-gray-300">{job.description}</p>
-            </div>
-          </div>
-
-          {/* Required skills */}
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold text-white mb-4">Required Skills</h2>
-            <div className="flex flex-wrap gap-2">
-              {job.skills_required.split(',').map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 rounded-full text-sm bg-white/10 text-gray-300"
-                >
-                  {skill.trim()}
+          {/* Job details card */}
+          <div className="bg-white/10 backdrop-blur-sm shadow-xl border border-white/20 overflow-hidden rounded-xl transition-all duration-200">
+            <div className="p-6 sm:p-8">
+              {/* Job header */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">{job.title}</h1>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/10 text-white border border-white/20">
+                  {job.employment_type}
                 </span>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          {/* Apply button */}
-          <div className="mt-8">
-            <Link
-              href={`/auth/signin?callbackUrl=/jobs/${params.id}`}
-              className="inline-flex items-center justify-center w-full md:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
-            >
-              Sign in to Apply
-            </Link>
+              {/* Job meta information */}
+              <div className="mt-6 space-y-4 sm:space-y-0 sm:flex sm:justify-between">
+                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8">
+                  <p className="flex items-center text-sm text-white/80">
+                    <Building className="w-5 h-5 mr-2 text-white/60" />
+                    Company Name
+                  </p>
+                  <p className="flex items-center text-sm text-white/80">
+                    <MapPin className="w-5 h-5 mr-2 text-white/60" />
+                    {job.location || 'Remote'}
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8">
+                  <p className="flex items-center text-sm text-white/80">
+                    <Briefcase className="w-5 h-5 mr-2 text-white/60" />
+                    {formatSalaryWithRupee(job.salary_range)}
+                  </p>
+                  <p className="flex items-center text-sm text-white/80">
+                    <Calendar className="w-5 h-5 mr-2 text-white/60" />
+                    Posted: {new Date(job.posted_date).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+
+              {/* Job description */}
+              <div className="mt-8">
+                <h2 className="text-xl font-semibold text-white mb-4">Description</h2>
+                <div className="prose prose-invert max-w-none">
+                  <p className="text-white/80">{job.description}</p>
+                </div>
+              </div>
+
+              {/* Required skills */}
+              <div className="mt-8">
+                <h2 className="text-xl font-semibold text-white mb-4">Required Skills</h2>
+                <div className="flex flex-wrap gap-2">
+                  {job.skills_required.split(',').map((skill, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 rounded-full text-sm bg-white/10 text-white/80 border border-white/20"
+                    >
+                      {skill.trim()}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Apply button */}
+              <div className="mt-8">
+                <Link
+                  href={`/auth/signin?callbackUrl=/jobs/${params.id}`}
+                  className="group/button w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-white text-sm font-medium rounded-lg text-black bg-white hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-white/20 transition-all duration-200 ease-in-out shadow-lg shadow-white/20 hover:shadow-white/30"
+                >
+                  Sign in to Apply
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
+
+      {/* Add this to the top of your CSS file or within a style tag */}
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        
+        .animate-fade-in {
+          animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .animation-delay-300 {
+          animation-delay: 0.3s;
+        }
+
+        .animate-gradient {
+          background-size: 200% auto;
+          animation: gradient 8s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }
