@@ -82,17 +82,31 @@ export default function JobDetailsPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent"></div>
       </div>
 
+      <nav className="relative z-10 backdrop-blur-md border-b border-white/10 bg-black/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between h-auto sm:h-16 py-4 sm:py-0">
+            <div className="flex items-center mb-4 sm:mb-0">
+              <Link
+                href="/jobs"
+                className="group inline-flex items-center text-white/80 hover:text-white transition-colors duration-200"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" />
+                Back to Jobs
+              </Link>
+            </div>
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold text-white tracking-tight">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-300 to-gray-400 animate-gradient">
+                  Job Details
+                </span>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       <main className="relative z-10 max-w-7xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="animate-fade-in">
-          {/* Back button */}
-          <Link
-            href="/jobs"
-            className="group inline-flex items-center text-white/80 hover:text-white transition-colors duration-200 mb-8"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" />
-            Back to Jobs
-          </Link>
-
           {/* Job details card */}
           <div className="bg-white/10 backdrop-blur-sm shadow-xl border border-white/20 overflow-hidden rounded-xl transition-all duration-200">
             <div className="p-6 sm:p-8">
